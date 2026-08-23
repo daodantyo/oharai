@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>お祓い ─ 身を清める</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sumi:#0c0e18;          /* 夜の墨色 */
+    --ai:#161b2e;            /* 深藍 */
+    --shu:#c2402f;           /* 朱（鳥居の色） */
+    --shiro:#f3efe6;         /* 紙垂の白 */
+    --kin:#c9a961;           /* 金 */
+    --usuzumi:#8b8fa3;       /* 薄墨（補助テキスト） */
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    background:var(--sumi);
+    color:var(--shiro);
+    font-family:'Zen Kaku Gothic New',sans-serif;
+    font-weight:300;
+    overflow:hidden;
+  }
+  .scene{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:24px;text-align:center;
+    opacity:0;visibility:hidden;
+    transition:opacity 1.2s ease;
+  }
+  .scene.active{opacity:1;visibility:visible}
+
+  /* ── 背景の灯り ── */
+  .glow{
+    position:fixed;left:50%;top:38%;
+    width:120vmin;height:120vmin;
+    transform:translate(-50%,-50%);
+    background:radial-gradient(circle,rgba(201,169,97,.10) 0%,rgba(194,64,47,.05) 35%,transparent 65%);
+    pointer-events:none;
+  }
+
+  /* ── 紙垂（しで）── */
+  .shide-row{
+    position:fixed;top:0;left:0;right:0;
+    display:flex;justify-content:space-around;
+    pointer-events:none;z-index:5;
+  }
+  .shide{
+    width:26px;height:64px;
+    background:var(--shiro);
+    clip-path:polygon(0 0,100% 0,100% 30%,55% 30%,55% 55%,100% 55%,100% 82%,55% 82%,55% 100%,0 100%,0 70%,45% 70%,45% 45%,0 45%,0 18%,45% 18%,45% 0);
+    opacity:.85;
+    transform-origin:top center;
+    animation:sway 5s ease-in-out infinite;
+  }
+  .shide:nth-child(2n){animation-delay:1.2s}
+  .shide:nth-child(3n){animation-delay:2.4s}
+  @keyframes sway{
+    0%,100%{transform:rotate(1.6deg)}
+    50%{transform:rotate(-1.6deg)}
+  }
+
+  h1,h2{font-family:'Shippori Mincho',serif;font-weight:500;letter-spacing:.35em}
+
+  /* ── 入口 ── */
+  .tate{
+    writing-mode:vertical-rl;
+    font-family:'Shippori Mincho',serif;
+    font-size:clamp(2.2rem,9vw,3.4rem);
+    letter-spacing:.5em;
+    line-height:1.9;
+    margin-bottom:8px;
+  }
+  .torii{
+    width:min(58vw,220px);
+    margin:20px auto 28px;
+    display:block;
+  }
+  .sub{
+    color:var(--usuzumi);
+    font-size:.85rem;
+    letter-spacing:.25em;
+    margin-bottom:40px;
+  }
+  button.hairei{
+    font-family:'Shippori Mincho',serif;
+    background:transparent;
+    color:var(--shiro);
+    border:1px solid var(--kin);
+    padding:16px 52px;
+    font-size:1.05rem;
+    letter-spacing:.4em;
+    text-indent:.4em;
+    cursor:pointer;
+    transition:background .4s,color .4s;
+  }
+  button.hairei:hover,button.hairei:focus-visible{
+    background:var(--kin);color:var(--sumi);outline:none;
+  }
+  button.hairei:focus-visible{box-shadow:0 0 0 3px rgba(201,169,97,.4)}
+
+  /* ── 手水（心を鎮める）── */
+  .breath-circle{
+    width:150px;height:150px;border-radius:50%;
+    border:1px solid var(--kin);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Shippori Mincho',serif;
+    letter-spacing:.3em;text-indent:.3em;
+    margin:36px 0;
+    animation:breathe 8s ease-in-out infinite;
+  }
+  @keyframes breathe{
+    0%,100%{transform:scale(1);border-color:var(--kin)}
+    50%{transform:scale(1.35);border-color:var(--shiro)}
+  }
+  .kotoba{
+    color:var(--usuzumi);font-size:.9rem;letter-spacing:.15em;line-height:2.2;
+  }
+
+  /* ── 祈祷 ── */
+  .video-frame{
+    width:min(92vw,560px);
+    aspect-ratio:16/9;
+    background:var(--ai);
+    border:1px solid rgba(201,169,97,.5);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:14px;
+    margin:28px 0;
+  }
+  .video-frame .maru{
+    width:64px;height:64px;border-radius:50%;
+    border:1px solid var(--kin);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--kin);font-size:1.4rem;
+  }
+  .video-frame p{color:var(--usuzumi);font-size:.8rem;letter-spacing:.15em;line-height:1.9}
+
+  /* ── 作法 ── */
+  .sahou{
+    font-family:'Shippori Mincho',serif;
+    font-size:clamp(1.5rem,6vw,2.1rem);
+    letter-spacing:.3em;text-indent:.3em;
+    margin:30px 0 14px;
+    min-height:1.5em;
+  }
+  .sahou-guide{color:var(--usuzumi);font-size:.9rem;letter-spacing:.15em;line-height:2;min-height:3.6em}
+
+  /* ── 完了 ── */
+  .fuda{
+    border:1px solid var(--kin);
+    padding:44px 36px;
+    margin:24px 0 36px;
+    background:linear-gradient(180deg,rgba(201,169,97,.06),transparent);
+  }
+  .fuda .tate{font-size:clamp(1.8rem,7vw,2.6rem);margin:0}
+  .hi{color:var(--usuzumi);font-size:.78rem;letter-spacing:.2em;margin-top:20px}
+
+  .next{
+    background:none;border:none;color:var(--kin);
+    font-family:'Shippori Mincho',serif;
+    font-size:.95rem;letter-spacing:.3em;text-indent:.3em;
+    cursor:pointer;padding:14px 20px;
+  }
+  .next:focus-visible{outline:1px solid var(--kin)}
+
+  @media (prefers-reduced-motion: reduce){
+    .shide,.breath-circle{animation:none}
+    .scene{transition:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="glow"></div>
+<div class="shide-row" aria-hidden="true">
+  <div class="shide"></div><div class="shide"></div><div class="shide"></div>
+  <div class="shide"></div><div class="shide"></div><div class="shide"></div>
+</div>
+
+<!-- 一、入口 -->
+<section class="scene active" id="s1">
+  <div class="tate">お祓い</div>
+  <svg class="torii" viewBox="0 0 200 160" aria-hidden="true">
+    <g fill="#c2402f">
+      <rect x="10" y="18" width="180" height="14" rx="2"/>
+      <rect x="24" y="44" width="152" height="10"/>
+      <rect x="42" y="32" width="14" height="120"/>
+      <rect x="144" y="32" width="14" height="120"/>
+      <rect x="95" y="18" width="10" height="26"/>
+    </g>
+  </svg>
+  <p class="sub">心静かに、身を清めるひととき</p>
+  <button class="hairei" onclick="go(2)">参拝する</button>
+</section>
+
+<!-- 二、手水 -->
+<section class="scene" id="s2">
+  <h2>手水</h2>
+  <div class="breath-circle">深呼吸</div>
+  <p class="kotoba">円のうごきに合わせて<br>ゆっくり息を吸い、ゆっくり吐きます<br>三度くり返しましょう</p>
+  <button class="next" onclick="go(3)">整いました ─ 進む</button>
+</section>
+
+<!-- 三、祈祷 -->
+<section class="scene" id="s3">
+  <h2>御祈祷</h2>
+  <div class="video-frame">
+    <div class="maru">▶</div>
+    <p>ここに神主さんの祈祷動画が入ります<br>（いまは仮の画面です）</p>
+  </div>
+  <button class="next" onclick="go(4)">祈祷を受けました ─ 進む</button>
+</section>
+
+<!-- 四、作法 -->
+<section class="scene" id="s4">
+  <h2>拝礼</h2>
+  <div class="sahou" id="sahouText">二礼</div>
+  <p class="sahou-guide" id="sahouGuide">深いおじぎを二回</p>
+  <button class="next" id="sahouBtn" onclick="sahouNext()">次へ</button>
+</section>
+
+<!-- 五、完了 -->
+<section class="scene" id="s5">
+  <div class="fuda">
+    <div class="tate">祓い清め</div>
+    <p class="hi" id="hizuke"></p>
+  </div>
+  <p class="kotoba">お参りおつかれさまでした<br>どうか穏やかな日々でありますように</p>
+  <button class="next" onclick="go(1)">はじめに戻る</button>
+</section>
+
+<script>
+  function go(n){
+    document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));
+    document.getElementById('s'+n).classList.add('active');
+    if(n===4){sahouStep=0;renderSahou();}
+    if(n===5){
+      const d=new Date();
+      document.getElementById('hizuke').textContent=
+        d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日　参拝';
+    }
+  }
+  const sahou=[
+    {t:'二礼',g:'深いおじぎを二回'},
+    {t:'二拍手',g:'胸の前で手を二回打ちます'},
+    {t:'一礼',g:'最後にもう一度、深いおじぎを'}
+  ];
+  let sahouStep=0;
+  function renderSahou(){
+    document.getElementById('sahouText').textContent=sahou[sahouStep].t;
+    document.getElementById('sahouGuide').textContent=sahou[sahouStep].g;
+    document.getElementById('sahouBtn').textContent=(sahouStep<sahou.length-1)?'次へ':'結ぶ';
+  }
+  function sahouNext(){
+    if(sahouStep<sahou.length-1){sahouStep++;renderSahou();}
+    else{go(5);}
+  }
+</script>
+</body>
+</html>
