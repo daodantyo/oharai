@@ -297,10 +297,10 @@
 <section class="scene" id="s3">
   <h2>御祈祷</h2>
   <div class="norito-area">
-    <button class="norito-play" id="noritoPlay" onclick="toggleNorito()" aria-label="お経を再生">
+    <button class="norito-play" id="noritoPlay" onclick="toggleNorito()" aria-label="祝詞を奏上">
       <span id="noritoIcon">▶</span>
     </button>
-    <p class="norito-label" id="noritoLabel">円を押して、お経を再生します</p>
+    <p class="norito-label" id="noritoLabel">円を押して、祝詞を奏上します</p>
     <audio id="noritoAudio" src="norito.mp3" preload="none"></audio>
   </div>
   <button class="next" onclick="go(4)">祈祷を受けました ─ 進む</button>
@@ -391,7 +391,7 @@
       const lb=document.getElementById('noritoLabel');
       const bt=document.getElementById('noritoPlay');
       if(ic) ic.textContent='▶';
-      if(lb) lb.textContent='円を押して、お経を再生します';
+      if(lb) lb.textContent='円を押して、祝詞を奏上します';
       if(bt) bt.classList.remove('playing');
     }
     document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));
@@ -422,7 +422,7 @@
     if(audio.paused){
       audio.play();
       icon.textContent='‖';
-      label.textContent='お経が流れています…（しばらくすると自動で進みます）';
+      label.textContent='祝詞が流れています…（しばらくすると自動で進みます）';
       btn.classList.add('playing');
       // 一定時間で自動的に拝礼へ進む
       if(window.noritoTimer){ clearTimeout(window.noritoTimer); }
@@ -430,7 +430,7 @@
     }else{
       audio.pause();
       icon.textContent='▶';
-      label.textContent='円を押して、お経を再生します';
+      label.textContent='円を押して、祝詞を奏上します';
       btn.classList.remove('playing');
       // 止めたら自動進行も取り消し
       if(window.noritoTimer){ clearTimeout(window.noritoTimer); window.noritoTimer=null; }
