@@ -42,22 +42,6 @@
     pointer-events:none;
   }
 
-  /* ── 紙垂（しで）── */
-  .shide-row{
-    position:fixed;top:0;left:0;right:0;
-    display:flex;justify-content:space-around;
-    pointer-events:none;z-index:5;
-  }
-  .shide{
-    width:26px;height:64px;
-    background:var(--shiro);
-    clip-path:polygon(0 0,100% 0,100% 30%,55% 30%,55% 55%,100% 55%,100% 82%,55% 82%,55% 100%,0 100%,0 70%,45% 70%,45% 45%,0 45%,0 18%,45% 18%,45% 0);
-    opacity:.85;
-    transform-origin:top center;
-    animation:sway 5s ease-in-out infinite;
-  }
-  .shide:nth-child(2n){animation-delay:1.2s}
-  .shide:nth-child(3n){animation-delay:2.4s}
   @keyframes sway{
     0%,100%{transform:rotate(1.6deg)}
     50%{transform:rotate(-1.6deg)}
@@ -311,7 +295,7 @@
   .next-big:hover,.next-big:focus-visible{background:var(--kin);color:var(--sumi);outline:none}
 
   @media (prefers-reduced-motion: reduce){
-    .shide,.breath-circle{animation:none}
+    .breath-circle{animation:none}
     .scene{transition:none}
   }
 </style>
@@ -319,10 +303,6 @@
 <body>
 
 <div class="glow"></div>
-<div class="shide-row" aria-hidden="true">
-  <div class="shide"></div><div class="shide"></div><div class="shide"></div>
-  <div class="shide"></div><div class="shide"></div><div class="shide"></div>
-</div>
 
 <!-- 一、入口 -->
 <section class="scene active" id="s1">
