@@ -247,6 +247,29 @@
 </section>
 
 <script>
+  function go(n){
+    // 御祈祷の画面を離れたら音を止める
+    const audio=document.getElementById('noritoAudio');
+    if(audio && !audio.paused){
+      audio.pause();
+      audio.currentTime=0;
+      const ic=document.getElementById('noritoIcon');
+      const lb=document.getElementById('noritoLabel');
+      const bt=document.getElementById('noritoPlay');
+      if(ic) ic.textContent='▶';
+      if(lb) lb.textContent='円を押して、お経を再生します';
+      if(bt) bt.classList.remove('playing');
+    }
+    document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));
+    document.getElementById('s'+n).classList.add('active');
+    if(n===4){sahouStep=0;renderSahou();}
+    if(n===5){
+      const d=new Date();
+      document.getElementById('hizuke').textContent=
+        d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日　参拝';
+    }
+  }
+
   function toggleNorito(){
     const audio=document.getElementById('noritoAudio');
     const icon=document.getElementById('noritoIcon');
@@ -264,19 +287,6 @@
       btn.classList.remove('playing');
     }
   }
-  // 御祈祷の画面を離れたら音を止める
-  const _origGo=go;
-  go=function(n){
-    const audio=document.getElementById('noritoAudio');
-    if(audio && !audio.paused){
-      audio.pause();
-      audio.currentTime=0;
-      document.getElementById('noritoIcon').textContent='▶';
-      document.getElementById('noritoLabel').textContent='円を押して、お経を再生します';
-      document.getElementById('noritoPlay').classList.remove('playing');
-    }
-    _origGo(n);
-  };
 
   const sahou=[
     {t:'二礼',g:'深いおじぎを二回'},
