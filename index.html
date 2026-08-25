@@ -170,6 +170,38 @@
   .fuda .tate{font-size:clamp(1.8rem,7vw,2.6rem);margin:0}
   .hi{color:var(--usuzumi);font-size:.78rem;letter-spacing:.2em;margin-top:20px}
 
+  /* ── おみくじ ── */
+  .omikuji-box{
+    border:1px solid var(--kin);
+    padding:40px 30px;
+    margin:26px 0 30px;
+    min-width:min(80vw,320px);
+    background:linear-gradient(180deg,rgba(201,169,97,.06),transparent);
+  }
+  .omikuji-fortune{
+    font-family:'Shippori Mincho',serif;
+    font-size:clamp(2.4rem,11vw,3.4rem);
+    letter-spacing:.3em;text-indent:.3em;
+    color:var(--kin);
+    min-height:1.4em;
+  }
+  .omikuji-advice{
+    color:var(--usuzumi);
+    font-size:.92rem;letter-spacing:.1em;line-height:2;
+    margin-top:20px;
+    min-height:3.6em;
+  }
+  .omikuji-draw{
+    font-family:'Shippori Mincho',serif;
+    background:transparent;color:var(--shiro);
+    border:1px solid var(--kin);
+    padding:14px 40px;
+    font-size:1rem;letter-spacing:.3em;text-indent:.3em;
+    cursor:pointer;margin-bottom:8px;
+    transition:background .4s,color .4s;
+  }
+  .omikuji-draw:hover,.omikuji-draw:focus-visible{background:var(--kin);color:var(--sumi);outline:none}
+
   .next{
     background:none;border:none;color:var(--kin);
     font-family:'Shippori Mincho',serif;
@@ -243,8 +275,21 @@
     <p class="hi" id="hizuke"></p>
   </div>
   <p class="kotoba">お参りおつかれさまでした<br>どうか穏やかな日々でありますように</p>
+  <button class="next" onclick="go(6)">おみくじを引く</button>
   <button class="next" onclick="go(1)">はじめに戻る</button>
 </section>
+
+<!-- 六、おみくじ -->
+<section class="scene" id="s6">
+  <h2>おみくじ</h2>
+  <div class="omikuji-box" id="omikujiBox">
+    <div class="omikuji-fortune" id="omikujiFortune">―</div>
+    <p class="omikuji-advice" id="omikujiAdvice">下の鈴を鳴らして、一枚引きましょう</p>
+  </div>
+  <button class="omikuji-draw" id="omikujiBtn" onclick="drawOmikuji()">鈴を鳴らして引く</button>
+  <button class="next" onclick="go(1)">はじめに戻る</button>
+</section>
+
 
 <script>
   function go(n){
@@ -263,6 +308,13 @@
     document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));
     document.getElementById('s'+n).classList.add('active');
     if(n===4){sahouStep=0;renderSahou();}
+    if(n===6){
+      document.getElementById('omikujiFortune').textContent='―';
+      document.getElementById('omikujiAdvice').textContent='下の鈴を鳴らして、一枚引きましょう';
+      const ob=document.getElementById('omikujiBtn');
+      ob.textContent='鈴を鳴らして引く';
+      ob.disabled=false;
+    }
     if(n===5){
       const d=new Date();
       document.getElementById('hizuke').textContent=
@@ -302,6 +354,40 @@
   function sahouNext(){
     if(sahouStep<sahou.length-1){sahouStep++;renderSahou();}
     else{go(5);}
+  }
+
+  // おみくじ（運勢＋今日の過ごし方）
+  const omikuji=[
+    {f:'大吉', a:'万事に光が差す日。思い切って一歩を踏み出すと良い流れに乗れます。'},
+    {f:'中吉', a:'穏やかに進めば整う日。焦らず、丁寧に物事を運びましょう。'},
+    {f:'小吉', a:'小さな幸せに気づける日。身の回りを整えると運が上向きます。'},
+    {f:'吉',   a:'素直な心が福を呼ぶ日。人への感謝を言葉にしてみましょう。'},
+    {f:'末吉', a:'これから運が開ける日。今日は準備と休息を大切に。'},
+    {f:'半吉', a:'半ばで整う日。無理をせず、できることから始めましょう。'},
+    {f:'吉凶未分末大吉', a:'いまは定まらずとも、行いを重ねれば大きな吉に至ります。'},
+    {f:'凶→吉', a:'厄を祓えば道は開けます。今日の禊が転機になります。'}
+  ];
+  function drawOmikuji(){
+    const box=document.getElementById('omikujiBox');
+    const fEl=document.getElementById('omikujiFortune');
+    const aEl=document.getElementById('omikujiAdvice');
+    const btn=document.getElementById('omikujiBtn');
+    // 演出：一瞬シャッフルしてから決定
+    let ticks=0;
+    btn.disabled=true;
+    const timer=setInterval(()=>{
+      const t=omikuji[Math.floor(Math.random()*omikuji.length)];
+      fEl.textContent=t.f;
+      ticks++;
+      if(ticks>10){
+        clearInterval(timer);
+        const r=omikuji[Math.floor(Math.random()*omikuji.length)];
+        fEl.textContent=r.f;
+        aEl.textContent=r.a;
+        btn.textContent='もう一度引く';
+        btn.disabled=false;
+      }
+    },80);
   }
 </script>
 </body>
