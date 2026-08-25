@@ -284,7 +284,15 @@
   .sahou-tap{color:var(--usuzumi);font-size:.74rem;letter-spacing:.15em;margin-top:34px;opacity:.55}
 
   /* ── 五、完了 ── */
-  .scene-compact{overflow-y:auto}
+  .scene-compact{
+    overflow-y:auto;
+    justify-content:flex-start;
+    padding-top:118px;
+    padding-bottom:36px;
+  }
+  /* 画面に余裕があるときは中央に寄せる */
+  .scene-compact::before,
+  .scene-compact::after{content:'';margin:auto;flex-shrink:0}
   .fuda{
     position:relative;
     border:1px solid var(--kin);
@@ -410,7 +418,7 @@
   .omikuji-draw:hover,.omikuji-draw:focus-visible{background:var(--kin);color:var(--sumi);outline:none;box-shadow:0 0 30px rgba(201,169,97,.4)}
 
   /* ── 読み物ページ共通 ── */
-  .scene-scroll{justify-content:flex-start;overflow-y:auto;padding-top:56px;padding-bottom:40px}
+  .scene-scroll{justify-content:flex-start;overflow-y:auto;padding-top:120px;padding-bottom:40px}
   .omamori-page{max-width:min(90vw,540px);text-align:left;margin-bottom:22px}
   .omamori-page h2{text-align:center;margin-bottom:24px}
   .omamori-intro{color:var(--usuzumi);font-size:.9rem;line-height:2;letter-spacing:.05em;margin-bottom:26px}
