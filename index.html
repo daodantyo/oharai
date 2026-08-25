@@ -399,6 +399,7 @@
   function go(n){
     // 御祈祷の画面を離れたら音を止める＋自動進行タイマーを解除
     if(window.noritoTimer){ clearTimeout(window.noritoTimer); window.noritoTimer=null; }
+    if(window.sahouTimer){ clearTimeout(window.sahouTimer); window.sahouTimer=null; }
     const audio=document.getElementById('noritoAudio');
     if(audio && !audio.paused){
       audio.pause();
@@ -412,7 +413,7 @@
     }
     document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));
     document.getElementById('s'+n).classList.add('active');
-    if(n===4){sahouStep=0;renderSahou();}
+    if(n===4){sahouStep=0;renderSahou();startSahouAuto();}
     if(n===6){
       document.getElementById('omikujiFortune').textContent='―';
       document.getElementById('omikujiAdvice').textContent='下の鈴を鳴らして、一枚引きましょう';
@@ -458,15 +459,27 @@
     {t:'二拍手',g:'胸の前で手を二回打ちます'},
     {t:'一礼',g:'最後にもう一度、深いおじぎを'}
   ];
+  const SAHOU_AUTO_SEC = 3;
   let sahouStep=0;
   function renderSahou(){
     document.getElementById('sahouText').textContent=sahou[sahouStep].t;
     document.getElementById('sahouGuide').textContent=sahou[sahouStep].g;
     document.getElementById('sahouBtn').textContent=(sahouStep<sahou.length-1)?'次へ':'結ぶ';
   }
+  // 一定時間ごとに自動で次の作法へ
+  function startSahouAuto(){
+    if(window.sahouTimer){ clearTimeout(window.sahouTimer); }
+    window.sahouTimer=setTimeout(function(){ sahouNext(); }, SAHOU_AUTO_SEC*1000);
+  }
   function sahouNext(){
-    if(sahouStep<sahou.length-1){sahouStep++;renderSahou();}
-    else{go(5);}
+    if(window.sahouTimer){ clearTimeout(window.sahouTimer); window.sahouTimer=null; }
+    if(sahouStep<sahou.length-1){
+      sahouStep++;
+      renderSahou();
+      startSahouAuto();
+    }else{
+      go(5);
+    }
   }
 
   // おみくじ（運勢＋今日の過ごし方）
