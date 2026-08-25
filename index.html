@@ -743,11 +743,21 @@
         kotoba[Math.floor(Math.random()*kotoba.length)];
     }
     if(n===6){
-      document.getElementById('omikujiFortune').textContent='―';
-      document.getElementById('omikujiAdvice').textContent='下の鈴を鳴らして、一枚引きましょう';
+      const fEl=document.getElementById('omikujiFortune');
+      const aEl=document.getElementById('omikujiAdvice');
       const ob=document.getElementById('omikujiBtn');
-      ob.textContent='鈴を鳴らして引く';
-      ob.disabled=false;
+      const saved=loadTodayOmikuji();
+      if(saved){
+        fEl.textContent=saved.f;
+        aEl.textContent=saved.a;
+        ob.textContent='本日はお引きになりました ─ また明日';
+        ob.disabled=true;
+      }else{
+        fEl.textContent='―';
+        aEl.textContent='下の鈴を鳴らして、一枚引きましょう（一日一回）';
+        ob.textContent='鈴を鳴らして引く';
+        ob.disabled=false;
+      }
     }
   }
 
@@ -848,10 +858,35 @@
     {f:'吉凶未分末大吉', a:'いまは定まらずとも、行いを重ねれば大きな吉に至ります。'},
     {f:'凶→吉', a:'厄を祓えば道は開けます。今日の禊が転機になります。'}
   ];
+  // ── 1日1回の記録 ──
+  function todayKey(){
+    const d=new Date();
+    return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+  }
+  function loadTodayOmikuji(){
+    try{
+      const raw=localStorage.getItem('omikuji');
+      if(!raw) return null;
+      const data=JSON.parse(raw);
+      if(data.day===todayKey()) return data;
+      return null;
+    }catch(e){ return null; }
+  }
+  function saveTodayOmikuji(r){
+    try{
+      localStorage.setItem('omikuji', JSON.stringify({day:todayKey(), f:r.f, a:r.a}));
+    }catch(e){}
+  }
+
   function drawOmikuji(){
     const fEl=document.getElementById('omikujiFortune');
     const aEl=document.getElementById('omikujiAdvice');
     const btn=document.getElementById('omikujiBtn');
+    if(loadTodayOmikuji()){
+      btn.textContent='本日はお引きになりました ─ また明日';
+      btn.disabled=true;
+      return;
+    }
     let ticks=0;
     btn.disabled=true;
     const timer=setInterval(function(){
@@ -863,8 +898,9 @@
         const r=omikuji[Math.floor(Math.random()*omikuji.length)];
         fEl.textContent=r.f;
         aEl.textContent=r.a;
-        btn.textContent='もう一度引く';
-        btn.disabled=false;
+        saveTodayOmikuji(r);
+        btn.textContent='本日はお引きになりました ─ また明日';
+        btn.disabled=true;
       }
     },80);
   }
