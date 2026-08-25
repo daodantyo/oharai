@@ -253,6 +253,45 @@
     padding-top:18px;margin-top:8px;
   }
 
+  /* ── 方位 ── */
+  .eho-box{
+    border:1px solid var(--kin);
+    padding:26px 20px;text-align:center;
+    background:linear-gradient(180deg,rgba(201,169,97,.06),transparent);
+  }
+  .eho-dir{
+    font-family:'Shippori Mincho',serif;
+    font-size:clamp(2rem,9vw,2.8rem);
+    letter-spacing:.3em;text-indent:.3em;
+    color:var(--kin);
+  }
+  .eho-note{color:var(--usuzumi);font-size:.82rem !important;margin-top:12px;text-align:center}
+  .compass-wrap{text-align:center}
+  .compass{
+    position:relative;
+    width:200px;height:200px;border-radius:50%;
+    border:1px solid var(--kin);
+    margin:10px auto 16px;
+    transition:transform .2s linear;
+  }
+  .compass-n,.compass-e,.compass-s,.compass-w{
+    position:absolute;
+    font-family:'Shippori Mincho',serif;
+    color:var(--shiro);font-size:1rem;
+  }
+  .compass-n{top:10px;left:50%;transform:translateX(-50%);color:var(--shu);font-size:1.2rem}
+  .compass-s{bottom:10px;left:50%;transform:translateX(-50%)}
+  .compass-e{right:12px;top:50%;transform:translateY(-50%)}
+  .compass-w{left:12px;top:50%;transform:translateY(-50%)}
+  .compass-needle{
+    position:absolute;left:50%;top:50%;
+    width:2px;height:70px;
+    background:linear-gradient(180deg,var(--shu) 50%,var(--shiro) 50%);
+    transform:translate(-50%,-100%);
+    transform-origin:bottom center;
+  }
+  .compass-label{color:var(--usuzumi);font-size:.82rem !important;margin-bottom:14px;text-align:center}
+
   .next{
     background:none;border:none;color:var(--kin);
     font-family:'Shippori Mincho',serif;
@@ -340,6 +379,7 @@
   <button class="next" onclick="go(6)">おみくじを引く</button>
   <button class="next" onclick="go(7)">お守りの作り方</button>
   <button class="next" onclick="go(8)">セージ浄化のやり方</button>
+  <button class="next" onclick="go(9)">方位を知る</button>
   <button class="next" onclick="go(1)">はじめに戻る</button>
 </section>
 
@@ -432,6 +472,50 @@
   </div>
   <button class="next" onclick="go(1)">はじめに戻る</button>
 </section>
+
+<!-- 九、方位 -->
+<section class="scene scene-scroll" id="s9">
+  <div class="omamori-page">
+    <h2>方位を知る</h2>
+
+    <p class="omamori-intro">神道では方位を大切にしてきました。よい方角に向かって祈り、避けるべき方角を意識して暮らす。方位を知ることは、心を整える第一歩です。</p>
+
+    <div class="omamori-sec">
+      <div class="omamori-head">今年の恵方</div>
+      <div class="eho-box">
+        <div class="eho-dir">南南東</div>
+        <p class="eho-note">2026年（丙午）の恵方。この方角に向かって祈ると縁起がよいとされます。</p>
+      </div>
+    </div>
+
+    <div class="omamori-sec">
+      <div class="omamori-head">方位磁針</div>
+      <div class="compass-wrap">
+        <div class="compass" id="compassDial">
+          <div class="compass-n">北</div>
+          <div class="compass-e">東</div>
+          <div class="compass-s">南</div>
+          <div class="compass-w">西</div>
+          <div class="compass-needle"></div>
+        </div>
+        <p class="compass-label" id="compassLabel">下のボタンを押すと、方位磁針が動きます</p>
+        <button class="omikuji-draw" id="compassBtn" onclick="startCompass()">方位磁針を使う</button>
+      </div>
+    </div>
+
+    <div class="omamori-sec">
+      <div class="omamori-head">方位の意味</div>
+      <p><span class="mark">北東</span>鬼門（きもん）。古くから気の出入りする方角とされ、整理整頓と清潔を心がけるとよいとされます。</p>
+      <p><span class="mark">南西</span>裏鬼門（うらきもん）。鬼門と対をなす方角。同じく清らかに保つのがよいとされます。</p>
+      <p><span class="mark">北</span>神聖な方角。神棚は北を背にして南向き、または西を背にして東向きに祀るのが基本とされます。</p>
+      <p><span class="mark">東</span>日の昇る方角。始まりと発展の象徴とされています。</p>
+    </div>
+
+    <p class="omamori-foot">方位の吉凶は古くからの慣習・考え方であり、暮らしの中で心を整えるための知恵として受け継がれてきたものです。</p>
+  </div>
+  <button class="next" onclick="go(1)">はじめに戻る</button>
+</section>
+
 
 
 
@@ -543,6 +627,46 @@
     {f:'吉凶未分末大吉', a:'いまは定まらずとも、行いを重ねれば大きな吉に至ります。'},
     {f:'凶→吉', a:'厄を祓えば道は開けます。今日の禊が転機になります。'}
   ];
+  // 方位磁針
+  let compassActive=false;
+  function startCompass(){
+    const label=document.getElementById('compassLabel');
+    const btn=document.getElementById('compassBtn');
+    if(compassActive) return;
+    // iPhone系は許可が必要
+    if(typeof DeviceOrientationEvent!=='undefined' && typeof DeviceOrientationEvent.requestPermission==='function'){
+      DeviceOrientationEvent.requestPermission().then(function(state){
+        if(state==='granted'){ attachCompass(); }
+        else{ label.textContent='方位センサーの利用が許可されませんでした'; }
+      }).catch(function(){
+        label.textContent='この端末では方位センサーを使えないようです';
+      });
+    }else if(window.DeviceOrientationEvent){
+      attachCompass();
+    }else{
+      label.textContent='この端末には方位センサーがないようです';
+    }
+    function attachCompass(){
+      compassActive=true;
+      btn.style.display='none';
+      label.textContent='スマホを水平に持って、ゆっくり回してみてください';
+      window.addEventListener('deviceorientationabsolute', onHeading, true);
+      window.addEventListener('deviceorientation', onHeading, true);
+    }
+    function onHeading(e){
+      let heading=null;
+      if(typeof e.webkitCompassHeading==='number'){ heading=e.webkitCompassHeading; }
+      else if(e.absolute && typeof e.alpha==='number'){ heading=360-e.alpha; }
+      else if(typeof e.alpha==='number'){ heading=360-e.alpha; }
+      if(heading===null) return;
+      const dial=document.getElementById('compassDial');
+      if(dial){ dial.style.transform='rotate('+(-heading)+'deg)'; }
+      const names=['北','北北東','北東','東北東','東','東南東','南東','南南東','南','南南西','南西','西南西','西','西北西','北西','北北西'];
+      const idx=Math.round(((heading%360)+360)%360/22.5)%16;
+      label.textContent='いま画面の上が向いているのは：'+names[idx];
+    }
+  }
+
   function drawOmikuji(){
     const box=document.getElementById('omikujiBox');
     const fEl=document.getElementById('omikujiFortune');
