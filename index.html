@@ -55,14 +55,41 @@
     100%{transform:translateY(-108vh) translateX(6vw);opacity:0}
   }
 
-  /* ── 月 ── */
-  .moon{
-    position:fixed;left:50%;top:16%;
-    width:150px;height:150px;border-radius:50%;
-    transform:translateX(-50%);
-    background:radial-gradient(circle at 42% 38%, #fdf8e7 0%, #ead9ae 55%, #cbb377 100%);
-    box-shadow:0 0 60px 18px rgba(233,213,158,.18), 0 0 140px 60px rgba(233,213,158,.07);
-    opacity:.9;pointer-events:none;z-index:0;
+  /* ── 月の題字 ── */
+  .moon-title{
+    position:relative;
+    width:min(58vw,225px);
+    aspect-ratio:1;
+    border-radius:50%;
+    background:
+      radial-gradient(circle 18px at 26% 30%, rgba(190,170,120,.25), transparent 60%),
+      radial-gradient(circle 12px at 68% 64%, rgba(190,170,120,.2), transparent 60%),
+      radial-gradient(circle 9px at 40% 74%, rgba(190,170,120,.18), transparent 60%),
+      radial-gradient(circle at 42% 36%, #fefaf0 0%, #f7ecd0 45%, #e8d5a8 78%, #cbb377 100%);
+    box-shadow:
+      0 0 55px 16px rgba(236,216,160,.22),
+      0 0 130px 55px rgba(236,216,160,.08),
+      inset -8px -10px 30px rgba(160,130,70,.35),
+      inset 6px 8px 18px rgba(255,252,240,.8);
+    display:flex;align-items:center;justify-content:center;
+    margin:4px auto 6px;
+    animation:moonfloat 9s ease-in-out infinite;
+  }
+  @keyframes moonfloat{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-7px)}
+  }
+  .moon-moji{
+    writing-mode:vertical-rl;
+    font-family:'Shippori Mincho',serif;
+    font-weight:600;
+    font-size:clamp(2rem,8vw,2.7rem);
+    letter-spacing:.32em;
+    line-height:1;
+    color:#33291a;
+    text-shadow:
+      0 1px 0 rgba(255,252,240,.7),
+      0 2px 4px rgba(120,95,45,.35);
   }
 
   .glow{
@@ -505,7 +532,6 @@
   <span style="left:93%;top:8%;animation-delay:3s"></span><span style="left:12%;top:55%;animation-delay:2.7s"></span>
   <span style="left:88%;top:52%;animation-delay:1.2s"></span><span style="left:46%;top:44%;animation-delay:3.4s"></span>
 </div>
-<div class="moon" aria-hidden="true"></div>
 <canvas id="particles" aria-hidden="true"></canvas>
 <div class="glow" aria-hidden="true"></div>
 <div class="lights" aria-hidden="true">
@@ -523,7 +549,9 @@
 
 <!-- 一、入口 -->
 <section class="scene scene-compact active" id="s1">
-  <div class="tate">お祓い</div>
+  <div class="moon-title">
+    <span class="moon-moji">お祓い</span>
+  </div>
   <svg class="torii" viewBox="0 0 200 165" aria-hidden="true">
     <g>
       <path d="M6 26 Q100 12 194 26 L191 40 Q100 27 9 40 Z" fill="#c2402f"/>
