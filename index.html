@@ -381,7 +381,8 @@
 
 <script>
   function go(n){
-    // 御祈祷の画面を離れたら音を止める
+    // 御祈祷の画面を離れたら音を止める＋自動進行タイマーを解除
+    if(window.noritoTimer){ clearTimeout(window.noritoTimer); window.noritoTimer=null; }
     const audio=document.getElementById('noritoAudio');
     if(audio && !audio.paused){
       audio.pause();
@@ -410,6 +411,9 @@
     }
   }
 
+  // 自動で次へ進むまでの時間（秒）。ここの数字を変えれば調整できます
+  const NORITO_AUTO_SEC = 60;
+
   function toggleNorito(){
     const audio=document.getElementById('noritoAudio');
     const icon=document.getElementById('noritoIcon');
@@ -418,13 +422,18 @@
     if(audio.paused){
       audio.play();
       icon.textContent='‖';
-      label.textContent='お経が流れています…（もう一度押すと止まります）';
+      label.textContent='お経が流れています…（しばらくすると自動で進みます）';
       btn.classList.add('playing');
+      // 一定時間で自動的に拝礼へ進む
+      if(window.noritoTimer){ clearTimeout(window.noritoTimer); }
+      window.noritoTimer=setTimeout(function(){ go(4); }, NORITO_AUTO_SEC*1000);
     }else{
       audio.pause();
       icon.textContent='▶';
       label.textContent='円を押して、お経を再生します';
       btn.classList.remove('playing');
+      // 止めたら自動進行も取り消し
+      if(window.noritoTimer){ clearTimeout(window.noritoTimer); window.noritoTimer=null; }
     }
   }
 
