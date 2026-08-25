@@ -260,6 +260,16 @@
   }
   .next:focus-visible{outline:1px solid var(--kin)}
 
+  .next-big{
+    font-size:1.7rem;
+    letter-spacing:.5em;text-indent:.5em;
+    border:1px solid var(--kin);
+    padding:20px 60px;
+    margin:6px 0;
+    transition:background .4s,color .4s;
+  }
+  .next-big:hover,.next-big:focus-visible{background:var(--kin);color:var(--sumi);outline:none}
+
   @media (prefers-reduced-motion: reduce){
     .shide,.breath-circle{animation:none}
     .scene{transition:none}
@@ -308,7 +318,7 @@
     <audio id="noritoAudio" src="norito.mp3" preload="none"></audio>
   </div>
   <p class="norito-guide">お急ぎの方は「進む」をお押しください<br>心清らかな方は、そのまま三十秒お待ちください</p>
-  <button class="next" onclick="go(4)">祈祷を受けました ─ 進む</button>
+  <button class="next next-big" onclick="go(4)">進む</button>
 </section>
 
 <!-- 四、作法 -->
