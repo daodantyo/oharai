@@ -202,6 +202,52 @@
   }
   .omikuji-draw:hover,.omikuji-draw:focus-visible{background:var(--kin);color:var(--sumi);outline:none}
 
+  /* ── お守りの作り方（スクロール可）── */
+  .scene-scroll{
+    justify-content:flex-start;
+    overflow-y:auto;
+    padding-top:56px;padding-bottom:40px;
+  }
+  .omamori-page{
+    max-width:min(90vw,540px);
+    text-align:left;
+    margin-bottom:24px;
+  }
+  .omamori-page h2{text-align:center;margin-bottom:22px}
+  .omamori-intro{
+    color:var(--usuzumi);font-size:.9rem;line-height:2;letter-spacing:.05em;
+    margin-bottom:26px;
+  }
+  .omamori-sec{
+    border-top:1px solid rgba(201,169,97,.3);
+    padding-top:18px;margin-bottom:24px;
+  }
+  .omamori-head{
+    font-family:'Shippori Mincho',serif;
+    color:var(--kin);font-size:1.05rem;letter-spacing:.2em;
+    margin-bottom:14px;
+  }
+  .omamori-page p{
+    font-size:.9rem;line-height:1.95;letter-spacing:.03em;
+    margin-bottom:10px;color:var(--shiro);
+  }
+  .omamori-page .mark{
+    display:inline-block;color:var(--shu);
+    font-family:'Shippori Mincho',serif;
+    margin-right:10px;min-width:2.6em;
+  }
+  .omamori-page .num{
+    display:inline-block;color:var(--kin);
+    font-family:'Shippori Mincho',serif;
+    margin-right:10px;
+  }
+  .omamori-note{color:var(--usuzumi);font-size:.8rem !important}
+  .omamori-foot{
+    color:var(--usuzumi);font-size:.82rem !important;line-height:1.9;
+    border-top:1px solid rgba(201,169,97,.3);
+    padding-top:18px;margin-top:8px;
+  }
+
   .next{
     background:none;border:none;color:var(--kin);
     font-family:'Shippori Mincho',serif;
@@ -276,6 +322,7 @@
   </div>
   <p class="kotoba">お参りおつかれさまでした<br>どうか穏やかな日々でありますように</p>
   <button class="next" onclick="go(6)">おみくじを引く</button>
+  <button class="next" onclick="go(7)">お守りの作り方</button>
   <button class="next" onclick="go(1)">はじめに戻る</button>
 </section>
 
@@ -289,6 +336,47 @@
   <button class="omikuji-draw" id="omikujiBtn" onclick="drawOmikuji()">鈴を鳴らして引く</button>
   <button class="next" onclick="go(1)">はじめに戻る</button>
 </section>
+
+<!-- 七、お守りの作り方 -->
+<section class="scene scene-scroll" id="s7">
+  <div class="omamori-page">
+    <h2>お守りの作り方</h2>
+
+    <p class="omamori-intro">塩・小豆・お米は、日本で受け継がれてきた「清め・魔除け・実り」の縁起物です。心を込めて、自分だけのお守りを作りましょう。</p>
+
+    <div class="omamori-sec">
+      <div class="omamori-head">三つの意味</div>
+      <p><span class="mark">塩</span>古くからもっとも基本の清めのもの。盛り塩やお清めに使われてきました。</p>
+      <p><span class="mark">小豆</span>赤い色が魔除け・厄除けを表し、節目の祝いに使われてきました。</p>
+      <p><span class="mark">お米</span>神様への供えの基本。生命力と繁栄の象徴とされています。</p>
+    </div>
+
+    <div class="omamori-sec">
+      <div class="omamori-head">用意するもの</div>
+      <p>小さな布袋（お守り袋）／塩ひとつまみ／小豆 数粒／お米 数粒／小さな紙／ひも</p>
+      <p class="omamori-note">※ 小豆・お米は乾いたまま。湿気ると傷みます。</p>
+    </div>
+
+    <div class="omamori-sec">
+      <div class="omamori-head">作り方</div>
+      <p><span class="num">一</span>塩・小豆・お米を少量ずつ用意する</p>
+      <p><span class="num">二</span>小さな紙に願い事や「無病息災」などの言葉を書いて添える</p>
+      <p><span class="num">三</span>中身を小さな紙や薄い布で軽く包んでから袋に入れる（縫い目からこぼれないように）</p>
+      <p><span class="num">四</span>袋の口をひもで結ぶ（叶結びなど縁起のよい結び方で）</p>
+      <p><span class="num">五</span>神棚や神社で手を合わせ、心を込める</p>
+    </div>
+
+    <div class="omamori-sec">
+      <div class="omamori-head">長持ちのコツ</div>
+      <p>塩は湿気を吸うので、小さなポリ袋やラップで一度包んでから入れると傷みにくくなります。中身は半年〜一年で新しく替えると清々しく保てます。</p>
+      <p>古くなった塩やお米は、感謝して土に還す・白い紙に包んで処分するとよいでしょう。</p>
+    </div>
+
+    <p class="omamori-foot">これは日本で受け継がれてきた縁起物・祈りの形です。心を込めて作ること、そのものに意味があります。</p>
+  </div>
+  <button class="next" onclick="go(1)">はじめに戻る</button>
+</section>
+
 
 
 <script>
