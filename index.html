@@ -298,45 +298,67 @@
   .scene-compact .kotoba{font-size:.82rem;line-height:1.8;margin-bottom:6px}
   .scene-compact .next{padding:8px 20px;font-size:.9rem}
 
-  /* ── 六、おみくじ（御籤紙）── */
+  /* ── 六、おみくじ（金襴の額入り御籤）── */
+  .mikuji-frame{
+    position:relative;
+    padding:16px;
+    margin:18px 0 26px;
+    background:
+      radial-gradient(circle 2px at 12px 12px, rgba(230,205,143,.5) 30%, transparent 35%),
+      repeating-linear-gradient(45deg,
+        rgba(201,169,97,.16) 0 2px, transparent 2px 12px),
+      repeating-linear-gradient(-45deg,
+        rgba(201,169,97,.12) 0 2px, transparent 2px 12px),
+      linear-gradient(160deg,#3a1220 0%,#24101f 45%,#160b18 100%);
+    background-size:24px 24px, auto, auto, auto;
+    border:1px solid var(--kin);
+    box-shadow:
+      0 24px 60px rgba(0,0,0,.65),
+      0 0 46px rgba(201,169,97,.22),
+      inset 0 0 0 3px rgba(20,10,18,.9),
+      inset 0 0 0 4px rgba(201,169,97,.55);
+  }
+  /* 四隅の金具 */
+  .kazari{
+    position:absolute;width:26px;height:26px;z-index:2;
+    background:linear-gradient(135deg,#f0dca2 0%,#c9a961 45%,#8f7434 100%);
+    box-shadow:0 1px 3px rgba(0,0,0,.6), inset 0 1px 2px rgba(255,250,230,.8);
+  }
+  .k1{top:-4px;left:-4px;clip-path:polygon(0 0,100% 0,100% 28%,28% 28%,28% 100%,0 100%)}
+  .k2{top:-4px;right:-4px;clip-path:polygon(0 0,100% 0,100% 100%,72% 100%,72% 28%,0 28%)}
+  .k3{bottom:-4px;left:-4px;clip-path:polygon(0 0,28% 0,28% 72%,100% 72%,100% 100%,0 100%)}
+  .k4{bottom:-4px;right:-4px;clip-path:polygon(72% 0,100% 0,100% 100%,0 100%,0 72%,72% 72%)}
   .mikuji-paper{
     position:relative;
-    width:min(76vw,300px);
-    min-height:380px;
-    padding:56px 26px 66px;
-    margin:20px 0 26px;
+    width:min(70vw,272px);
+    min-height:372px;
+    padding:52px 24px 68px;
     background:
-      linear-gradient(115deg, rgba(255,255,255,0) 42%, rgba(255,255,255,.5) 50%, rgba(255,255,255,0) 58%),
-      radial-gradient(ellipse 130% 100% at 50% 0%, #fdfbf4 0%, #f4eeda 60%, #eae1c6 100%);
+      linear-gradient(115deg, rgba(255,255,255,0) 42%, rgba(255,255,255,.45) 50%, rgba(255,255,255,0) 58%),
+      repeating-linear-gradient(0deg, rgba(160,128,60,.03) 0 1px, transparent 1px 7px),
+      radial-gradient(ellipse 130% 100% at 50% 0%, #fdfbf4 0%, #f6f0dc 60%, #ece3c8 100%);
     color:#3a3320;
-    box-shadow:
-      0 18px 46px rgba(0,0,0,.55),
-      0 0 40px rgba(201,169,97,.18),
-      inset 0 0 26px rgba(184,158,102,.18);
+    box-shadow:inset 0 0 30px rgba(150,120,60,.22);
     display:flex;flex-direction:column;align-items:center;
   }
-  /* 折り目 */
-  .mikuji-paper::before{
-    content:'';position:absolute;inset:0;
-    background:
-      linear-gradient(180deg, rgba(120,100,55,.10), transparent 3px) 0 25%/100% 4px no-repeat,
-      linear-gradient(180deg, rgba(120,100,55,.08), transparent 3px) 0 72%/100% 4px no-repeat;
-    pointer-events:none;
-  }
-  /* 金の内枠 */
+  /* 内側の金罫線 */
   .mikuji-paper::after{
-    content:'';position:absolute;inset:9px;
-    border:1px solid rgba(160,128,60,.55);
-    outline:1px solid rgba(160,128,60,.25);
+    content:'';position:absolute;inset:8px;
+    border:1px solid rgba(160,128,60,.5);
+    outline:1px solid rgba(160,128,60,.22);
     outline-offset:3px;
     pointer-events:none;
   }
+  /* 題字の金プレート */
   .mikuji-title{
     font-family:'Shippori Mincho',serif;
-    font-size:.95rem;letter-spacing:.7em;text-indent:.7em;
-    color:#8a7134;
-    border-bottom:1px solid rgba(160,128,60,.5);
-    padding-bottom:10px;margin-bottom:26px;
+    font-size:.92rem;letter-spacing:.6em;text-indent:.6em;
+    color:#4a3714;
+    background:linear-gradient(180deg,#f2e2af 0%,#d8ba74 55%,#b6923f 100%);
+    padding:8px 22px;
+    box-shadow:0 2px 5px rgba(0,0,0,.35), inset 0 1px 1px rgba(255,252,235,.9), inset 0 -1px 2px rgba(90,65,20,.5);
+    text-shadow:0 1px 0 rgba(255,250,230,.7);
+    margin-bottom:26px;
   }
   .omikuji-fortune{
     font-family:'Shippori Mincho',serif;
@@ -345,10 +367,10 @@
     letter-spacing:.28em;
     line-height:1.2;
     min-height:4.2em;
-    background:linear-gradient(160deg,#9a7b2e 0%, #c9a03c 35%, #8a6b24 70%, #b8933a 100%);
+    background:linear-gradient(160deg,#9a7b2e 0%, #d4ab45 30%, #8a6b24 55%, #c49d3f 80%, #7d6222 100%);
     -webkit-background-clip:text;background-clip:text;
     -webkit-text-fill-color:transparent;color:transparent;
-    text-shadow:0 1px 1px rgba(255,255,255,.35);
+    filter:drop-shadow(0 1px 1px rgba(255,255,255,.5)) drop-shadow(0 2px 3px rgba(90,65,20,.25));
     display:flex;align-items:center;
   }
   .omikuji-advice{
@@ -357,28 +379,31 @@
   }
   /* 朱印 */
   .mikuji-in{
-    position:absolute;bottom:20px;right:22px;
-    width:44px;height:44px;border-radius:6px;
-    border:2px solid rgba(178,45,32,.85);
-    color:rgba(178,45,32,.85);
+    position:absolute;bottom:20px;right:20px;
+    width:46px;height:46px;border-radius:5px;
+    background:
+      radial-gradient(circle at 30% 30%, rgba(255,255,255,.16), transparent 55%),
+      linear-gradient(150deg,#c0392b 0%,#a02818 60%,#8a1f12 100%);
+    color:#fdf6ea;
     font-family:'Shippori Mincho',serif;
-    font-size:1.35rem;
+    font-size:1.4rem;
     display:flex;align-items:center;justify-content:center;
-    transform:rotate(-6deg);
-    box-shadow:inset 0 0 6px rgba(178,45,32,.25);
-    opacity:.9;
+    transform:rotate(-5deg);
+    box-shadow:0 2px 5px rgba(0,0,0,.3), inset 0 0 5px rgba(60,10,5,.6);
+    opacity:.92;
   }
   .omikuji-draw{
     font-family:'Shippori Mincho',serif;
-    background:linear-gradient(180deg,rgba(201,169,97,.1),rgba(201,169,97,.02));
-    color:var(--shiro);
+    background:linear-gradient(180deg,rgba(201,169,97,.16),rgba(201,169,97,.03));
+    color:var(--kin-hi);
     border:1px solid var(--kin);
     padding:14px 42px;
     font-size:1rem;letter-spacing:.3em;text-indent:.3em;
     cursor:pointer;margin-bottom:6px;
-    transition:background .4s,color .4s;
+    box-shadow:0 0 18px rgba(201,169,97,.14), inset 0 0 10px rgba(201,169,97,.06);
+    transition:background .4s,color .4s,box-shadow .4s;
   }
-  .omikuji-draw:hover,.omikuji-draw:focus-visible{background:var(--kin);color:var(--sumi);outline:none}
+  .omikuji-draw:hover,.omikuji-draw:focus-visible{background:var(--kin);color:var(--sumi);outline:none;box-shadow:0 0 30px rgba(201,169,97,.4)}
 
   /* ── 読み物ページ共通 ── */
   .scene-scroll{justify-content:flex-start;overflow-y:auto;padding-top:56px;padding-bottom:40px}
@@ -549,11 +574,14 @@
 <!-- 六、おみくじ -->
 <section class="scene scene-compact" id="s6">
   <h2>おみくじ</h2>
-  <div class="mikuji-paper" id="omikujiBox">
-    <div class="mikuji-title">御神籤</div>
-    <div class="omikuji-fortune" id="omikujiFortune">―</div>
-    <p class="omikuji-advice" id="omikujiAdvice">下の鈴を鳴らして、一枚引きましょう</p>
-    <div class="mikuji-in" aria-hidden="true">籤</div>
+  <div class="mikuji-frame">
+    <span class="kazari k1"></span><span class="kazari k2"></span><span class="kazari k3"></span><span class="kazari k4"></span>
+    <div class="mikuji-paper" id="omikujiBox">
+      <div class="mikuji-title">御神籤</div>
+      <div class="omikuji-fortune" id="omikujiFortune">―</div>
+      <p class="omikuji-advice" id="omikujiAdvice">下の鈴を鳴らして、一枚引きましょう</p>
+      <div class="mikuji-in" aria-hidden="true">籤</div>
+    </div>
   </div>
   <button class="omikuji-draw" id="omikujiBtn" onclick="drawOmikuji()">鈴を鳴らして引く</button>
   <button class="next" onclick="go(1)">はじめに戻る</button>
