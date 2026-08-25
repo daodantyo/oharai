@@ -127,18 +127,28 @@
   }
 
   /* ── 祈祷 ── */
-  .video-frame{
-    width:min(92vw,560px);
-    aspect-ratio:16/9;
-    background:var(--ai);
-    border:1px solid rgba(201,169,97,.5);
-    margin:28px 0 12px;
-    overflow:hidden;
+  .norito-area{
+    display:flex;flex-direction:column;align-items:center;
+    margin:34px 0 18px;
   }
-  .video-frame iframe{width:100%;height:100%;border:0;display:block}
-  .video-fallback{margin-bottom:16px}
-  .video-fallback a{color:var(--usuzumi);font-size:.8rem;letter-spacing:.1em;text-decoration:none}
-  .video-fallback a:hover{color:var(--kin)}
+  .norito-play{
+    width:120px;height:120px;border-radius:50%;
+    border:1px solid var(--kin);
+    background:transparent;
+    color:var(--kin);
+    font-size:2rem;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    transition:background .4s,color .4s;
+  }
+  .norito-play:hover,.norito-play:focus-visible{
+    background:var(--kin);color:var(--sumi);outline:none;
+  }
+  .norito-play.playing{animation:breathe 6s ease-in-out infinite}
+  .norito-label{
+    color:var(--usuzumi);font-size:.85rem;letter-spacing:.15em;
+    margin-top:22px;line-height:1.9;
+  }
 
   /* ── 作法 ── */
   .sahou{
@@ -208,15 +218,13 @@
 <!-- 三、祈祷 -->
 <section class="scene" id="s3">
   <h2>御祈祷</h2>
-  <div class="video-frame">
-    <iframe
-      src="https://www.youtube-nocookie.com/embed/YSGFMFp5jdg?rel=0"
-      title="お経"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen
-      referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  <div class="norito-area">
+    <button class="norito-play" id="noritoPlay" onclick="toggleNorito()" aria-label="お経を再生">
+      <span id="noritoIcon">▶</span>
+    </button>
+    <p class="norito-label" id="noritoLabel">円を押して、お経を再生します</p>
+    <audio id="noritoAudio" src="norito.mp3" preload="none"></audio>
   </div>
-  <p class="video-fallback"><a href="https://www.youtube.com/watch?v=YSGFMFp5jdg" target="_blank" rel="noopener">▶ 再生されないときは、こちらをタップ（YouTubeで開く）</a></p>
   <button class="next" onclick="go(4)">祈祷を受けました ─ 進む</button>
 </section>
 
@@ -239,16 +247,37 @@
 </section>
 
 <script>
-  function go(n){
-    document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));
-    document.getElementById('s'+n).classList.add('active');
-    if(n===4){sahouStep=0;renderSahou();}
-    if(n===5){
-      const d=new Date();
-      document.getElementById('hizuke').textContent=
-        d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日　参拝';
+  function toggleNorito(){
+    const audio=document.getElementById('noritoAudio');
+    const icon=document.getElementById('noritoIcon');
+    const label=document.getElementById('noritoLabel');
+    const btn=document.getElementById('noritoPlay');
+    if(audio.paused){
+      audio.play();
+      icon.textContent='‖';
+      label.textContent='お経が流れています…（もう一度押すと止まります）';
+      btn.classList.add('playing');
+    }else{
+      audio.pause();
+      icon.textContent='▶';
+      label.textContent='円を押して、お経を再生します';
+      btn.classList.remove('playing');
     }
   }
+  // 御祈祷の画面を離れたら音を止める
+  const _origGo=go;
+  go=function(n){
+    const audio=document.getElementById('noritoAudio');
+    if(audio && !audio.paused){
+      audio.pause();
+      audio.currentTime=0;
+      document.getElementById('noritoIcon').textContent='▶';
+      document.getElementById('noritoLabel').textContent='円を押して、お経を再生します';
+      document.getElementById('noritoPlay').classList.remove('playing');
+    }
+    _origGo(n);
+  };
+
   const sahou=[
     {t:'二礼',g:'深いおじぎを二回'},
     {t:'二拍手',g:'胸の前で手を二回打ちます'},
