@@ -149,6 +149,10 @@
     color:var(--usuzumi);font-size:.85rem;letter-spacing:.15em;
     margin-top:22px;line-height:1.9;
   }
+  .norito-guide{
+    color:var(--usuzumi);font-size:.8rem;letter-spacing:.1em;
+    line-height:2;margin:6px 0 20px;opacity:.85;
+  }
 
   /* ── 作法 ── */
   .sahou{
@@ -303,6 +307,7 @@
     <p class="norito-label" id="noritoLabel">円を押して、祝詞を奏上します</p>
     <audio id="noritoAudio" src="norito.mp3" preload="none"></audio>
   </div>
+  <p class="norito-guide">お急ぎの方は「進む」をお押しください<br>心清らかな方は、そのまま三十秒お待ちください</p>
   <button class="next" onclick="go(4)">祈祷を受けました ─ 進む</button>
 </section>
 
@@ -412,7 +417,7 @@
   }
 
   // 自動で次へ進むまでの時間（秒）。ここの数字を変えれば調整できます
-  const NORITO_AUTO_SEC = 60;
+  const NORITO_AUTO_SEC = 30;
 
   function toggleNorito(){
     const audio=document.getElementById('noritoAudio');
