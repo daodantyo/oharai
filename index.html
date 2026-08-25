@@ -8,89 +8,158 @@
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@300;400&display=swap" rel="stylesheet">
 <style>
   :root{
-    --sumi:#0c0e18;          /* 夜の墨色 */
-    --ai:#161b2e;            /* 深藍 */
-    --shu:#c2402f;           /* 朱（鳥居の色） */
-    --shiro:#f3efe6;         /* 紙垂の白 */
-    --kin:#c9a961;           /* 金 */
-    --usuzumi:#8b8fa3;       /* 薄墨（補助テキスト） */
+    --sumi:#0a0c16;
+    --ai:#141a2f;
+    --shu:#c2402f;
+    --shu-dark:#8e2f22;
+    --shiro:#f3efe6;
+    --kin:#c9a961;
+    --kin-hi:#e6cd8f;
+    --usuzumi:#8b8fa3;
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{height:100%}
   body{
-    background:var(--sumi);
+    background:
+      radial-gradient(ellipse 120% 70% at 50% -10%, #1b2340 0%, transparent 60%),
+      radial-gradient(ellipse 100% 60% at 50% 115%, #10131f 0%, transparent 55%),
+      var(--sumi);
     color:var(--shiro);
     font-family:'Zen Kaku Gothic New',sans-serif;
     font-weight:300;
     overflow:hidden;
   }
+
+  /* ── 星空 ── */
+  .stars{position:fixed;inset:0;pointer-events:none;z-index:0}
+  .stars span{
+    position:absolute;width:2px;height:2px;border-radius:50%;
+    background:var(--shiro);opacity:.4;
+    animation:twinkle 4s ease-in-out infinite;
+  }
+  @keyframes twinkle{0%,100%{opacity:.15}50%{opacity:.55}}
+
+  /* ── 舞う光 ── */
+  .lights{position:fixed;inset:0;pointer-events:none;z-index:1}
+  .lights span{
+    position:absolute;bottom:-4vh;
+    width:5px;height:5px;border-radius:50%;
+    background:radial-gradient(circle,var(--kin-hi) 0%,rgba(201,169,97,0) 70%);
+    animation:rise linear infinite;
+    opacity:0;
+  }
+  @keyframes rise{
+    0%{transform:translateY(0) translateX(0);opacity:0}
+    10%{opacity:.75}
+    90%{opacity:.25}
+    100%{transform:translateY(-108vh) translateX(6vw);opacity:0}
+  }
+
+  /* ── 月 ── */
+  .moon{
+    position:fixed;left:50%;top:16%;
+    width:150px;height:150px;border-radius:50%;
+    transform:translateX(-50%);
+    background:radial-gradient(circle at 42% 38%, #fdf8e7 0%, #ead9ae 55%, #cbb377 100%);
+    box-shadow:0 0 60px 18px rgba(233,213,158,.18), 0 0 140px 60px rgba(233,213,158,.07);
+    opacity:.9;pointer-events:none;z-index:0;
+  }
+
+  .glow{
+    position:fixed;left:50%;top:40%;
+    width:130vmin;height:130vmin;
+    transform:translate(-50%,-50%);
+    background:radial-gradient(circle,rgba(201,169,97,.09) 0%,rgba(194,64,47,.045) 35%,transparent 65%);
+    pointer-events:none;z-index:0;
+  }
+
+  /* ── 紙垂 ── */
+  .shide-row{
+    position:fixed;top:0;left:0;right:0;
+    display:flex;justify-content:space-around;
+    pointer-events:none;z-index:6;
+    filter:drop-shadow(0 4px 8px rgba(0,0,0,.5));
+  }
+  .shide-row::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:7px;
+    background:linear-gradient(180deg,#d8cba8,#a99763);
+  }
+  .shide{
+    width:24px;height:60px;margin-top:6px;
+    background:linear-gradient(160deg,#fbf8f0,#e8e2d2);
+    clip-path:polygon(0 0,100% 0,100% 30%,55% 30%,55% 55%,100% 55%,100% 82%,55% 82%,55% 100%,0 100%,0 70%,45% 70%,45% 45%,0 45%,0 18%,45% 18%,45% 0);
+    opacity:.92;
+    transform-origin:top center;
+    animation:sway 5.5s ease-in-out infinite;
+  }
+  .shide:nth-child(2n){animation-delay:1.3s}
+  .shide:nth-child(3n){animation-delay:2.6s}
+  @keyframes sway{0%,100%{transform:rotate(1.8deg)}50%{transform:rotate(-1.8deg)}}
+
+  /* ── 画面 ── */
   .scene{
-    position:absolute;inset:0;
+    position:absolute;inset:0;z-index:3;
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     padding:24px;text-align:center;
     opacity:0;visibility:hidden;
-    transition:opacity 1.2s ease;
+    transform:translateY(14px);
+    transition:opacity 1s ease, transform 1s ease, visibility 1s;
   }
-  .scene.active{opacity:1;visibility:visible}
+  .scene.active{opacity:1;visibility:visible;transform:translateY(0)}
 
-  /* ── 背景の灯り ── */
-  .glow{
-    position:fixed;left:50%;top:38%;
-    width:120vmin;height:120vmin;
-    transform:translate(-50%,-50%);
-    background:radial-gradient(circle,rgba(201,169,97,.10) 0%,rgba(194,64,47,.05) 35%,transparent 65%);
-    pointer-events:none;
+  h1,h2{
+    font-family:'Shippori Mincho',serif;font-weight:500;letter-spacing:.4em;text-indent:.4em;
+    color:var(--shiro);
+    text-shadow:0 0 24px rgba(201,169,97,.25);
+  }
+  h2{position:relative;padding-bottom:16px;margin-bottom:4px}
+  h2::after{
+    content:'';position:absolute;left:50%;bottom:0;
+    width:2.2em;height:1px;transform:translateX(-50%);
+    background:linear-gradient(90deg,transparent,var(--kin),transparent);
   }
 
-  @keyframes sway{
-    0%,100%{transform:rotate(1.6deg)}
-    50%{transform:rotate(-1.6deg)}
-  }
-
-  h1,h2{font-family:'Shippori Mincho',serif;font-weight:500;letter-spacing:.35em}
-
-  /* ── 入口 ── */
+  /* ── 一、入口 ── */
   .tate{
     writing-mode:vertical-rl;
     font-family:'Shippori Mincho',serif;
-    font-size:clamp(2.2rem,9vw,3.4rem);
+    font-size:clamp(2.1rem,8.5vw,3.2rem);
     letter-spacing:.5em;
     line-height:1.9;
-    margin-bottom:8px;
+    margin-bottom:4px;
+    text-shadow:0 0 30px rgba(201,169,97,.3);
   }
-  .torii{
-    width:min(58vw,220px);
-    margin:20px auto 28px;
-    display:block;
-  }
+  .torii{width:min(56vw,215px);margin:14px auto 20px;display:block;
+    filter:drop-shadow(0 10px 24px rgba(0,0,0,.55)) drop-shadow(0 0 18px rgba(194,64,47,.2));}
   .sub{
-    color:var(--usuzumi);
-    font-size:.85rem;
-    letter-spacing:.25em;
-    margin-bottom:40px;
+    color:var(--usuzumi);font-size:.84rem;letter-spacing:.3em;
+    margin-bottom:30px;
   }
   button.hairei{
     font-family:'Shippori Mincho',serif;
-    background:transparent;
-    color:var(--shiro);
+    background:linear-gradient(180deg,rgba(201,169,97,.12),rgba(201,169,97,.03));
+    color:var(--kin-hi);
     border:1px solid var(--kin);
-    padding:16px 52px;
+    padding:16px 54px;
     font-size:1.05rem;
-    letter-spacing:.4em;
-    text-indent:.4em;
+    letter-spacing:.4em;text-indent:.4em;
     cursor:pointer;
-    transition:background .4s,color .4s;
+    box-shadow:0 0 20px rgba(201,169,97,.12), inset 0 0 12px rgba(201,169,97,.06);
+    transition:background .4s,color .4s,box-shadow .4s;
   }
   button.hairei:hover,button.hairei:focus-visible{
     background:var(--kin);color:var(--sumi);outline:none;
+    box-shadow:0 0 34px rgba(201,169,97,.4);
   }
-  button.hairei:focus-visible{box-shadow:0 0 0 3px rgba(201,169,97,.4)}
+  .top-menu{display:flex;flex-direction:column;align-items:center;margin-top:24px;gap:1px}
+  .top-menu .next{padding:8px 20px;font-size:.84rem;opacity:.85}
 
-  /* ── 手水（心を鎮める）── */
+  /* ── 二、手水 ── */
   .breath-circle{
-    width:150px;height:150px;border-radius:50%;
+    position:relative;
+    width:158px;height:158px;border-radius:50%;
     border:1px solid var(--kin);
-    background:transparent;
+    background:radial-gradient(circle,rgba(201,169,97,.07),transparent 70%);
     color:var(--shiro);
     display:flex;align-items:center;justify-content:center;
     font-family:'Shippori Mincho',serif;
@@ -101,139 +170,152 @@
     animation:breathe 8s ease-in-out infinite;
     transition:color .4s;
   }
-  .breath-circle:hover,.breath-circle:focus-visible{color:var(--kin);outline:none}
+  .breath-circle::before{
+    content:'';position:absolute;inset:-14px;border-radius:50%;
+    border:1px solid rgba(201,169,97,.25);
+    animation:breathe 8s ease-in-out infinite reverse;
+  }
+  .breath-circle:hover,.breath-circle:focus-visible{color:var(--kin-hi);outline:none}
   @keyframes breathe{
     0%,100%{transform:scale(1);border-color:var(--kin)}
-    50%{transform:scale(1.35);border-color:var(--shiro)}
+    50%{transform:scale(1.33);border-color:var(--shiro)}
   }
-  .kotoba{
-    color:var(--usuzumi);font-size:.9rem;letter-spacing:.15em;line-height:2.2;
-  }
+  .kotoba{color:var(--usuzumi);font-size:.9rem;letter-spacing:.15em;line-height:2.2}
 
-  /* ── 祈祷 ── */
-  .norito-area{
-    display:flex;flex-direction:column;align-items:center;
-    margin:34px 0 18px;
-  }
+  /* ── 三、御祈祷 ── */
+  .norito-area{display:flex;flex-direction:column;align-items:center;margin:30px 0 14px}
   .norito-play{
-    width:120px;height:120px;border-radius:50%;
+    position:relative;
+    width:126px;height:126px;border-radius:50%;
     border:1px solid var(--kin);
-    background:transparent;
-    color:var(--kin);
+    background:radial-gradient(circle,rgba(201,169,97,.1),transparent 72%);
+    color:var(--kin-hi);
     font-family:'Shippori Mincho',serif;
-    font-size:2.6rem;
+    font-size:2.7rem;
     display:flex;align-items:center;justify-content:center;
     cursor:pointer;
+    text-shadow:0 0 22px rgba(201,169,97,.45);
     transition:background .4s,color .4s;
   }
-  .norito-play:hover,.norito-play:focus-visible{
-    background:var(--kin);color:var(--sumi);outline:none;
+  .norito-play:hover,.norito-play:focus-visible{background:rgba(201,169,97,.2);outline:none}
+  .norito-play.playing::before,.norito-play.playing::after{
+    content:'';position:absolute;inset:0;border-radius:50%;
+    border:1px solid rgba(201,169,97,.5);
+    animation:ring 3s ease-out infinite;
   }
-  .norito-play.playing{animation:breathe 6s ease-in-out infinite}
-  .norito-label{
-    color:var(--usuzumi);font-size:.85rem;letter-spacing:.15em;
-    margin-top:22px;line-height:1.9;
+  .norito-play.playing::after{animation-delay:1.5s}
+  @keyframes ring{
+    0%{transform:scale(1);opacity:.7}
+    100%{transform:scale(1.7);opacity:0}
   }
-  .norito-guide{
-    color:var(--usuzumi);font-size:.8rem;letter-spacing:.1em;
-    line-height:2;margin:6px 0 20px;opacity:.85;
-  }
+  .norito-label{color:var(--usuzumi);font-size:.85rem;letter-spacing:.15em;margin-top:24px;line-height:1.9}
+  .norito-guide{color:var(--usuzumi);font-size:.8rem;letter-spacing:.1em;line-height:2;margin:6px 0 18px;opacity:.85}
 
-  /* ── 作法 ── */
+  /* ── ボタン共通 ── */
+  .next{
+    background:none;border:none;color:var(--kin);
+    font-family:'Shippori Mincho',serif;
+    font-size:.95rem;letter-spacing:.3em;text-indent:.3em;
+    cursor:pointer;padding:13px 20px;
+    transition:color .3s,text-shadow .3s;
+  }
+  .next:hover{color:var(--kin-hi);text-shadow:0 0 14px rgba(201,169,97,.5)}
+  .next:focus-visible{outline:1px solid var(--kin)}
+  .next-big{
+    font-size:1.65rem;
+    letter-spacing:.5em;text-indent:.5em;
+    border:1px solid var(--kin);
+    background:linear-gradient(180deg,rgba(201,169,97,.1),rgba(201,169,97,.02));
+    padding:18px 58px;margin:4px 0;
+    box-shadow:0 0 18px rgba(201,169,97,.1);
+    transition:background .4s,color .4s;
+  }
+  .next-big:hover,.next-big:focus-visible{background:var(--kin);color:var(--sumi);outline:none;text-shadow:none}
+
+  /* ── 四、拝礼 ── */
   .sahou{
     font-family:'Shippori Mincho',serif;
-    font-size:clamp(1.5rem,6vw,2.1rem);
+    font-size:clamp(1.6rem,6.5vw,2.3rem);
     letter-spacing:.3em;text-indent:.3em;
-    margin:30px 0 14px;
-    min-height:1.5em;
+    margin:30px 0 12px;min-height:1.5em;
+    text-shadow:0 0 26px rgba(201,169,97,.3);
   }
   .sahou-guide{color:var(--usuzumi);font-size:.9rem;letter-spacing:.15em;line-height:2;min-height:3.6em}
-  .sahou-tap{
-    color:var(--usuzumi);font-size:.75rem;letter-spacing:.15em;
-    margin-top:34px;opacity:.6;
-  }
+  .sahou-tap{color:var(--usuzumi);font-size:.74rem;letter-spacing:.15em;margin-top:34px;opacity:.55}
 
-  /* ── 完了 ── */
+  /* ── 五、完了 ── */
+  .scene-compact{overflow-y:auto}
   .fuda{
+    position:relative;
     border:1px solid var(--kin);
-    padding:44px 36px;
-    margin:24px 0 36px;
-    background:linear-gradient(180deg,rgba(201,169,97,.06),transparent);
+    padding:24px 34px;margin:8px 0 14px;
+    background:linear-gradient(180deg,rgba(201,169,97,.08),rgba(201,169,97,.01));
+    box-shadow:0 0 26px rgba(201,169,97,.1), inset 0 0 20px rgba(0,0,0,.3);
   }
-  .fuda .tate{font-size:clamp(1.8rem,7vw,2.6rem);margin:0}
-  .hi{color:var(--usuzumi);font-size:.78rem;letter-spacing:.2em;margin-top:20px}
+  .fuda::before{
+    content:'';position:absolute;inset:5px;
+    border:1px solid rgba(201,169,97,.35);
+    pointer-events:none;
+  }
+  .fuda .tate{font-size:clamp(1.35rem,5.5vw,1.95rem);line-height:1.7;margin:0}
+  .hi{color:var(--usuzumi);font-size:.72rem;letter-spacing:.2em;margin-top:12px}
+  .scene-compact .kotoba{font-size:.82rem;line-height:1.8;margin-bottom:6px}
+  .scene-compact .next{padding:8px 20px;font-size:.9rem}
 
-  /* ── おみくじ ── */
+  /* ── 六、おみくじ ── */
   .omikuji-box{
+    position:relative;
     border:1px solid var(--kin);
-    padding:40px 30px;
-    margin:26px 0 30px;
+    padding:38px 28px;margin:24px 0 26px;
     min-width:min(80vw,320px);
-    background:linear-gradient(180deg,rgba(201,169,97,.06),transparent);
+    background:linear-gradient(180deg,rgba(201,169,97,.07),transparent);
+    box-shadow:0 0 24px rgba(201,169,97,.08);
+  }
+  .omikuji-box::before{
+    content:'';position:absolute;inset:5px;
+    border:1px solid rgba(201,169,97,.3);pointer-events:none;
   }
   .omikuji-fortune{
     font-family:'Shippori Mincho',serif;
-    font-size:clamp(2.4rem,11vw,3.4rem);
+    font-size:clamp(2.3rem,10.5vw,3.3rem);
     letter-spacing:.3em;text-indent:.3em;
-    color:var(--kin);
-    min-height:1.4em;
+    color:var(--kin-hi);min-height:1.4em;
+    text-shadow:0 0 30px rgba(201,169,97,.45);
   }
   .omikuji-advice{
-    color:var(--usuzumi);
-    font-size:.92rem;letter-spacing:.1em;line-height:2;
-    margin-top:20px;
-    min-height:3.6em;
+    color:var(--usuzumi);font-size:.92rem;letter-spacing:.1em;line-height:2;
+    margin-top:18px;min-height:3.6em;
   }
   .omikuji-draw{
     font-family:'Shippori Mincho',serif;
-    background:transparent;color:var(--shiro);
+    background:linear-gradient(180deg,rgba(201,169,97,.1),rgba(201,169,97,.02));
+    color:var(--shiro);
     border:1px solid var(--kin);
-    padding:14px 40px;
+    padding:14px 42px;
     font-size:1rem;letter-spacing:.3em;text-indent:.3em;
-    cursor:pointer;margin-bottom:8px;
+    cursor:pointer;margin-bottom:6px;
     transition:background .4s,color .4s;
   }
   .omikuji-draw:hover,.omikuji-draw:focus-visible{background:var(--kin);color:var(--sumi);outline:none}
 
-  /* ── お守りの作り方（スクロール可）── */
-  .scene-scroll{
-    justify-content:flex-start;
-    overflow-y:auto;
-    padding-top:56px;padding-bottom:40px;
-  }
-  .omamori-page{
-    max-width:min(90vw,540px);
-    text-align:left;
-    margin-bottom:24px;
-  }
-  .omamori-page h2{text-align:center;margin-bottom:22px}
-  .omamori-intro{
-    color:var(--usuzumi);font-size:.9rem;line-height:2;letter-spacing:.05em;
-    margin-bottom:26px;
-  }
-  .omamori-sec{
-    border-top:1px solid rgba(201,169,97,.3);
-    padding-top:18px;margin-bottom:24px;
-  }
+  /* ── 読み物ページ共通 ── */
+  .scene-scroll{justify-content:flex-start;overflow-y:auto;padding-top:56px;padding-bottom:40px}
+  .omamori-page{max-width:min(90vw,540px);text-align:left;margin-bottom:22px}
+  .omamori-page h2{text-align:center;margin-bottom:24px}
+  .omamori-intro{color:var(--usuzumi);font-size:.9rem;line-height:2;letter-spacing:.05em;margin-bottom:26px}
+  .omamori-sec{border-top:1px solid rgba(201,169,97,.3);padding-top:18px;margin-bottom:24px}
   .omamori-head{
     font-family:'Shippori Mincho',serif;
-    color:var(--kin);font-size:1.05rem;letter-spacing:.2em;
+    color:var(--kin-hi);font-size:1.05rem;letter-spacing:.2em;
     margin-bottom:14px;
   }
-  .omamori-page p{
-    font-size:.9rem;line-height:1.95;letter-spacing:.03em;
-    margin-bottom:10px;color:var(--shiro);
-  }
+  .omamori-page p{font-size:.9rem;line-height:1.95;letter-spacing:.03em;margin-bottom:10px;color:var(--shiro)}
   .omamori-page .mark{
     display:inline-block;color:var(--shu);
     font-family:'Shippori Mincho',serif;
     margin-right:10px;min-width:2.6em;
   }
-  .omamori-page .num{
-    display:inline-block;color:var(--kin);
-    font-family:'Shippori Mincho',serif;
-    margin-right:10px;
-  }
+  .omamori-page .num{display:inline-block;color:var(--kin);font-family:'Shippori Mincho',serif;margin-right:10px}
   .omamori-note{color:var(--usuzumi);font-size:.8rem !important}
   .omamori-foot{
     color:var(--usuzumi);font-size:.82rem !important;line-height:1.9;
@@ -241,17 +323,20 @@
     padding-top:18px;margin-top:8px;
   }
 
-  /* ── 方位 ── */
+  /* ── 九、方位 ── */
   .eho-box{
+    position:relative;
     border:1px solid var(--kin);
     padding:26px 20px;text-align:center;
-    background:linear-gradient(180deg,rgba(201,169,97,.06),transparent);
+    background:linear-gradient(180deg,rgba(201,169,97,.07),transparent);
   }
+  .eho-box::before{content:'';position:absolute;inset:5px;border:1px solid rgba(201,169,97,.3);pointer-events:none}
   .eho-dir{
     font-family:'Shippori Mincho',serif;
     font-size:clamp(2rem,9vw,2.8rem);
     letter-spacing:.3em;text-indent:.3em;
-    color:var(--kin);
+    color:var(--kin-hi);
+    text-shadow:0 0 26px rgba(201,169,97,.4);
   }
   .eho-note{color:var(--usuzumi);font-size:.82rem !important;margin-top:12px;text-align:center}
   .compass-wrap{text-align:center}
@@ -259,12 +344,16 @@
     position:relative;
     width:200px;height:200px;border-radius:50%;
     border:1px solid var(--kin);
+    background:radial-gradient(circle,rgba(201,169,97,.05),transparent 70%);
     margin:10px auto 16px;
     transition:transform .2s linear;
   }
+  .compass::before{
+    content:'';position:absolute;inset:14px;border-radius:50%;
+    border:1px solid rgba(201,169,97,.25);
+  }
   .compass-n,.compass-e,.compass-s,.compass-w{
-    position:absolute;
-    font-family:'Shippori Mincho',serif;
+    position:absolute;font-family:'Shippori Mincho',serif;
     color:var(--shiro);font-size:1rem;
   }
   .compass-n{top:10px;left:50%;transform:translateX(-50%);color:var(--shu);font-size:1.2rem}
@@ -280,68 +369,59 @@
   }
   .compass-label{color:var(--usuzumi);font-size:.82rem !important;margin-bottom:14px;text-align:center}
 
-  .next{
-    background:none;border:none;color:var(--kin);
-    font-family:'Shippori Mincho',serif;
-    font-size:.95rem;letter-spacing:.3em;text-indent:.3em;
-    cursor:pointer;padding:14px 20px;
-  }
-  .next:focus-visible{outline:1px solid var(--kin)}
-
-  /* ── 完了画面を1画面に収める ── */
-  .scene-compact{overflow-y:auto}
-  .scene-compact .fuda{
-    padding:22px 30px;
-    margin:8px 0 14px;
-  }
-  .scene-compact .fuda .tate{
-    font-size:clamp(1.3rem,5.5vw,1.9rem);
-    line-height:1.7;
-  }
-  .scene-compact .hi{margin-top:10px;font-size:.72rem}
-  .scene-compact .kotoba{
-    font-size:.82rem;line-height:1.8;
-    margin-bottom:6px;
-  }
-  .scene-compact .next{
-    padding:8px 20px;
-    font-size:.9rem;
-  }
-
-  .next-big{
-    font-size:1.7rem;
-    letter-spacing:.5em;text-indent:.5em;
-    border:1px solid var(--kin);
-    padding:20px 60px;
-    margin:6px 0;
-    transition:background .4s,color .4s;
-  }
-  .next-big:hover,.next-big:focus-visible{background:var(--kin);color:var(--sumi);outline:none}
-
   @media (prefers-reduced-motion: reduce){
-    .breath-circle{animation:none}
+    .shide,.breath-circle,.breath-circle::before,.lights span,.stars span,
+    .norito-play.playing::before,.norito-play.playing::after{animation:none}
     .scene{transition:none}
   }
 </style>
 </head>
 <body>
 
-<div class="glow"></div>
+<div class="stars" aria-hidden="true">
+  <span style="left:8%;top:12%"></span><span style="left:18%;top:34%;animation-delay:1s"></span>
+  <span style="left:27%;top:7%;animation-delay:2s"></span><span style="left:38%;top:22%;animation-delay:.5s"></span>
+  <span style="left:52%;top:9%;animation-delay:1.6s"></span><span style="left:63%;top:30%;animation-delay:2.4s"></span>
+  <span style="left:74%;top:14%;animation-delay:.8s"></span><span style="left:85%;top:27%;animation-delay:1.9s"></span>
+  <span style="left:93%;top:8%;animation-delay:3s"></span><span style="left:12%;top:55%;animation-delay:2.7s"></span>
+  <span style="left:88%;top:52%;animation-delay:1.2s"></span><span style="left:46%;top:44%;animation-delay:3.4s"></span>
+</div>
+<div class="moon" aria-hidden="true"></div>
+<div class="glow" aria-hidden="true"></div>
+<div class="lights" aria-hidden="true">
+  <span style="left:12%;animation-duration:16s;animation-delay:0s"></span>
+  <span style="left:28%;animation-duration:21s;animation-delay:4s"></span>
+  <span style="left:45%;animation-duration:18s;animation-delay:8s"></span>
+  <span style="left:61%;animation-duration:23s;animation-delay:2s"></span>
+  <span style="left:76%;animation-duration:17s;animation-delay:10s"></span>
+  <span style="left:90%;animation-duration:20s;animation-delay:6s"></span>
+</div>
+<div class="shide-row" aria-hidden="true">
+  <div class="shide"></div><div class="shide"></div><div class="shide"></div>
+  <div class="shide"></div><div class="shide"></div><div class="shide"></div>
+</div>
 
 <!-- 一、入口 -->
-<section class="scene active" id="s1">
+<section class="scene scene-compact active" id="s1">
   <div class="tate">お祓い</div>
-  <svg class="torii" viewBox="0 0 200 160" aria-hidden="true">
-    <g fill="#c2402f">
-      <rect x="10" y="18" width="180" height="14" rx="2"/>
-      <rect x="24" y="44" width="152" height="10"/>
-      <rect x="42" y="32" width="14" height="120"/>
-      <rect x="144" y="32" width="14" height="120"/>
-      <rect x="95" y="18" width="10" height="26"/>
+  <svg class="torii" viewBox="0 0 200 165" aria-hidden="true">
+    <g>
+      <path d="M6 26 Q100 12 194 26 L191 40 Q100 27 9 40 Z" fill="#c2402f"/>
+      <rect x="24" y="50" width="152" height="10" fill="#c2402f"/>
+      <rect x="41" y="38" width="15" height="120" fill="#c2402f"/>
+      <rect x="144" y="38" width="15" height="120" fill="#c2402f"/>
+      <rect x="95" y="26" width="10" height="24" fill="#c2402f"/>
+      <rect x="37" y="152" width="23" height="7" fill="#8e2f22"/>
+      <rect x="140" y="152" width="23" height="7" fill="#8e2f22"/>
     </g>
   </svg>
   <p class="sub">心静かに、身を清めるひととき</p>
   <button class="hairei" onclick="go(2)">参拝する</button>
+  <div class="top-menu">
+    <button class="next" onclick="go(7)">お守りの作り方</button>
+    <button class="next" onclick="go(8)">セージ浄化のやり方</button>
+    <button class="next" onclick="go(9)">方位を知る</button>
+  </div>
 </section>
 
 <!-- 二、手水 -->
@@ -351,7 +431,7 @@
   <p class="kotoba">円のうごきに合わせて<br>ゆっくり息を吸い、ゆっくり吐きます<br>三度くり返したら、円をそっと押しましょう</p>
 </section>
 
-<!-- 三、祈祷 -->
+<!-- 三、御祈祷 -->
 <section class="scene" id="s3">
   <h2>御祈祷</h2>
   <div class="norito-area">
@@ -365,7 +445,7 @@
   <button class="next next-big" onclick="go(4)">進む</button>
 </section>
 
-<!-- 四、作法 -->
+<!-- 四、拝礼 -->
 <section class="scene" id="s4" onclick="sahouNext()">
   <h2>拝礼</h2>
   <div class="sahou" id="sahouText">二礼</div>
@@ -381,9 +461,6 @@
   </div>
   <p class="kotoba">お参りおつかれさまでした<br>どうか穏やかな日々でありますように</p>
   <button class="next" onclick="go(6)">おみくじを引く</button>
-  <button class="next" onclick="go(7)">お守りの作り方</button>
-  <button class="next" onclick="go(8)">セージ浄化のやり方</button>
-  <button class="next" onclick="go(9)">方位を知る</button>
   <button class="next" onclick="go(1)">はじめに戻る</button>
 </section>
 
@@ -520,13 +597,9 @@
   <button class="next" onclick="go(1)">はじめに戻る</button>
 </section>
 
-
-
-
-
 <script>
   function go(n){
-    // 御祈祷の画面を離れたら音を止める＋自動進行タイマーを解除
+    // 画面を離れるとき：音を止め、自動進行タイマーを解除
     if(window.noritoTimer){ clearTimeout(window.noritoTimer); window.noritoTimer=null; }
     if(window.sahouTimer){ clearTimeout(window.sahouTimer); window.sahouTimer=null; }
     const audio=document.getElementById('noritoAudio');
@@ -540,16 +613,9 @@
       if(lb) lb.textContent='円を押して、祝詞を奏上します';
       if(bt) bt.classList.remove('playing');
     }
-    document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));
+    document.querySelectorAll('.scene').forEach(function(s){s.classList.remove('active');});
     document.getElementById('s'+n).classList.add('active');
     if(n===4){sahouStep=0;renderSahou();startSahouAuto();}
-    if(n===6){
-      document.getElementById('omikujiFortune').textContent='―';
-      document.getElementById('omikujiAdvice').textContent='下の鈴を鳴らして、一枚引きましょう';
-      const ob=document.getElementById('omikujiBtn');
-      ob.textContent='鈴を鳴らして引く';
-      ob.disabled=false;
-    }
     if(n===5){
       const d=new Date();
       document.getElementById('hizuke').textContent=
@@ -564,34 +630,36 @@
       document.getElementById('fudaKotoba').textContent=
         kotoba[Math.floor(Math.random()*kotoba.length)];
     }
+    if(n===6){
+      document.getElementById('omikujiFortune').textContent='―';
+      document.getElementById('omikujiAdvice').textContent='下の鈴を鳴らして、一枚引きましょう';
+      const ob=document.getElementById('omikujiBtn');
+      ob.textContent='鈴を鳴らして引く';
+      ob.disabled=false;
+    }
   }
 
-  // 自動で次へ進むまでの時間（秒）。ここの数字を変えれば調整できます
+  // ── 御祈祷：祝詞の再生と自動進行 ──
   const NORITO_AUTO_SEC = 30;
-
   function toggleNorito(){
     const audio=document.getElementById('noritoAudio');
-    const icon=document.getElementById('noritoIcon');
     const label=document.getElementById('noritoLabel');
     const btn=document.getElementById('noritoPlay');
     if(audio.paused){
       audio.play();
-      icon.textContent='神';
       label.textContent='祝詞が流れています…（しばらくすると自動で進みます）';
       btn.classList.add('playing');
-      // 一定時間で自動的に拝礼へ進む
       if(window.noritoTimer){ clearTimeout(window.noritoTimer); }
       window.noritoTimer=setTimeout(function(){ go(4); }, NORITO_AUTO_SEC*1000);
     }else{
       audio.pause();
-      icon.textContent='神';
       label.textContent='円を押して、祝詞を奏上します';
       btn.classList.remove('playing');
-      // 止めたら自動進行も取り消し
       if(window.noritoTimer){ clearTimeout(window.noritoTimer); window.noritoTimer=null; }
     }
   }
 
+  // ── 拝礼：自動進行＋タップで進む ──
   const sahou=[
     {t:'二礼',g:'深いおじぎを二回'},
     {t:'二拍手',g:'胸の前で手を二回打ちます'},
@@ -603,7 +671,6 @@
     document.getElementById('sahouText').textContent=sahou[sahouStep].t;
     document.getElementById('sahouGuide').textContent=sahou[sahouStep].g;
   }
-  // 一定時間ごとに自動で次の作法へ
   function startSahouAuto(){
     if(window.sahouTimer){ clearTimeout(window.sahouTimer); }
     window.sahouTimer=setTimeout(function(){ sahouNext(); }, SAHOU_AUTO_SEC*1000);
@@ -619,24 +686,12 @@
     }
   }
 
-  // おみくじ（運勢＋今日の過ごし方）
-  const omikuji=[
-    {f:'大吉', a:'万事に光が差す日。思い切って一歩を踏み出すと良い流れに乗れます。'},
-    {f:'中吉', a:'穏やかに進めば整う日。焦らず、丁寧に物事を運びましょう。'},
-    {f:'小吉', a:'小さな幸せに気づける日。身の回りを整えると運が上向きます。'},
-    {f:'吉',   a:'素直な心が福を呼ぶ日。人への感謝を言葉にしてみましょう。'},
-    {f:'末吉', a:'これから運が開ける日。今日は準備と休息を大切に。'},
-    {f:'半吉', a:'半ばで整う日。無理をせず、できることから始めましょう。'},
-    {f:'吉凶未分末大吉', a:'いまは定まらずとも、行いを重ねれば大きな吉に至ります。'},
-    {f:'凶→吉', a:'厄を祓えば道は開けます。今日の禊が転機になります。'}
-  ];
-  // 方位磁針
+  // ── 方位磁針 ──
   let compassActive=false;
   function startCompass(){
     const label=document.getElementById('compassLabel');
     const btn=document.getElementById('compassBtn');
     if(compassActive) return;
-    // iPhone系は許可が必要
     if(typeof DeviceOrientationEvent!=='undefined' && typeof DeviceOrientationEvent.requestPermission==='function'){
       DeviceOrientationEvent.requestPermission().then(function(state){
         if(state==='granted'){ attachCompass(); }
@@ -670,15 +725,24 @@
     }
   }
 
+  // ── おみくじ ──
+  const omikuji=[
+    {f:'大吉', a:'万事に光が差す日。思い切って一歩を踏み出すと良い流れに乗れます。'},
+    {f:'中吉', a:'穏やかに進めば整う日。焦らず、丁寧に物事を運びましょう。'},
+    {f:'小吉', a:'小さな幸せに気づける日。身の回りを整えると運が上向きます。'},
+    {f:'吉',   a:'素直な心が福を呼ぶ日。人への感謝を言葉にしてみましょう。'},
+    {f:'末吉', a:'これから運が開ける日。今日は準備と休息を大切に。'},
+    {f:'半吉', a:'半ばで整う日。無理をせず、できることから始めましょう。'},
+    {f:'吉凶未分末大吉', a:'いまは定まらずとも、行いを重ねれば大きな吉に至ります。'},
+    {f:'凶→吉', a:'厄を祓えば道は開けます。今日の禊が転機になります。'}
+  ];
   function drawOmikuji(){
-    const box=document.getElementById('omikujiBox');
     const fEl=document.getElementById('omikujiFortune');
     const aEl=document.getElementById('omikujiAdvice');
     const btn=document.getElementById('omikujiBtn');
-    // 演出：一瞬シャッフルしてから決定
     let ticks=0;
     btn.disabled=true;
-    const timer=setInterval(()=>{
+    const timer=setInterval(function(){
       const t=omikuji[Math.floor(Math.random()*omikuji.length)];
       fEl.textContent=t.f;
       ticks++;
