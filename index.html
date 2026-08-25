@@ -136,7 +136,8 @@
     border:1px solid var(--kin);
     background:transparent;
     color:var(--kin);
-    font-size:2rem;
+    font-family:'Shippori Mincho',serif;
+    font-size:2.6rem;
     display:flex;align-items:center;justify-content:center;
     cursor:pointer;
     transition:background .4s,color .4s;
@@ -312,7 +313,7 @@
   <h2>御祈祷</h2>
   <div class="norito-area">
     <button class="norito-play" id="noritoPlay" onclick="toggleNorito()" aria-label="祝詞を奏上">
-      <span id="noritoIcon">▶</span>
+      <span id="noritoIcon">神</span>
     </button>
     <p class="norito-label" id="noritoLabel">円を押して、祝詞を奏上します</p>
     <audio id="noritoAudio" src="norito.mp3" preload="none"></audio>
@@ -405,7 +406,7 @@
       const ic=document.getElementById('noritoIcon');
       const lb=document.getElementById('noritoLabel');
       const bt=document.getElementById('noritoPlay');
-      if(ic) ic.textContent='▶';
+      if(ic) ic.textContent='神';
       if(lb) lb.textContent='円を押して、祝詞を奏上します';
       if(bt) bt.classList.remove('playing');
     }
@@ -436,7 +437,7 @@
     const btn=document.getElementById('noritoPlay');
     if(audio.paused){
       audio.play();
-      icon.textContent='‖';
+      icon.textContent='神';
       label.textContent='祝詞が流れています…（しばらくすると自動で進みます）';
       btn.classList.add('playing');
       // 一定時間で自動的に拝礼へ進む
@@ -444,7 +445,7 @@
       window.noritoTimer=setTimeout(function(){ go(4); }, NORITO_AUTO_SEC*1000);
     }else{
       audio.pause();
-      icon.textContent='▶';
+      icon.textContent='神';
       label.textContent='円を押して、祝詞を奏上します';
       btn.classList.remove('playing');
       // 止めたら自動進行も取り消し
