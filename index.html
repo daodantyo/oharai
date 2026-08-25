@@ -333,7 +333,7 @@
 <!-- 五、完了 -->
 <section class="scene" id="s5">
   <div class="fuda">
-    <div class="tate">祓い清め</div>
+    <div class="tate" id="fudaKotoba">祓い清め</div>
     <p class="hi" id="hizuke"></p>
   </div>
   <p class="kotoba">お参りおつかれさまでした<br>どうか穏やかな日々でありますように</p>
@@ -425,6 +425,15 @@
       const d=new Date();
       document.getElementById('hizuke').textContent=
         d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日　参拝';
+      const kotoba=[
+        '祓い清め','穏やかな日々を','心晴れやかに','明日への一歩',
+        '感謝を胸に','ありのままで','急がず、まっすぐ','今日を大切に',
+        'ひとつずつ、丁寧に','肩の力を抜いて','よき出会いを','無事に、健やかに',
+        '笑顔で過ごせますように','迷いを手放して','幸せは足もとに','ゆっくり深呼吸',
+        '前を向いて','日々是好日','たまには休んで','心のままに'
+      ];
+      document.getElementById('fudaKotoba').textContent=
+        kotoba[Math.floor(Math.random()*kotoba.length)];
     }
   }
 
