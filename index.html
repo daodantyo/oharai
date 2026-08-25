@@ -106,12 +106,18 @@
   .breath-circle{
     width:150px;height:150px;border-radius:50%;
     border:1px solid var(--kin);
+    background:transparent;
+    color:var(--shiro);
     display:flex;align-items:center;justify-content:center;
     font-family:'Shippori Mincho',serif;
+    font-size:1.05rem;
     letter-spacing:.3em;text-indent:.3em;
     margin:36px 0;
+    cursor:pointer;
     animation:breathe 8s ease-in-out infinite;
+    transition:color .4s;
   }
+  .breath-circle:hover,.breath-circle:focus-visible{color:var(--kin);outline:none}
   @keyframes breathe{
     0%,100%{transform:scale(1);border-color:var(--kin)}
     50%{transform:scale(1.35);border-color:var(--shiro)}
@@ -126,17 +132,13 @@
     aspect-ratio:16/9;
     background:var(--ai);
     border:1px solid rgba(201,169,97,.5);
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    gap:14px;
-    margin:28px 0;
+    margin:28px 0 12px;
+    overflow:hidden;
   }
-  .video-frame .maru{
-    width:64px;height:64px;border-radius:50%;
-    border:1px solid var(--kin);
-    display:flex;align-items:center;justify-content:center;
-    color:var(--kin);font-size:1.4rem;
-  }
-  .video-frame p{color:var(--usuzumi);font-size:.8rem;letter-spacing:.15em;line-height:1.9}
+  .video-frame iframe{width:100%;height:100%;border:0;display:block}
+  .video-fallback{margin-bottom:16px}
+  .video-fallback a{color:var(--usuzumi);font-size:.8rem;letter-spacing:.1em;text-decoration:none}
+  .video-fallback a:hover{color:var(--kin)}
 
   /* ── 作法 ── */
   .sahou{
@@ -199,18 +201,22 @@
 <!-- 二、手水 -->
 <section class="scene" id="s2">
   <h2>手水</h2>
-  <div class="breath-circle">深呼吸</div>
-  <p class="kotoba">円のうごきに合わせて<br>ゆっくり息を吸い、ゆっくり吐きます<br>三度くり返しましょう</p>
-  <button class="next" onclick="go(3)">整いました ─ 進む</button>
+  <button class="breath-circle" onclick="go(3)" aria-label="深呼吸を終えて進む">深呼吸</button>
+  <p class="kotoba">円のうごきに合わせて<br>ゆっくり息を吸い、ゆっくり吐きます<br>三度くり返したら、円をそっと押しましょう</p>
 </section>
 
 <!-- 三、祈祷 -->
 <section class="scene" id="s3">
   <h2>御祈祷</h2>
   <div class="video-frame">
-    <div class="maru">▶</div>
-    <p>ここに神主さんの祈祷動画が入ります<br>（いまは仮の画面です）</p>
+    <iframe
+      src="https://www.youtube-nocookie.com/embed/YSGFMFp5jdg?rel=0"
+      title="お経"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+      referrerpolicy="strict-origin-when-cross-origin"></iframe>
   </div>
+  <p class="video-fallback"><a href="https://www.youtube.com/watch?v=YSGFMFp5jdg" target="_blank" rel="noopener">▶ 再生されないときは、こちらをタップ（YouTubeで開く）</a></p>
   <button class="next" onclick="go(4)">祈祷を受けました ─ 進む</button>
 </section>
 
