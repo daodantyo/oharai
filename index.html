@@ -288,6 +288,26 @@
   }
   .next:focus-visible{outline:1px solid var(--kin)}
 
+  /* ── 完了画面を1画面に収める ── */
+  .scene-compact{overflow-y:auto}
+  .scene-compact .fuda{
+    padding:22px 30px;
+    margin:8px 0 14px;
+  }
+  .scene-compact .fuda .tate{
+    font-size:clamp(1.3rem,5.5vw,1.9rem);
+    line-height:1.7;
+  }
+  .scene-compact .hi{margin-top:10px;font-size:.72rem}
+  .scene-compact .kotoba{
+    font-size:.82rem;line-height:1.8;
+    margin-bottom:6px;
+  }
+  .scene-compact .next{
+    padding:8px 20px;
+    font-size:.9rem;
+  }
+
   .next-big{
     font-size:1.7rem;
     letter-spacing:.5em;text-indent:.5em;
@@ -354,7 +374,7 @@
 </section>
 
 <!-- 五、完了 -->
-<section class="scene" id="s5">
+<section class="scene scene-compact" id="s5">
   <div class="fuda">
     <div class="tate" id="fudaKotoba">祓い清め</div>
     <p class="hi" id="hizuke"></p>
