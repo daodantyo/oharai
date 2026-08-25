@@ -148,6 +148,10 @@
     min-height:1.5em;
   }
   .sahou-guide{color:var(--usuzumi);font-size:.9rem;letter-spacing:.15em;line-height:2;min-height:3.6em}
+  .sahou-tap{
+    color:var(--usuzumi);font-size:.75rem;letter-spacing:.15em;
+    margin-top:34px;opacity:.6;
+  }
 
   /* ── 完了 ── */
   .fuda{
@@ -342,11 +346,11 @@
 </section>
 
 <!-- 四、作法 -->
-<section class="scene" id="s4">
+<section class="scene" id="s4" onclick="sahouNext()">
   <h2>拝礼</h2>
   <div class="sahou" id="sahouText">二礼</div>
   <p class="sahou-guide" id="sahouGuide">深いおじぎを二回</p>
-  <button class="next" id="sahouBtn" onclick="sahouNext()">次へ</button>
+  <p class="sahou-tap">お急ぎの方は画面をタップ</p>
 </section>
 
 <!-- 五、完了 -->
@@ -578,7 +582,6 @@
   function renderSahou(){
     document.getElementById('sahouText').textContent=sahou[sahouStep].t;
     document.getElementById('sahouGuide').textContent=sahou[sahouStep].g;
-    document.getElementById('sahouBtn').textContent=(sahouStep<sahou.length-1)?'次へ':'結ぶ';
   }
   // 一定時間ごとに自動で次の作法へ
   function startSahouAuto(){
