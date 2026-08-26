@@ -357,21 +357,27 @@
   /* 画面に余裕があるときは中央に寄せる */
   .scene-compact::before,
   .scene-compact::after{content:'';margin:auto;flex-shrink:0}
-  .fuda{
-    position:relative;
-    border:1px solid var(--kin);
-    padding:24px 34px;margin:8px 0 14px;
-    background:linear-gradient(180deg,rgba(201,169,97,.08),rgba(201,169,97,.01));
-    box-shadow:0 0 26px rgba(201,169,97,.1), inset 0 0 20px rgba(0,0,0,.3);
+  .fuda-paper{
+    width:min(66vw,250px);
+    min-height:330px;
+    padding:44px 20px 66px;
   }
-  .fuda::before{
-    content:'';position:absolute;inset:5px;
-    border:1px solid rgba(201,169,97,.35);
-    pointer-events:none;
+  .fuda-kotoba{
+    font-family:'Shippori Mincho',serif;
+    writing-mode:vertical-rl;
+    font-size:clamp(1.5rem,6.5vw,2rem);
+    letter-spacing:.22em;
+    line-height:1.5;
+    max-height:200px;
+    background:linear-gradient(160deg,#9a7b2e 0%, #d4ab45 30%, #8a6b24 55%, #c49d3f 80%, #7d6222 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+    filter:drop-shadow(0 1px 1px rgba(255,255,255,.5)) drop-shadow(0 2px 3px rgba(90,65,20,.25));
+    display:flex;align-items:center;
+    flex:1;
   }
-  .fuda .tate{font-size:clamp(1.35rem,5.5vw,1.95rem);line-height:1.7;margin:0}
-  .hi{color:var(--usuzumi);font-size:.72rem;letter-spacing:.2em;margin-top:12px}
-  .scene-compact .kotoba{font-size:.82rem;line-height:1.8;margin-bottom:6px}
+  .fuda-paper .hi{color:#8a7134;font-size:.7rem;letter-spacing:.18em;margin-top:14px}
+  .scene-compact .kotoba{font-size:.82rem;line-height:1.8;margin-bottom:6px;margin-top:14px}
   .scene-compact .next{padding:8px 20px;font-size:.9rem}
 
   /* ── 六、おみくじ（金襴の額入り御籤）── */
@@ -834,9 +840,14 @@
 
 <!-- 五、完了 -->
 <section class="scene scene-compact" id="s5">
-  <div class="fuda">
-    <div class="tate" id="fudaKotoba">祓い清め</div>
-    <p class="hi" id="hizuke"></p>
+  <div class="mikuji-frame">
+    <span class="kazari k1"></span><span class="kazari k2"></span><span class="kazari k3"></span><span class="kazari k4"></span>
+    <div class="mikuji-paper fuda-paper">
+      <div class="mikuji-title">御札</div>
+      <div class="fuda-kotoba" id="fudaKotoba">祓い清め</div>
+      <p class="hi" id="hizuke"></p>
+      <div class="mikuji-in" aria-hidden="true">祓</div>
+    </div>
   </div>
   <p class="kotoba">お参りおつかれさまでした<br>どうか穏やかな日々でありますように</p>
   <button class="next" onclick="go(12)">おみくじを引く</button>
@@ -1125,8 +1136,11 @@
         '笑顔で過ごせますように','迷いを手放して','幸せは足もとに','ゆっくり深呼吸',
         '前を向いて','日々是好日','たまには休んで','心のままに'
       ];
-      document.getElementById('fudaKotoba').textContent=
-        kotoba[Math.floor(Math.random()*kotoba.length)];
+      const fk=document.getElementById('fudaKotoba');
+      fk.textContent=kotoba[Math.floor(Math.random()*kotoba.length)];
+      fk.classList.remove('stamp-in');
+      void fk.offsetWidth;
+      fk.classList.add('stamp-in');
     }
     if(n===6){ initKujiScreen('omikuji','omikujiFortune','omikujiAdvice','omikujiBtn'); }
     if(n===11){ initKujiScreen('koi','koiFortune','koiAdvice','koiBtn'); }
