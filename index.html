@@ -926,15 +926,20 @@
       const fEl=document.getElementById('omikujiFortune');
       const aEl=document.getElementById('omikujiAdvice');
       const ob=document.getElementById('omikujiBtn');
-      const saved=loadTodayOmikuji();
-      if(saved){
-        fEl.textContent=saved.f;
-        aEl.textContent=saved.a;
+      const rec=loadTodayKuji();
+      if(rec && rec.type==='omikuji'){
+        fEl.textContent=rec.f;
+        aEl.textContent=rec.a;
         ob.textContent='本日はお引きになりました ─ また明日';
+        ob.disabled=true;
+      }else if(rec){
+        fEl.textContent='―';
+        aEl.textContent='本日は恋みくじをお引きになりました。おみくじは一日ひとつまで。また明日お参りください。';
+        ob.textContent='また明日';
         ob.disabled=true;
       }else{
         fEl.textContent='―';
-        aEl.textContent='下の鈴を鳴らして、一枚引きましょう（一日一回）';
+        aEl.textContent='下の鈴を鳴らして、一枚引きましょう（一日ひとつまで）';
         ob.textContent='鈴を鳴らして引く';
         ob.disabled=false;
       }
@@ -943,15 +948,20 @@
       const fEl=document.getElementById('koiFortune');
       const aEl=document.getElementById('koiAdvice');
       const ob=document.getElementById('koiBtn');
-      const saved=loadToday('koimikuji');
-      if(saved){
-        fEl.textContent=saved.f;
-        aEl.textContent=saved.a;
+      const rec=loadTodayKuji();
+      if(rec && rec.type==='koi'){
+        fEl.textContent=rec.f;
+        aEl.textContent=rec.a;
         ob.textContent='本日はお引きになりました ─ また明日';
+        ob.disabled=true;
+      }else if(rec){
+        fEl.textContent='―';
+        aEl.textContent='本日はおみくじをお引きになりました。おみくじは一日ひとつまで。また明日お参りください。';
+        ob.textContent='また明日';
         ob.disabled=true;
       }else{
         fEl.textContent='―';
-        aEl.textContent='下の鈴を鳴らして、一枚引きましょう（一日一回）';
+        aEl.textContent='下の鈴を鳴らして、一枚引きましょう（一日ひとつまで）';
         ob.textContent='鈴を鳴らして引く';
         ob.disabled=false;
       }
@@ -1060,20 +1070,19 @@
     const d=new Date();
     return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
   }
-  function loadTodayOmikuji(){ return loadToday('omikuji'); }
-  function saveTodayOmikuji(r){ saveToday('omikuji', r); }
-  function loadToday(key){
+  // ── 一日一籤の記録（おみくじ・恋みくじ共通）──
+  function loadTodayKuji(){
     try{
-      const raw=localStorage.getItem(key);
+      const raw=localStorage.getItem('mikuji-day');
       if(!raw) return null;
       const data=JSON.parse(raw);
       if(data.day===todayKey()) return data;
       return null;
     }catch(e){ return null; }
   }
-  function saveToday(key, r){
+  function saveTodayKuji(type, r){
     try{
-      localStorage.setItem(key, JSON.stringify({day:todayKey(), f:r.f, a:r.a}));
+      localStorage.setItem('mikuji-day', JSON.stringify({day:todayKey(), type:type, f:r.f, a:r.a}));
     }catch(e){}
   }
 
@@ -1081,8 +1090,8 @@
     const fEl=document.getElementById('omikujiFortune');
     const aEl=document.getElementById('omikujiAdvice');
     const btn=document.getElementById('omikujiBtn');
-    if(loadTodayOmikuji()){
-      btn.textContent='本日はお引きになりました ─ また明日';
+    if(loadTodayKuji()){
+      btn.textContent='また明日';
       btn.disabled=true;
       return;
     }
@@ -1097,7 +1106,7 @@
         const r=omikuji[Math.floor(Math.random()*omikuji.length)];
         fEl.textContent=r.f;
         aEl.textContent=r.a;
-        saveTodayOmikuji(r);
+        saveTodayKuji('omikuji', r);
         btn.textContent='本日はお引きになりました ─ また明日';
         btn.disabled=true;
       }
@@ -1120,8 +1129,8 @@
     const aEl=document.getElementById('koiAdvice');
     const btn=document.getElementById('koiBtn');
     const frame=document.querySelector('.mikuji-frame.koi');
-    if(loadToday('koimikuji')){
-      btn.textContent='本日はお引きになりました ─ また明日';
+    if(loadTodayKuji()){
+      btn.textContent='また明日';
       btn.disabled=true;
       return;
     }
@@ -1165,7 +1174,7 @@
         // 五、助言がふわり
         aEl.textContent=r.a;
         aEl.classList.add('fade-in');
-        saveToday('koimikuji', r);
+        saveTodayKuji('koi', r);
         btn.textContent='本日はお引きになりました ─ また明日';
       }, 350);
     }, 1300);
