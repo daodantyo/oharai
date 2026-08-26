@@ -300,15 +300,52 @@
   .next-big:hover,.next-big:focus-visible{background:var(--kin);color:var(--sumi);outline:none;text-shadow:none}
 
   /* ── 四、拝礼 ── */
+  .sahou-ring{
+    position:relative;
+    width:min(62vw,238px);
+    aspect-ratio:1;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    margin:28px 0 6px;
+    background:radial-gradient(circle,rgba(201,169,97,.09),transparent 68%);
+    border:1px solid var(--kin);
+    box-shadow:0 0 34px rgba(201,169,97,.18), inset 0 0 26px rgba(201,169,97,.08);
+  }
+  /* まわる外環 */
+  .sahou-ring::before{
+    content:'';position:absolute;inset:-13px;border-radius:50%;
+    border:1px dashed rgba(201,169,97,.5);
+    animation:ringspin 26s linear infinite;
+  }
+  /* 内の細環 */
+  .sahou-ring::after{
+    content:'';position:absolute;inset:12px;border-radius:50%;
+    border:1px solid rgba(201,169,97,.28);
+  }
+  @keyframes ringspin{to{transform:rotate(360deg)}}
   .sahou{
     font-family:'Shippori Mincho',serif;
-    font-size:clamp(1.6rem,6.5vw,2.3rem);
-    letter-spacing:.3em;text-indent:.3em;
-    margin:30px 0 12px;min-height:1.5em;
-    text-shadow:0 0 26px rgba(201,169,97,.3);
+    font-size:clamp(2.2rem,10vw,3.1rem);
+    letter-spacing:.18em;text-indent:.18em;
+    margin:0;min-height:auto;
+    background:linear-gradient(170deg,#f5e5ae 0%,#d4ab45 45%,#9a7b2e 75%,#c49d3f 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+    filter:drop-shadow(0 0 18px rgba(201,169,97,.45)) drop-shadow(0 2px 3px rgba(0,0,0,.5));
   }
-  .sahou-guide{color:var(--usuzumi);font-size:.9rem;letter-spacing:.15em;line-height:2;min-height:3.6em}
-  .sahou-tap{color:var(--usuzumi);font-size:.74rem;letter-spacing:.15em;margin-top:34px;opacity:.55}
+  .sahou-guide{color:var(--usuzumi);font-size:.9rem;letter-spacing:.15em;line-height:2;min-height:3.6em;margin-top:16px}
+  .sahou-steps{display:flex;gap:18px;margin:2px 0 8px}
+  .sdot{
+    width:11px;height:11px;border-radius:50%;
+    border:1px solid var(--kin);
+    background:transparent;
+    transition:background .5s, box-shadow .5s;
+  }
+  .sdot.on{
+    background:radial-gradient(circle at 35% 30%, #f5e5ae, #c9a961 70%);
+    box-shadow:0 0 12px rgba(201,169,97,.7);
+  }
+  .sahou-tap{color:var(--usuzumi);font-size:.74rem;letter-spacing:.15em;margin-top:26px;opacity:.55}
 
   /* ── 五、完了 ── */
   .scene-compact{
@@ -783,8 +820,15 @@
 <!-- 四、拝礼 -->
 <section class="scene" id="s4" onclick="sahouNext()">
   <h2>拝礼</h2>
-  <div class="sahou" id="sahouText">二礼</div>
+  <div class="sahou-ring">
+    <div class="sahou" id="sahouText">二礼</div>
+  </div>
   <p class="sahou-guide" id="sahouGuide">深いおじぎを二回</p>
+  <div class="sahou-steps" aria-hidden="true">
+    <span class="sdot" id="sdot0"></span>
+    <span class="sdot" id="sdot1"></span>
+    <span class="sdot" id="sdot2"></span>
+  </div>
   <p class="sahou-tap">お急ぎの方は画面をタップ</p>
 </section>
 
@@ -1118,8 +1162,18 @@
   const SAHOU_AUTO_SEC = 3;
   let sahouStep=0;
   function renderSahou(){
-    document.getElementById('sahouText').textContent=sahou[sahouStep].t;
+    const t=document.getElementById('sahouText');
+    t.textContent=sahou[sahouStep].t;
     document.getElementById('sahouGuide').textContent=sahou[sahouStep].g;
+    // 文字が判子のように現れる
+    t.classList.remove('stamp-in');
+    void t.offsetWidth;
+    t.classList.add('stamp-in');
+    // 灯を進める
+    for(let i=0;i<3;i++){
+      const d=document.getElementById('sdot'+i);
+      if(d){ d.classList.toggle('on', i<=sahouStep); }
+    }
   }
   function startSahouAuto(){
     if(window.sahouTimer){ clearTimeout(window.sahouTimer); }
