@@ -471,6 +471,51 @@
       linear-gradient(150deg,#d4536f 0%,#b03a55 60%,#8e2540 100%) !important;
   }
 
+  /* ── 恋みくじの演出 ── */
+  .shaking{animation:kshake .12s linear infinite}
+  @keyframes kshake{
+    0%{transform:translate(0,0) rotate(0)}
+    25%{transform:translate(2px,-2px) rotate(.4deg)}
+    50%{transform:translate(-2px,2px) rotate(-.4deg)}
+    75%{transform:translate(2px,2px) rotate(.3deg)}
+    100%{transform:translate(-2px,-2px) rotate(-.3deg)}
+  }
+  .koi-flash{
+    position:fixed;inset:0;z-index:50;pointer-events:none;
+    background:radial-gradient(circle at 50% 45%, rgba(255,214,224,.95) 0%, rgba(224,96,126,.65) 35%, rgba(224,96,126,0) 75%);
+    opacity:0;
+  }
+  .koi-flash.on{animation:kflash .8s ease-out forwards}
+  @keyframes kflash{
+    0%{opacity:0}
+    12%{opacity:1}
+    100%{opacity:0}
+  }
+  .petal{
+    position:fixed;z-index:51;pointer-events:none;
+    width:16px;height:14px;
+    background:radial-gradient(circle at 40% 30%, #ffe3ea 0%, #f7b6c8 55%, #e98aa5 100%);
+    border-radius:80% 10% 80% 10%;
+    opacity:0;
+    animation:petalfly 1.6s ease-out forwards;
+  }
+  @keyframes petalfly{
+    0%{transform:translate(0,0) rotate(0) scale(.5);opacity:1}
+    70%{opacity:.95}
+    100%{transform:translate(var(--dx),var(--dy)) rotate(var(--rot)) scale(1.05);opacity:0}
+  }
+  .stamp-in{animation:kstamp .5s cubic-bezier(.2,2.2,.4,1) both}
+  @keyframes kstamp{
+    0%{transform:scale(3.2);opacity:0;filter:blur(8px)}
+    60%{transform:scale(.94);opacity:1;filter:blur(0)}
+    100%{transform:scale(1)}
+  }
+  .fade-in{animation:kfade 1s ease .25s both}
+  @keyframes kfade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  @media (prefers-reduced-motion: reduce){
+    .shaking,.koi-flash.on,.petal,.stamp-in,.fade-in{animation:none}
+  }
+
   /* ── 読み物ページ共通 ── */
   .scene-scroll{justify-content:flex-start;overflow-y:auto;padding-top:120px;padding-bottom:40px}
   .omamori-page{max-width:min(90vw,540px);text-align:left;margin-bottom:22px}
@@ -560,6 +605,7 @@
   <span style="left:88%;top:52%;animation-delay:1.2s"></span><span style="left:46%;top:44%;animation-delay:3.4s"></span>
 </div>
 <canvas id="particles" aria-hidden="true"></canvas>
+<div class="koi-flash" id="koiFlash" aria-hidden="true"></div>
 <div class="glow" aria-hidden="true"></div>
 <div class="lights" aria-hidden="true">
   <span style="left:12%;animation-duration:16s;animation-delay:0s"></span>
@@ -1073,27 +1119,56 @@
     const fEl=document.getElementById('koiFortune');
     const aEl=document.getElementById('koiAdvice');
     const btn=document.getElementById('koiBtn');
+    const frame=document.querySelector('.mikuji-frame.koi');
     if(loadToday('koimikuji')){
       btn.textContent='本日はお引きになりました ─ また明日';
       btn.disabled=true;
       return;
     }
-    let ticks=0;
     btn.disabled=true;
-    const timer=setInterval(function(){
-      const t=koi[Math.floor(Math.random()*koi.length)];
-      fEl.textContent=t.f;
-      ticks++;
-      if(ticks>10){
-        clearInterval(timer);
+    fEl.textContent='';
+    fEl.classList.remove('stamp-in');
+    aEl.classList.remove('fade-in');
+    aEl.textContent='ご縁を手繰り寄せています…';
+    // 一、震え
+    frame.classList.add('shaking');
+    setTimeout(function(){
+      frame.classList.remove('shaking');
+      // 二、閃光
+      const flash=document.getElementById('koiFlash');
+      flash.classList.remove('on');
+      void flash.offsetWidth;
+      flash.classList.add('on');
+      // 三、花びらの舞
+      const rect=frame.getBoundingClientRect();
+      const cx=rect.left+rect.width/2;
+      const cy=rect.top+rect.height/2;
+      for(let i=0;i<26;i++){
+        const p=document.createElement('span');
+        p.className='petal';
+        const ang=Math.random()*Math.PI*2;
+        const dist=90+Math.random()*220;
+        p.style.left=cx+'px';
+        p.style.top=cy+'px';
+        p.style.setProperty('--dx',(Math.cos(ang)*dist)+'px');
+        p.style.setProperty('--dy',(Math.sin(ang)*dist-60)+'px');
+        p.style.setProperty('--rot',(Math.random()*720-360)+'deg');
+        p.style.animationDelay=(Math.random()*0.18)+'s';
+        document.body.appendChild(p);
+        setTimeout(function(){ p.remove(); }, 2200);
+      }
+      // 四、運勢が判子のように現れる
+      setTimeout(function(){
         const r=koi[Math.floor(Math.random()*koi.length)];
         fEl.textContent=r.f;
+        fEl.classList.add('stamp-in');
+        // 五、助言がふわり
         aEl.textContent=r.a;
+        aEl.classList.add('fade-in');
         saveToday('koimikuji', r);
         btn.textContent='本日はお引きになりました ─ また明日';
-        btn.disabled=true;
-      }
-    },80);
+      }, 350);
+    }, 1300);
   }
 
   // ── 素粒子 ──
