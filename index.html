@@ -513,35 +513,118 @@
   .fade-in{animation:kfade 1s ease .25s both}
   @keyframes kfade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-  /* ── おみくじ処 ── */
+  /* ── おみくじ処（豪華札）── */
   .kuji-note{color:var(--usuzumi);font-size:.8rem;letter-spacing:.15em;margin:14px 0 22px}
-  .kuji-menu{display:flex;flex-direction:column;gap:16px;width:min(84vw,340px)}
+  .kuji-menu{display:flex;flex-direction:column;gap:20px;width:min(86vw,360px)}
   .kuji-card{
-    position:relative;
-    display:flex;flex-direction:column;align-items:center;gap:8px;
-    padding:22px 18px;
-    background:linear-gradient(160deg,rgba(201,169,97,.13),rgba(201,169,97,.03));
+    position:relative;overflow:hidden;
+    display:flex;align-items:center;gap:20px;
+    padding:22px 24px;
+    background:
+      radial-gradient(circle 2px at 10px 10px, rgba(230,205,143,.4) 30%, transparent 35%),
+      repeating-linear-gradient(45deg, rgba(201,169,97,.13) 0 2px, transparent 2px 11px),
+      repeating-linear-gradient(-45deg, rgba(201,169,97,.09) 0 2px, transparent 2px 11px),
+      linear-gradient(160deg,#2a2036 0%,#1a1526 50%,#100d1a 100%);
+    background-size:22px 22px, auto, auto, auto;
     border:1px solid var(--kin);
     cursor:pointer;
-    box-shadow:0 6px 20px rgba(0,0,0,.4), inset 0 0 0 3px rgba(10,12,22,.7), inset 0 0 0 4px rgba(201,169,97,.4);
-    transition:background .3s, box-shadow .3s, transform .2s;
+    box-shadow:
+      0 10px 28px rgba(0,0,0,.5),
+      0 0 22px rgba(201,169,97,.14),
+      inset 0 0 0 3px rgba(10,8,18,.9),
+      inset 0 0 0 4px rgba(201,169,97,.5);
+    transition:box-shadow .3s, transform .2s;
+  }
+  /* きらめきの帯 */
+  .kuji-card::after{
+    content:'';position:absolute;top:-30%;bottom:-30%;left:-40%;width:34%;
+    background:linear-gradient(105deg, transparent 0%, rgba(255,244,210,.16) 45%, rgba(255,244,210,.32) 50%, rgba(255,244,210,.16) 55%, transparent 100%);
+    transform:skewX(-18deg);
+    animation:cardshine 4.6s ease-in-out infinite;
+    pointer-events:none;
+  }
+  .koi-card::after{animation-delay:1.5s}
+  .kin-card::after{animation-delay:3s}
+  @keyframes cardshine{
+    0%{left:-45%}
+    55%{left:115%}
+    100%{left:115%}
   }
   .kuji-card:hover,.kuji-card:focus-visible{
-    background:linear-gradient(160deg,rgba(201,169,97,.24),rgba(201,169,97,.07));
-    box-shadow:0 8px 26px rgba(0,0,0,.5), 0 0 24px rgba(201,169,97,.25), inset 0 0 0 3px rgba(10,12,22,.7), inset 0 0 0 4px rgba(201,169,97,.55);
-    transform:translateY(-2px);
+    transform:translateY(-3px);
+    box-shadow:
+      0 14px 34px rgba(0,0,0,.6),
+      0 0 34px rgba(201,169,97,.32),
+      inset 0 0 0 3px rgba(10,8,18,.9),
+      inset 0 0 0 4px rgba(201,169,97,.7);
     outline:none;
   }
+  /* 四隅の金具 */
+  .ckz{
+    position:absolute;width:18px;height:18px;z-index:2;
+    background:linear-gradient(135deg,#f0dca2 0%,#c9a961 45%,#8f7434 100%);
+    box-shadow:0 1px 2px rgba(0,0,0,.6), inset 0 1px 1px rgba(255,250,230,.8);
+    pointer-events:none;
+  }
+  .c1{top:-2px;left:-2px;clip-path:polygon(0 0,100% 0,100% 32%,32% 32%,32% 100%,0 100%)}
+  .c2{top:-2px;right:-2px;clip-path:polygon(0 0,100% 0,100% 100%,68% 100%,68% 32%,0 32%)}
+  .c3{bottom:-2px;left:-2px;clip-path:polygon(0 0,32% 0,32% 68%,100% 68%,100% 100%,0 100%)}
+  .c4{bottom:-2px;right:-2px;clip-path:polygon(68% 0,100% 0,100% 100%,0 100%,0 68%,68% 68%)}
+  /* 紋章 */
+  .kuji-seal{
+    flex-shrink:0;
+    width:62px;height:62px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Shippori Mincho',serif;
+    font-size:1.7rem;font-weight:600;
+    color:#fdf6ea;
+    background:
+      radial-gradient(circle at 32% 28%, rgba(255,255,255,.22), transparent 55%),
+      linear-gradient(150deg,#b8933a 0%,#96762c 55%,#6e5620 100%);
+    border:1px solid rgba(240,220,162,.8);
+    box-shadow:0 3px 8px rgba(0,0,0,.45), inset 0 0 8px rgba(60,42,10,.55), 0 0 18px rgba(201,169,97,.3);
+    text-shadow:0 1px 2px rgba(60,40,10,.6);
+  }
+  .koi-seal{
+    background:
+      radial-gradient(circle at 32% 28%, rgba(255,255,255,.22), transparent 55%),
+      linear-gradient(150deg,#d4536f 0%,#b03a55 55%,#832038 100%);
+    border-color:rgba(247,182,200,.85);
+    box-shadow:0 3px 8px rgba(0,0,0,.45), inset 0 0 8px rgba(70,10,25,.6), 0 0 18px rgba(224,96,126,.35);
+  }
+  .kin-seal{
+    background:
+      radial-gradient(circle at 32% 28%, rgba(255,255,255,.3), transparent 55%),
+      linear-gradient(150deg,#e6c04a 0%,#c49a2e 55%,#8f6d1c 100%);
+    border-color:rgba(250,235,180,.9);
+    box-shadow:0 3px 8px rgba(0,0,0,.45), inset 0 0 8px rgba(80,58,10,.55), 0 0 22px rgba(230,192,74,.45);
+  }
+  .kuji-card-text{display:flex;flex-direction:column;align-items:flex-start;gap:7px;text-align:left}
   .kuji-card-title{
     font-family:'Shippori Mincho',serif;
-    color:var(--kin-hi);font-size:1.25rem;letter-spacing:.3em;text-indent:.3em;
-    text-shadow:0 0 16px rgba(201,169,97,.35);
+    font-size:1.3rem;letter-spacing:.24em;
+    background:linear-gradient(180deg,#f5e5ae 0%,#d4ab45 55%,#a98a35 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+    filter:drop-shadow(0 0 12px rgba(201,169,97,.35));
   }
   .kuji-card-sub{color:var(--usuzumi);font-size:.78rem;letter-spacing:.12em}
-  .koi-card{border-color:#d67e92;box-shadow:0 6px 20px rgba(0,0,0,.4), inset 0 0 0 3px rgba(20,6,14,.7), inset 0 0 0 4px rgba(214,126,146,.45)}
-  .koi-card .kuji-card-title{color:#f0aebf;text-shadow:0 0 16px rgba(224,96,126,.4)}
-  .koi-card:hover,.koi-card:focus-visible{background:linear-gradient(160deg,rgba(214,110,130,.22),rgba(214,110,130,.06));box-shadow:0 8px 26px rgba(0,0,0,.5), 0 0 24px rgba(224,96,126,.3), inset 0 0 0 3px rgba(20,6,14,.7), inset 0 0 0 4px rgba(214,126,146,.6)}
-  .kin-card .kuji-card-title{color:#f5e0a0;text-shadow:0 0 18px rgba(230,190,90,.5)}
+  .koi-card{border-color:#d67e92;box-shadow:0 10px 28px rgba(0,0,0,.5), 0 0 22px rgba(224,96,126,.2), inset 0 0 0 3px rgba(18,6,14,.9), inset 0 0 0 4px rgba(214,126,146,.5)}
+  .koi-card .kuji-card-title{
+    background:linear-gradient(180deg,#ffd7e1 0%,#e0607e 55%,#a83350 100%);
+    -webkit-background-clip:text;background-clip:text;
+    filter:drop-shadow(0 0 12px rgba(224,96,126,.4));
+  }
+  .koi-card:hover,.koi-card:focus-visible{box-shadow:0 14px 34px rgba(0,0,0,.6), 0 0 34px rgba(224,96,126,.4), inset 0 0 0 3px rgba(18,6,14,.9), inset 0 0 0 4px rgba(214,126,146,.75)}
+  .koi-card .ckz{background:linear-gradient(135deg,#f7c6d2 0%,#d67e92 45%,#95435a 100%)}
+  .kin-card .kuji-card-title{
+    background:linear-gradient(180deg,#fff0b8 0%,#e6c04a 50%,#a9832a 100%);
+    -webkit-background-clip:text;background-clip:text;
+    filter:drop-shadow(0 0 14px rgba(230,192,74,.5));
+  }
+  @media (prefers-reduced-motion: reduce){
+    .kuji-card::after{animation:none;display:none}
+  }
   @media (prefers-reduced-motion: reduce){
     .shaking,.koi-flash.on,.petal,.stamp-in,.fade-in{animation:none}
   }
@@ -922,16 +1005,28 @@
   <p class="kuji-note">お引きいただけるのは、一日にひとつです</p>
   <div class="kuji-menu">
     <button class="kuji-card" onclick="go(6)">
-      <span class="kuji-card-title">運勢みくじ</span>
-      <span class="kuji-card-sub">今日の運勢と過ごし方</span>
+      <span class="ckz c1"></span><span class="ckz c2"></span><span class="ckz c3"></span><span class="ckz c4"></span>
+      <span class="kuji-seal">運</span>
+      <span class="kuji-card-text">
+        <span class="kuji-card-title">運勢みくじ</span>
+        <span class="kuji-card-sub">今日の運勢と過ごし方</span>
+      </span>
     </button>
     <button class="kuji-card koi-card" onclick="go(11)">
-      <span class="kuji-card-title">恋みくじ</span>
-      <span class="kuji-card-sub">縁結び ・ 恋愛成就</span>
+      <span class="ckz c1"></span><span class="ckz c2"></span><span class="ckz c3"></span><span class="ckz c4"></span>
+      <span class="kuji-seal koi-seal">縁</span>
+      <span class="kuji-card-text">
+        <span class="kuji-card-title">恋みくじ</span>
+        <span class="kuji-card-sub">縁結び ・ 恋愛成就</span>
+      </span>
     </button>
     <button class="kuji-card kin-card" onclick="go(13)">
-      <span class="kuji-card-title">金運みくじ</span>
-      <span class="kuji-card-sub">商売繁盛 ・ 金運上昇</span>
+      <span class="ckz c1"></span><span class="ckz c2"></span><span class="ckz c3"></span><span class="ckz c4"></span>
+      <span class="kuji-seal kin-seal">富</span>
+      <span class="kuji-card-text">
+        <span class="kuji-card-title">金運みくじ</span>
+        <span class="kuji-card-sub">商売繁盛 ・ 金運上昇</span>
+      </span>
     </button>
   </div>
   <button class="next" onclick="go(1)">はじめに戻る</button>
