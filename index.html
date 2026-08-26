@@ -444,6 +444,33 @@
   }
   .omikuji-draw:hover,.omikuji-draw:focus-visible{background:var(--kin);color:var(--sumi);outline:none;box-shadow:0 0 30px rgba(201,169,97,.4)}
 
+  /* ── 恋みくじ（紅仕立て）── */
+  .mikuji-frame.koi{
+    background:
+      radial-gradient(circle 2px at 12px 12px, rgba(240,180,190,.5) 30%, transparent 35%),
+      repeating-linear-gradient(45deg,
+        rgba(214,110,130,.18) 0 2px, transparent 2px 12px),
+      repeating-linear-gradient(-45deg,
+        rgba(214,110,130,.13) 0 2px, transparent 2px 12px),
+      linear-gradient(160deg,#4a1026 0%,#33091f 45%,#1c0715 100%);
+    background-size:24px 24px, auto, auto, auto;
+    border-color:#d67e92;
+    box-shadow:
+      0 24px 60px rgba(0,0,0,.65),
+      0 0 46px rgba(214,110,130,.28),
+      inset 0 0 0 3px rgba(24,6,16,.9),
+      inset 0 0 0 4px rgba(214,126,146,.55);
+  }
+  .koi-fortune{
+    background:linear-gradient(160deg,#b03a55 0%, #e0607e 30%, #96233d 55%, #d4536f 80%, #872036 100%) !important;
+    -webkit-background-clip:text !important;background-clip:text !important;
+  }
+  .koi-in{
+    background:
+      radial-gradient(circle at 30% 30%, rgba(255,255,255,.18), transparent 55%),
+      linear-gradient(150deg,#d4536f 0%,#b03a55 60%,#8e2540 100%) !important;
+  }
+
   /* ── 読み物ページ共通 ── */
   .scene-scroll{justify-content:flex-start;overflow-y:auto;padding-top:120px;padding-bottom:40px}
   .omamori-page{max-width:min(90vw,540px);text-align:left;margin-bottom:22px}
@@ -610,6 +637,7 @@
   </div>
   <p class="kotoba">お参りおつかれさまでした<br>どうか穏やかな日々でありますように</p>
   <button class="next" onclick="go(6)">おみくじを引く</button>
+  <button class="next" onclick="go(11)">恋みくじを引く</button>
   <button class="next" onclick="go(1)">はじめに戻る</button>
 </section>
 
@@ -797,6 +825,23 @@
   <button class="next" onclick="go(1)">はじめに戻る</button>
 </section>
 
+<!-- 十一、恋みくじ -->
+<section class="scene scene-compact" id="s11">
+  <h2>恋みくじ</h2>
+  <div class="mikuji-frame koi">
+    <span class="kazari k1"></span><span class="kazari k2"></span><span class="kazari k3"></span><span class="kazari k4"></span>
+    <div class="mikuji-paper">
+      <div class="mikuji-title">恋神籤</div>
+      <div class="omikuji-fortune koi-fortune" id="koiFortune">―</div>
+      <p class="omikuji-advice" id="koiAdvice">下の鈴を鳴らして、一枚引きましょう（一日一回）</p>
+      <div class="mikuji-in koi-in" aria-hidden="true">縁</div>
+    </div>
+  </div>
+  <button class="omikuji-draw" id="koiBtn" onclick="drawKoi()">鈴を鳴らして引く</button>
+  <button class="next" onclick="go(1)">はじめに戻る</button>
+</section>
+
+
 
 <script>
   function go(n){
@@ -836,6 +881,23 @@
       const aEl=document.getElementById('omikujiAdvice');
       const ob=document.getElementById('omikujiBtn');
       const saved=loadTodayOmikuji();
+      if(saved){
+        fEl.textContent=saved.f;
+        aEl.textContent=saved.a;
+        ob.textContent='本日はお引きになりました ─ また明日';
+        ob.disabled=true;
+      }else{
+        fEl.textContent='―';
+        aEl.textContent='下の鈴を鳴らして、一枚引きましょう（一日一回）';
+        ob.textContent='鈴を鳴らして引く';
+        ob.disabled=false;
+      }
+    }
+    if(n===11){
+      const fEl=document.getElementById('koiFortune');
+      const aEl=document.getElementById('koiAdvice');
+      const ob=document.getElementById('koiBtn');
+      const saved=loadToday('koimikuji');
       if(saved){
         fEl.textContent=saved.f;
         aEl.textContent=saved.a;
@@ -952,18 +1014,20 @@
     const d=new Date();
     return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
   }
-  function loadTodayOmikuji(){
+  function loadTodayOmikuji(){ return loadToday('omikuji'); }
+  function saveTodayOmikuji(r){ saveToday('omikuji', r); }
+  function loadToday(key){
     try{
-      const raw=localStorage.getItem('omikuji');
+      const raw=localStorage.getItem(key);
       if(!raw) return null;
       const data=JSON.parse(raw);
       if(data.day===todayKey()) return data;
       return null;
     }catch(e){ return null; }
   }
-  function saveTodayOmikuji(r){
+  function saveToday(key, r){
     try{
-      localStorage.setItem('omikuji', JSON.stringify({day:todayKey(), f:r.f, a:r.a}));
+      localStorage.setItem(key, JSON.stringify({day:todayKey(), f:r.f, a:r.a}));
     }catch(e){}
   }
 
@@ -988,6 +1052,44 @@
         fEl.textContent=r.f;
         aEl.textContent=r.a;
         saveTodayOmikuji(r);
+        btn.textContent='本日はお引きになりました ─ また明日';
+        btn.disabled=true;
+      }
+    },80);
+  }
+
+  // ── 恋みくじ ──
+  const koi=[
+    {f:'大吉', a:'想いが通じやすい日。素直な言葉が、ふたりの距離をぐっと縮めます。'},
+    {f:'中吉', a:'焦らずとも良い流れ。相手の話にゆっくり耳を傾けると絆が深まります。'},
+    {f:'小吉', a:'小さな気配りが恋を育てる日。さりげない優しさを一つ贈りましょう。'},
+    {f:'吉',   a:'笑顔が何よりのお守り。今日のあなたの明るさが、良縁を引き寄せます。'},
+    {f:'末吉', a:'ご縁はゆっくり近づいています。自分を磨く時間にあてると吉。'},
+    {f:'半吉', a:'迷いは半分、願いも半分。心を整えてから一歩を踏み出しましょう。'},
+    {f:'縁結び吉', a:'新しい出会いの気配あり。いつもと違う場所に足を運んでみて。'},
+    {f:'恋愛成就', a:'祓い清めた心に、まっすぐな恋が宿ります。想いを大切に温めて。'}
+  ];
+  function drawKoi(){
+    const fEl=document.getElementById('koiFortune');
+    const aEl=document.getElementById('koiAdvice');
+    const btn=document.getElementById('koiBtn');
+    if(loadToday('koimikuji')){
+      btn.textContent='本日はお引きになりました ─ また明日';
+      btn.disabled=true;
+      return;
+    }
+    let ticks=0;
+    btn.disabled=true;
+    const timer=setInterval(function(){
+      const t=koi[Math.floor(Math.random()*koi.length)];
+      fEl.textContent=t.f;
+      ticks++;
+      if(ticks>10){
+        clearInterval(timer);
+        const r=koi[Math.floor(Math.random()*koi.length)];
+        fEl.textContent=r.f;
+        aEl.textContent=r.a;
+        saveToday('koimikuji', r);
         btn.textContent='本日はお引きになりました ─ また明日';
         btn.disabled=true;
       }
