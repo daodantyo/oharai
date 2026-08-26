@@ -512,6 +512,36 @@
   }
   .fade-in{animation:kfade 1s ease .25s both}
   @keyframes kfade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+  /* ── おみくじ処 ── */
+  .kuji-note{color:var(--usuzumi);font-size:.8rem;letter-spacing:.15em;margin:14px 0 22px}
+  .kuji-menu{display:flex;flex-direction:column;gap:16px;width:min(84vw,340px)}
+  .kuji-card{
+    position:relative;
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+    padding:22px 18px;
+    background:linear-gradient(160deg,rgba(201,169,97,.13),rgba(201,169,97,.03));
+    border:1px solid var(--kin);
+    cursor:pointer;
+    box-shadow:0 6px 20px rgba(0,0,0,.4), inset 0 0 0 3px rgba(10,12,22,.7), inset 0 0 0 4px rgba(201,169,97,.4);
+    transition:background .3s, box-shadow .3s, transform .2s;
+  }
+  .kuji-card:hover,.kuji-card:focus-visible{
+    background:linear-gradient(160deg,rgba(201,169,97,.24),rgba(201,169,97,.07));
+    box-shadow:0 8px 26px rgba(0,0,0,.5), 0 0 24px rgba(201,169,97,.25), inset 0 0 0 3px rgba(10,12,22,.7), inset 0 0 0 4px rgba(201,169,97,.55);
+    transform:translateY(-2px);
+    outline:none;
+  }
+  .kuji-card-title{
+    font-family:'Shippori Mincho',serif;
+    color:var(--kin-hi);font-size:1.25rem;letter-spacing:.3em;text-indent:.3em;
+    text-shadow:0 0 16px rgba(201,169,97,.35);
+  }
+  .kuji-card-sub{color:var(--usuzumi);font-size:.78rem;letter-spacing:.12em}
+  .koi-card{border-color:#d67e92;box-shadow:0 6px 20px rgba(0,0,0,.4), inset 0 0 0 3px rgba(20,6,14,.7), inset 0 0 0 4px rgba(214,126,146,.45)}
+  .koi-card .kuji-card-title{color:#f0aebf;text-shadow:0 0 16px rgba(224,96,126,.4)}
+  .koi-card:hover,.koi-card:focus-visible{background:linear-gradient(160deg,rgba(214,110,130,.22),rgba(214,110,130,.06));box-shadow:0 8px 26px rgba(0,0,0,.5), 0 0 24px rgba(224,96,126,.3), inset 0 0 0 3px rgba(20,6,14,.7), inset 0 0 0 4px rgba(214,126,146,.6)}
+  .kin-card .kuji-card-title{color:#f5e0a0;text-shadow:0 0 18px rgba(230,190,90,.5)}
   @media (prefers-reduced-motion: reduce){
     .shaking,.koi-flash.on,.petal,.stamp-in,.fade-in{animation:none}
   }
@@ -682,8 +712,7 @@
     <p class="hi" id="hizuke"></p>
   </div>
   <p class="kotoba">お参りおつかれさまでした<br>どうか穏やかな日々でありますように</p>
-  <button class="next" onclick="go(6)">おみくじを引く</button>
-  <button class="next" onclick="go(11)">恋みくじを引く</button>
+  <button class="next" onclick="go(12)">おみくじを引く</button>
   <button class="next" onclick="go(1)">はじめに戻る</button>
 </section>
 
@@ -700,7 +729,7 @@
     </div>
   </div>
   <button class="omikuji-draw" id="omikujiBtn" onclick="drawOmikuji()">鈴を鳴らして引く</button>
-  <button class="next" onclick="go(1)">はじめに戻る</button>
+  <button class="next" onclick="go(12)">おみくじ処へ戻る</button>
 </section>
 
 <!-- 七、お守りの作り方 -->
@@ -884,8 +913,46 @@
     </div>
   </div>
   <button class="omikuji-draw" id="koiBtn" onclick="drawKoi()">鈴を鳴らして引く</button>
+  <button class="next" onclick="go(12)">おみくじ処へ戻る</button>
+</section>
+
+<!-- 十二、おみくじ処 -->
+<section class="scene scene-compact" id="s12">
+  <h2>おみくじ処</h2>
+  <p class="kuji-note">お引きいただけるのは、一日にひとつです</p>
+  <div class="kuji-menu">
+    <button class="kuji-card" onclick="go(6)">
+      <span class="kuji-card-title">運勢みくじ</span>
+      <span class="kuji-card-sub">今日の運勢と過ごし方</span>
+    </button>
+    <button class="kuji-card koi-card" onclick="go(11)">
+      <span class="kuji-card-title">恋みくじ</span>
+      <span class="kuji-card-sub">縁結び ・ 恋愛成就</span>
+    </button>
+    <button class="kuji-card kin-card" onclick="go(13)">
+      <span class="kuji-card-title">金運みくじ</span>
+      <span class="kuji-card-sub">商売繁盛 ・ 金運上昇</span>
+    </button>
+  </div>
   <button class="next" onclick="go(1)">はじめに戻る</button>
 </section>
+
+<!-- 十三、金運みくじ -->
+<section class="scene scene-compact" id="s13">
+  <h2>金運みくじ</h2>
+  <div class="mikuji-frame">
+    <span class="kazari k1"></span><span class="kazari k2"></span><span class="kazari k3"></span><span class="kazari k4"></span>
+    <div class="mikuji-paper">
+      <div class="mikuji-title">金神籤</div>
+      <div class="omikuji-fortune" id="kinFortune">―</div>
+      <p class="omikuji-advice" id="kinAdvice">下の鈴を鳴らして、一枚引きましょう（一日ひとつまで）</p>
+      <div class="mikuji-in" aria-hidden="true">富</div>
+    </div>
+  </div>
+  <button class="omikuji-draw" id="kinBtn" onclick="drawKin()">鈴を鳴らして引く</button>
+  <button class="next" onclick="go(12)">おみくじ処へ戻る</button>
+</section>
+
 
 
 
@@ -922,50 +989,9 @@
       document.getElementById('fudaKotoba').textContent=
         kotoba[Math.floor(Math.random()*kotoba.length)];
     }
-    if(n===6){
-      const fEl=document.getElementById('omikujiFortune');
-      const aEl=document.getElementById('omikujiAdvice');
-      const ob=document.getElementById('omikujiBtn');
-      const rec=loadTodayKuji();
-      if(rec && rec.type==='omikuji'){
-        fEl.textContent=rec.f;
-        aEl.textContent=rec.a;
-        ob.textContent='本日はお引きになりました ─ また明日';
-        ob.disabled=true;
-      }else if(rec){
-        fEl.textContent='―';
-        aEl.textContent='本日は恋みくじをお引きになりました。おみくじは一日ひとつまで。また明日お参りください。';
-        ob.textContent='また明日';
-        ob.disabled=true;
-      }else{
-        fEl.textContent='―';
-        aEl.textContent='下の鈴を鳴らして、一枚引きましょう（一日ひとつまで）';
-        ob.textContent='鈴を鳴らして引く';
-        ob.disabled=false;
-      }
-    }
-    if(n===11){
-      const fEl=document.getElementById('koiFortune');
-      const aEl=document.getElementById('koiAdvice');
-      const ob=document.getElementById('koiBtn');
-      const rec=loadTodayKuji();
-      if(rec && rec.type==='koi'){
-        fEl.textContent=rec.f;
-        aEl.textContent=rec.a;
-        ob.textContent='本日はお引きになりました ─ また明日';
-        ob.disabled=true;
-      }else if(rec){
-        fEl.textContent='―';
-        aEl.textContent='本日はおみくじをお引きになりました。おみくじは一日ひとつまで。また明日お参りください。';
-        ob.textContent='また明日';
-        ob.disabled=true;
-      }else{
-        fEl.textContent='―';
-        aEl.textContent='下の鈴を鳴らして、一枚引きましょう（一日ひとつまで）';
-        ob.textContent='鈴を鳴らして引く';
-        ob.disabled=false;
-      }
-    }
+    if(n===6){ initKujiScreen('omikuji','omikujiFortune','omikujiAdvice','omikujiBtn'); }
+    if(n===11){ initKujiScreen('koi','koiFortune','koiAdvice','koiBtn'); }
+    if(n===13){ initKujiScreen('kin','kinFortune','kinAdvice','kinBtn'); }
   }
 
   // ── 御祈祷：祝詞の再生と自動進行 ──
@@ -1070,7 +1096,30 @@
     const d=new Date();
     return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
   }
-  // ── 一日一籤の記録（おみくじ・恋みくじ共通）──
+  // ── 一日一籤の記録（全みくじ共通）──
+  const KUJI_NAMES={omikuji:'運勢みくじ', koi:'恋みくじ', kin:'金運みくじ'};
+  function initKujiScreen(type, fId, aId, bId){
+    const fEl=document.getElementById(fId);
+    const aEl=document.getElementById(aId);
+    const ob=document.getElementById(bId);
+    const rec=loadTodayKuji();
+    if(rec && rec.type===type){
+      fEl.textContent=rec.f;
+      aEl.textContent=rec.a;
+      ob.textContent='本日はお引きになりました ─ また明日';
+      ob.disabled=true;
+    }else if(rec){
+      fEl.textContent='―';
+      aEl.textContent='本日は'+(KUJI_NAMES[rec.type]||'おみくじ')+'をお引きになりました。おみくじは一日ひとつまで。また明日お参りください。';
+      ob.textContent='また明日';
+      ob.disabled=true;
+    }else{
+      fEl.textContent='―';
+      aEl.textContent='下の鈴を鳴らして、一枚引きましょう（一日ひとつまで）';
+      ob.textContent='鈴を鳴らして引く';
+      ob.disabled=false;
+    }
+  }
   function loadTodayKuji(){
     try{
       const raw=localStorage.getItem('mikuji-day');
@@ -1178,6 +1227,44 @@
         btn.textContent='本日はお引きになりました ─ また明日';
       }, 350);
     }, 1300);
+  }
+
+  // ── 金運みくじ ──
+  const kinkuji=[
+    {f:'大金運', a:'金運の流れが開く日。財布や通帳まわりを整えると、良い巡りが宿ります。'},
+    {f:'中吉', a:'堅実さが実を結ぶ日。衝動買いを一つ我慢すると、後の福につながります。'},
+    {f:'小吉', a:'小さな倹約が福を呼ぶ日。使い道を一度書き出してみましょう。'},
+    {f:'吉',   a:'働きに実りのある日。丁寧な仕事が、思わぬ評価と実入りを連れてきます。'},
+    {f:'末吉', a:'蒔いた種が育つ途中。今日は学びと貯えにあてると吉。'},
+    {f:'商売繁盛', a:'人とのご縁が金運を運ぶ日。感謝の挨拶を忘れずに。'},
+    {f:'蓄財吉', a:'貯めるに良し。今日始めた積み立ては、末永くあなたを支えます。'},
+    {f:'金運上昇', a:'祓い清めた心に、良い金の巡りが宿ります。無駄を手放して身軽に。'}
+  ];
+  function drawKin(){
+    const fEl=document.getElementById('kinFortune');
+    const aEl=document.getElementById('kinAdvice');
+    const btn=document.getElementById('kinBtn');
+    if(loadTodayKuji()){
+      btn.textContent='また明日';
+      btn.disabled=true;
+      return;
+    }
+    let ticks=0;
+    btn.disabled=true;
+    const timer=setInterval(function(){
+      const t=kinkuji[Math.floor(Math.random()*kinkuji.length)];
+      fEl.textContent=t.f;
+      ticks++;
+      if(ticks>10){
+        clearInterval(timer);
+        const r=kinkuji[Math.floor(Math.random()*kinkuji.length)];
+        fEl.textContent=r.f;
+        aEl.textContent=r.a;
+        saveTodayKuji('kin', r);
+        btn.textContent='本日はお引きになりました ─ また明日';
+        btn.disabled=true;
+      }
+    },80);
   }
 
   // ── 素粒子 ──
