@@ -668,6 +668,49 @@
   @media (prefers-reduced-motion: reduce){
     .kuji-card::after{animation:none;display:none}
   }
+
+  /* ── 御朱印帳 ── */
+  .goshuin-stats{display:flex;gap:22px;margin:18px 0 8px}
+  .gstat{
+    position:relative;
+    min-width:128px;padding:20px 18px 16px;
+    border:1px solid var(--kin);
+    background:linear-gradient(160deg,rgba(201,169,97,.12),rgba(201,169,97,.02));
+    box-shadow:0 6px 20px rgba(0,0,0,.4), inset 0 0 0 3px rgba(10,8,18,.8), inset 0 0 0 4px rgba(201,169,97,.4);
+  }
+  .gstat-num{
+    font-family:'Shippori Mincho',serif;
+    font-size:2.3rem;line-height:1.1;
+    background:linear-gradient(180deg,#f5e5ae 0%,#d4ab45 55%,#a98a35 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+    filter:drop-shadow(0 0 12px rgba(201,169,97,.4));
+  }
+  .gstat-num::after{
+    content:'日';
+    font-size:.9rem;margin-left:4px;
+  }
+  #gsTotal::after{content:'回'}
+  .gstat-label{color:var(--usuzumi);font-size:.76rem;letter-spacing:.2em;margin-top:8px}
+  .goshuin-grid{
+    display:grid;grid-template-columns:repeat(7,1fr);gap:10px;
+    width:min(86vw,340px);margin-bottom:14px;
+  }
+  .gday{
+    aspect-ratio:1;border-radius:50%;
+    border:1px solid rgba(201,169,97,.4);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    color:var(--usuzumi);font-size:.6rem;letter-spacing:.02em;
+  }
+  .gday.on{
+    border-color:rgba(178,45,32,.8);
+    background:
+      radial-gradient(circle at 32% 28%, rgba(255,255,255,.15), transparent 55%),
+      linear-gradient(150deg,#c0392b 0%,#a02818 60%,#8a1f12 100%);
+    color:#fdf6ea;
+    box-shadow:0 2px 6px rgba(0,0,0,.4), inset 0 0 5px rgba(60,10,5,.6);
+  }
+  .gday .gd-mark{font-family:'Shippori Mincho',serif;font-size:.95rem;line-height:1.2}
   @media (prefers-reduced-motion: reduce){
     .shaking,.koi-flash.on,.petal,.stamp-in,.fade-in{animation:none}
   }
@@ -799,6 +842,7 @@
     <button class="next" onclick="go(8)">セージ浄化のやり方</button>
     <button class="next" onclick="go(9)">方位を知る</button>
     <button class="next" onclick="go(10)">日本全国 人気神社</button>
+    <button class="next" onclick="go(14)">御朱印帳</button>
   </div>
 </section>
 
@@ -850,6 +894,7 @@
     </div>
   </div>
   <p class="kotoba">お参りおつかれさまでした<br>どうか穏やかな日々でありますように</p>
+  <button class="next" onclick="shareFuda()">御札を画像で保存</button>
   <button class="next" onclick="go(12)">おみくじを引く</button>
   <button class="next" onclick="go(1)">はじめに戻る</button>
 </section>
@@ -867,6 +912,7 @@
     </div>
   </div>
   <button class="omikuji-draw" id="omikujiBtn" onclick="drawOmikuji()">鈴を鳴らして引く</button>
+  <button class="next" id="omikujiShareBtn" style="display:none" onclick="shareKuji('omikuji')">結果を画像で保存</button>
   <button class="next" onclick="go(12)">おみくじ処へ戻る</button>
 </section>
 
@@ -1051,6 +1097,7 @@
     </div>
   </div>
   <button class="omikuji-draw" id="koiBtn" onclick="drawKoi()">鈴を鳴らして引く</button>
+  <button class="next" id="koiShareBtn" style="display:none" onclick="shareKuji('koi')">結果を画像で保存</button>
   <button class="next" onclick="go(12)">おみくじ処へ戻る</button>
 </section>
 
@@ -1100,8 +1147,29 @@
     </div>
   </div>
   <button class="omikuji-draw" id="kinBtn" onclick="drawKin()">鈴を鳴らして引く</button>
+  <button class="next" id="kinShareBtn" style="display:none" onclick="shareKuji('kin')">結果を画像で保存</button>
   <button class="next" onclick="go(12)">おみくじ処へ戻る</button>
 </section>
+
+<!-- 十四、御朱印帳 -->
+<section class="scene scene-compact" id="s14">
+  <h2>御朱印帳</h2>
+  <div class="goshuin-stats">
+    <div class="gstat">
+      <div class="gstat-num" id="gsStreak">0</div>
+      <div class="gstat-label">連続参拝</div>
+    </div>
+    <div class="gstat">
+      <div class="gstat-num" id="gsTotal">0</div>
+      <div class="gstat-label">通算参拝</div>
+    </div>
+  </div>
+  <p class="kuji-note">この十四日間のお参り</p>
+  <div class="goshuin-grid" id="goshuinGrid"></div>
+  <p class="kotoba" id="goshuinMsg">お参りを重ねて、御朱印を集めましょう</p>
+  <button class="next" onclick="go(1)">はじめに戻る</button>
+</section>
+
 
 
 
@@ -1126,6 +1194,8 @@
     document.getElementById('s'+n).classList.add('active');
     if(n===4){sahouStep=0;renderSahou();startSahouAuto();}
     if(n===5){
+      recordSanpai();
+      playSuzu(0.5);
       const d=new Date();
       document.getElementById('hizuke').textContent=
         d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日　参拝';
@@ -1145,6 +1215,7 @@
     if(n===6){ initKujiScreen('omikuji','omikujiFortune','omikujiAdvice','omikujiBtn'); }
     if(n===11){ initKujiScreen('koi','koiFortune','koiAdvice','koiBtn'); }
     if(n===13){ initKujiScreen('kin','kinFortune','kinAdvice','kinBtn'); }
+    if(n===14){ renderGoshuin(); }
   }
 
   // ── 御祈祷：祝詞の再生と自動進行 ──
@@ -1183,6 +1254,7 @@
     t.classList.remove('stamp-in');
     void t.offsetWidth;
     t.classList.add('stamp-in');
+    if(sahouStep===1){ playKashiwade(); }
     // 灯を進める
     for(let i=0;i<3;i++){
       const d=document.getElementById('sdot'+i);
@@ -1261,11 +1333,14 @@
   }
   // ── 一日一籤の記録（全みくじ共通）──
   const KUJI_NAMES={omikuji:'運勢みくじ', koi:'恋みくじ', kin:'金運みくじ'};
+  const SHARE_IDS={omikuji:'omikujiShareBtn', koi:'koiShareBtn', kin:'kinShareBtn'};
   function initKujiScreen(type, fId, aId, bId){
     const fEl=document.getElementById(fId);
     const aEl=document.getElementById(aId);
     const ob=document.getElementById(bId);
     const rec=loadTodayKuji();
+    const sh=document.getElementById(SHARE_IDS[type]);
+    if(sh){ sh.style.display=(rec && rec.type===type)?'':'none'; }
     if(rec && rec.type===type){
       fEl.textContent=rec.f;
       aEl.textContent=rec.a;
@@ -1307,6 +1382,7 @@
       btn.disabled=true;
       return;
     }
+    playSuzu(1);
     let ticks=0;
     btn.disabled=true;
     const timer=setInterval(function(){
@@ -1319,6 +1395,7 @@
         fEl.textContent=r.f;
         aEl.textContent=r.a;
         saveTodayKuji('omikuji', r);
+        var s1b=document.getElementById('omikujiShareBtn'); if(s1b){s1b.style.display='';}
         btn.textContent='本日はお引きになりました ─ また明日';
         btn.disabled=true;
       }
@@ -1352,6 +1429,7 @@
     aEl.classList.remove('fade-in');
     aEl.textContent='ご縁を手繰り寄せています…';
     // 一、震え
+    playSuzu(1);
     frame.classList.add('shaking');
     setTimeout(function(){
       frame.classList.remove('shaking');
@@ -1387,6 +1465,7 @@
         aEl.textContent=r.a;
         aEl.classList.add('fade-in');
         saveTodayKuji('koi', r);
+        var s2b=document.getElementById('koiShareBtn'); if(s2b){s2b.style.display='';}
         btn.textContent='本日はお引きになりました ─ また明日';
       }, 350);
     }, 1300);
@@ -1412,6 +1491,7 @@
       btn.disabled=true;
       return;
     }
+    playSuzu(1);
     let ticks=0;
     btn.disabled=true;
     const timer=setInterval(function(){
@@ -1424,10 +1504,201 @@
         fEl.textContent=r.f;
         aEl.textContent=r.a;
         saveTodayKuji('kin', r);
+        var s3b=document.getElementById('kinShareBtn'); if(s3b){s3b.style.display='';}
         btn.textContent='本日はお引きになりました ─ また明日';
         btn.disabled=true;
       }
     },80);
+  }
+
+  // ── 音（鈴・柏手）──
+  let audioCtx=null;
+  function ac(){
+    try{
+      if(!audioCtx){ audioCtx=new (window.AudioContext||window.webkitAudioContext)(); }
+      if(audioCtx.state==='suspended'){ audioCtx.resume(); }
+      return audioCtx;
+    }catch(e){ return null; }
+  }
+  document.addEventListener('click', function(){ ac(); }, {once:true});
+  function suzuHit(c, t0, vol){
+    [2093,2637,3520,4186,5274].forEach(function(f,i){
+      const o=c.createOscillator(), g=c.createGain();
+      o.type='sine';
+      o.frequency.value=f*(1+(Math.random()*0.004-0.002));
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(vol*0.10/(i+1), t0+0.012);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0+0.8+i*0.08);
+      o.connect(g); g.connect(c.destination);
+      o.start(t0); o.stop(t0+1.1);
+    });
+  }
+  function playSuzu(vol){
+    const c=ac(); if(!c) return;
+    const t=c.currentTime;
+    suzuHit(c, t, vol||1);
+    suzuHit(c, t+0.16, (vol||1)*0.65);
+  }
+  function clapHit(c, t0){
+    const dur=0.09;
+    const buf=c.createBuffer(1, c.sampleRate*dur, c.sampleRate);
+    const d=buf.getChannelData(0);
+    for(let i=0;i<d.length;i++){ d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,2); }
+    const src=c.createBufferSource(); src.buffer=buf;
+    const bp=c.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=1700; bp.Q.value=0.8;
+    const g=c.createGain();
+    g.gain.setValueAtTime(0.5, t0);
+    g.gain.exponentialRampToValueAtTime(0.001, t0+dur);
+    src.connect(bp); bp.connect(g); g.connect(c.destination);
+    src.start(t0);
+  }
+  function playKashiwade(){
+    const c=ac(); if(!c) return;
+    const t=c.currentTime;
+    clapHit(c, t);
+    clapHit(c, t+0.42);
+  }
+
+  // ── 結果を画像で保存 ──
+  const KUJI_ACCENTS={omikuji:'#c9a961', koi:'#e0607e', kin:'#e6c04a'};
+  function drawResultImage(title, big, small, accent, dateText){
+    const W=1080, H=1350;
+    const cv=document.createElement('canvas');
+    cv.width=W; cv.height=H;
+    const x=cv.getContext('2d');
+    // 夜空
+    const bg=x.createRadialGradient(W/2, H*0.2, 80, W/2, H*0.5, H);
+    bg.addColorStop(0,'#1b2340'); bg.addColorStop(0.5,'#12182c'); bg.addColorStop(1,'#0a0c16');
+    x.fillStyle=bg; x.fillRect(0,0,W,H);
+    // 星と粒
+    for(let i=0;i<70;i++){
+      x.globalAlpha=Math.random()*0.5+0.1;
+      x.fillStyle=Math.random()<0.5?'#e6cd8f':'#f3efe6';
+      const r=Math.random()*3+1;
+      x.beginPath(); x.arc(Math.random()*W, Math.random()*H, r, 0, Math.PI*2); x.fill();
+    }
+    x.globalAlpha=1;
+    // 二重金枠
+    x.strokeStyle=accent; x.lineWidth=6; x.strokeRect(40,40,W-80,H-80);
+    x.lineWidth=2; x.strokeRect(64,64,W-128,H-128);
+    const serif="'Noto Serif CJK JP','Hiragino Mincho ProN','Yu Mincho',serif";
+    // 題
+    x.fillStyle=accent; x.font='600 52px '+serif; x.textAlign='center';
+    x.fillText(title, W/2, 170);
+    // 大文字（縦書き風に一字ずつ）
+    x.font='900 170px '+serif;
+    const chars=big.split('');
+    const size=chars.length>5?120:170;
+    x.font='900 '+size+'px '+serif;
+    const totalH=size*1.12*chars.length;
+    let cy=H*0.52-totalH/2+size*0.6;
+    const grad=x.createLinearGradient(0,cy-size,0,cy+totalH);
+    grad.addColorStop(0,'#f5e5ae'); grad.addColorStop(0.5,accent); grad.addColorStop(1,'#8a6b24');
+    x.fillStyle=grad;
+    x.shadowColor=accent; x.shadowBlur=40;
+    chars.forEach(function(ch){ x.fillText(ch, W/2, cy); cy+=size*1.12; });
+    x.shadowBlur=0;
+    // 小文（折り返し）
+    x.fillStyle='#cfd3e0'; x.font='300 40px '+serif;
+    const maxW=W-220;
+    let line='', ly=H-330;
+    for(let i=0;i<small.length;i++){
+      const test=line+small[i];
+      if(x.measureText(test).width>maxW){ x.fillText(line, W/2, ly); line=small[i]; ly+=64; }
+      else{ line=test; }
+    }
+    if(line){ x.fillText(line, W/2, ly); }
+    // 日付と銘
+    x.fillStyle='#8b8fa3'; x.font='300 34px '+serif;
+    x.fillText(dateText, W/2, H-150);
+    x.fillText('お祓い ─ 身を清める', W/2, H-100);
+    return cv;
+  }
+  function saveCanvas(cv, name, title){
+    cv.toBlob(function(b){
+      if(!b) return;
+      const f=new File([b], name, {type:'image/png'});
+      if(navigator.canShare && navigator.canShare({files:[f]})){
+        navigator.share({files:[f], title:title}).catch(function(){});
+      }else{
+        const a=document.createElement('a');
+        a.href=URL.createObjectURL(b);
+        a.download=name;
+        a.click();
+        setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000);
+      }
+    }, 'image/png');
+  }
+  function jpDate(){
+    const d=new Date();
+    return d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日';
+  }
+  function shareKuji(type){
+    const rec=loadTodayKuji();
+    if(!rec || rec.type!==type) return;
+    const cv=drawResultImage(KUJI_NAMES[type], rec.f, rec.a, KUJI_ACCENTS[type], jpDate()+'　参拝');
+    saveCanvas(cv, 'omikuji.png', KUJI_NAMES[type]);
+  }
+  function shareFuda(){
+    const kotoba=document.getElementById('fudaKotoba').textContent;
+    const cv=drawResultImage('御札', kotoba, 'お参りおつかれさまでした。どうか穏やかな日々でありますように。', '#c9a961', jpDate()+'　参拝');
+    saveCanvas(cv, 'ofuda.png', '御札');
+  }
+
+  // ── 御朱印帳（参拝の記録）──
+  function loadSanpai(){
+    try{
+      const raw=localStorage.getItem('sanpai');
+      return raw?JSON.parse(raw):[];
+    }catch(e){ return []; }
+  }
+  function recordSanpai(){
+    try{
+      const days=loadSanpai();
+      const t=todayKey();
+      if(days.indexOf(t)===-1){
+        days.push(t);
+        if(days.length>400){ days.splice(0, days.length-400); }
+        localStorage.setItem('sanpai', JSON.stringify(days));
+      }
+    }catch(e){}
+  }
+  function dayKeyOf(d){
+    return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+  }
+  function renderGoshuin(){
+    const days=loadSanpai();
+    const set={};
+    days.forEach(function(k){ set[k]=true; });
+    // 連続日数（今日から遡る。今日まだなら昨日から）
+    let streak=0;
+    const cur=new Date();
+    if(!set[dayKeyOf(cur)]){ cur.setDate(cur.getDate()-1); }
+    while(set[dayKeyOf(cur)]){
+      streak++;
+      cur.setDate(cur.getDate()-1);
+    }
+    document.getElementById('gsStreak').textContent=streak;
+    document.getElementById('gsTotal').textContent=days.length;
+    // 直近14日のグリッド
+    const grid=document.getElementById('goshuinGrid');
+    grid.innerHTML='';
+    const start=new Date();
+    start.setDate(start.getDate()-13);
+    for(let i=0;i<14;i++){
+      const d=new Date(start);
+      d.setDate(start.getDate()+i);
+      const el=document.createElement('div');
+      const on=!!set[dayKeyOf(d)];
+      el.className='gday'+(on?' on':'');
+      el.innerHTML=(on?'<span class="gd-mark">祓</span>':'')+'<span>'+(d.getMonth()+1)+'/'+d.getDate()+'</span>';
+      grid.appendChild(el);
+    }
+    const msg=document.getElementById('goshuinMsg');
+    if(streak>=7){ msg.textContent='七日続きのお参り、見事です。神様もお喜びでしょう。'; }
+    else if(streak>=3){ msg.textContent='お参りが習慣になってきましたね。この調子で。'; }
+    else if(days.length>0){ msg.textContent='お参りを重ねて、御朱印を集めましょう。'; }
+    else{ msg.textContent='はじめてのお参りをすると、ここに御朱印が押されます。'; }
   }
 
   // ── 素粒子 ──
