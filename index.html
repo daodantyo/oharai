@@ -218,8 +218,52 @@
     background:var(--kin);color:var(--sumi);outline:none;
     box-shadow:0 0 34px rgba(201,169,97,.4);
   }
-  .top-menu{display:flex;flex-direction:column;align-items:center;margin-top:24px;gap:1px}
+  .top-menu{display:flex;flex-direction:column;align-items:center;margin-top:20px;gap:1px}
   .top-menu .next{padding:8px 20px;font-size:.84rem;opacity:.85}
+
+  /* ── 御朱印帳の入口 ── */
+  .goshuin-entry{
+    display:flex;align-items:center;gap:14px;
+    margin-top:18px;
+    padding:12px 30px 12px 14px;
+    background:linear-gradient(160deg,rgba(201,169,97,.14),rgba(201,169,97,.03));
+    border:1px solid var(--kin);
+    cursor:pointer;
+    box-shadow:0 6px 18px rgba(0,0,0,.4), 0 0 20px rgba(201,169,97,.16), inset 0 0 0 2px rgba(10,8,18,.8), inset 0 0 0 3px rgba(201,169,97,.4);
+    transition:box-shadow .3s, transform .2s;
+  }
+  .goshuin-entry:hover,.goshuin-entry:focus-visible{
+    transform:translateY(-2px);
+    box-shadow:0 10px 24px rgba(0,0,0,.5), 0 0 30px rgba(201,169,97,.3), inset 0 0 0 2px rgba(10,8,18,.8), inset 0 0 0 3px rgba(201,169,97,.6);
+    outline:none;
+  }
+  .ge-seal{
+    width:44px;height:44px;border-radius:6px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Shippori Mincho',serif;
+    font-size:1.3rem;color:#fdf6ea;
+    background:
+      radial-gradient(circle at 30% 30%, rgba(255,255,255,.16), transparent 55%),
+      linear-gradient(150deg,#c0392b 0%,#a02818 60%,#8a1f12 100%);
+    transform:rotate(-5deg);
+    box-shadow:0 2px 5px rgba(0,0,0,.35), inset 0 0 5px rgba(60,10,5,.6);
+    animation:sealglow 3.5s ease-in-out infinite;
+  }
+  @keyframes sealglow{
+    0%,100%{box-shadow:0 2px 5px rgba(0,0,0,.35), inset 0 0 5px rgba(60,10,5,.6), 0 0 6px rgba(192,57,43,.2)}
+    50%{box-shadow:0 2px 5px rgba(0,0,0,.35), inset 0 0 5px rgba(60,10,5,.6), 0 0 18px rgba(192,57,43,.55)}
+  }
+  .ge-text{
+    font-family:'Shippori Mincho',serif;
+    font-size:1.1rem;letter-spacing:.3em;text-indent:.1em;
+    background:linear-gradient(180deg,#f5e5ae 0%,#d4ab45 55%,#a98a35 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+    filter:drop-shadow(0 0 10px rgba(201,169,97,.35));
+  }
+  @media (prefers-reduced-motion: reduce){
+    .ge-seal{animation:none}
+  }
 
   /* ── 二、手水 ── */
   .breath-circle{
@@ -837,12 +881,15 @@
   </svg>
   <p class="sub">心静かに、身を清めるひととき</p>
   <button class="hairei" onclick="go(2)">参拝する</button>
+  <button class="goshuin-entry" onclick="go(14)">
+    <span class="ge-seal">祓</span>
+    <span class="ge-text">御朱印帳</span>
+  </button>
   <div class="top-menu">
     <button class="next" onclick="go(7)">お守りの作り方</button>
     <button class="next" onclick="go(8)">セージ浄化のやり方</button>
     <button class="next" onclick="go(9)">方位を知る</button>
     <button class="next" onclick="go(10)">日本全国 人気神社</button>
-    <button class="next" onclick="go(14)">御朱印帳</button>
   </div>
 </section>
 
