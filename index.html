@@ -907,7 +907,7 @@
     <button class="norito-play" id="noritoPlay" onclick="toggleNorito()" aria-label="祝詞を奏上">
       <span id="noritoIcon">神</span>
     </button>
-    <p class="norito-label" id="noritoLabel">円を押して、祝詞を奏上します</p>
+    <p class="norito-label" id="noritoLabel">「神」を押すと、祝詞が流れます</p>
     <audio id="noritoAudio" src="norito.mp3" preload="none"></audio>
   </div>
   <p class="norito-guide">お急ぎの方は「進む」をお押しください<br>心清らかな方は、そのまま三十秒お待ちください</p>
@@ -1234,7 +1234,7 @@
       const lb=document.getElementById('noritoLabel');
       const bt=document.getElementById('noritoPlay');
       if(ic) ic.textContent='神';
-      if(lb) lb.textContent='円を押して、祝詞を奏上します';
+      if(lb) lb.textContent='「神」を押すと、祝詞が流れます';
       if(bt) bt.classList.remove('playing');
     }
     document.querySelectorAll('.scene').forEach(function(s){s.classList.remove('active');});
@@ -1279,7 +1279,7 @@
       window.noritoTimer=setTimeout(function(){ go(4); }, NORITO_AUTO_SEC*1000);
     }else{
       audio.pause();
-      label.textContent='円を押して、祝詞を奏上します';
+      label.textContent='「神」を押すと、祝詞が流れます';
       btn.classList.remove('playing');
       if(window.noritoTimer){ clearTimeout(window.noritoTimer); window.noritoTimer=null; }
     }
