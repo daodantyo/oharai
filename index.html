@@ -265,6 +265,58 @@
     .ge-seal{animation:none}
   }
 
+  /* ── 雷 ── */
+  .kaminari{position:fixed;inset:0;z-index:60;pointer-events:none;display:none;overflow:hidden}
+  .kaminari.on{display:block}
+  .kaminari-flash{
+    position:absolute;inset:0;
+    background:radial-gradient(circle at 50% 12%, rgba(240,246,255,1) 0%, rgba(190,210,255,.85) 30%, rgba(120,150,230,.35) 60%, transparent 82%);
+    opacity:0;
+  }
+  .kaminari.on .kaminari-flash{animation:kmflash .95s ease-out forwards}
+  @keyframes kmflash{
+    0%{opacity:0}
+    6%{opacity:1}
+    12%{opacity:.15}
+    18%{opacity:.95}
+    26%{opacity:.25}
+    34%{opacity:.7}
+    100%{opacity:0}
+  }
+  .kaminari-bolt{
+    position:absolute;
+    left:50%;top:-2vh;
+    width:min(30vw,150px);height:78vh;
+    transform:translateX(-50%) scaleY(0);
+    transform-origin:top center;
+    background:linear-gradient(180deg,#ffffff 0%,#dbe8ff 45%,#9db8f5 100%);
+    clip-path:polygon(52% 0, 68% 0, 46% 30%, 66% 30%, 38% 58%, 58% 58%, 22% 100%, 36% 66%, 18% 66%, 44% 36%, 26% 36%);
+    filter:drop-shadow(0 0 26px rgba(190,215,255,.95)) drop-shadow(0 0 70px rgba(140,170,255,.6));
+    opacity:0;
+  }
+  .kaminari.on .kaminari-bolt{animation:kmbolt .8s ease-out forwards}
+  @keyframes kmbolt{
+    0%{transform:translateX(-50%) scaleY(0);opacity:0}
+    7%{transform:translateX(-50%) scaleY(1);opacity:1}
+    14%{opacity:.25}
+    22%{opacity:1}
+    36%{opacity:.6}
+    100%{transform:translateX(-50%) scaleY(1);opacity:0}
+  }
+  body.quake{animation:kmquake .55s ease-in-out}
+  @keyframes kmquake{
+    0%,100%{transform:translate(0,0)}
+    15%{transform:translate(-7px,4px)}
+    30%{transform:translate(6px,-5px)}
+    45%{transform:translate(-5px,3px)}
+    60%{transform:translate(4px,-3px)}
+    75%{transform:translate(-3px,2px)}
+    90%{transform:translate(2px,-1px)}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .kaminari.on .kaminari-flash,.kaminari.on .kaminari-bolt,body.quake{animation:none}
+  }
+
   /* ── 二、手水 ── */
   .breath-circle{
     position:relative;
@@ -849,6 +901,10 @@
 </div>
 <canvas id="particles" aria-hidden="true"></canvas>
 <div class="koi-flash" id="koiFlash" aria-hidden="true"></div>
+<div class="kaminari" id="kaminari" aria-hidden="true">
+  <div class="kaminari-flash"></div>
+  <div class="kaminari-bolt"></div>
+</div>
 <div class="glow" aria-hidden="true"></div>
 <div class="lights" aria-hidden="true">
   <span style="left:12%;animation-duration:16s;animation-delay:0s"></span>
@@ -880,7 +936,7 @@
     </g>
   </svg>
   <p class="sub">心静かに、身を清めるひととき</p>
-  <button class="hairei" onclick="go(2)">参拝する</button>
+  <button class="hairei" onclick="sanpaiStart()">参拝する</button>
   <button class="goshuin-entry" onclick="go(14)">
     <span class="ge-seal">祓</span>
     <span class="ge-text">御朱印帳</span>
@@ -1604,6 +1660,65 @@
     const t=c.currentTime;
     clapHit(c, t);
     clapHit(c, t+0.42);
+  }
+  function playKaminari(){
+    const c=ac(); if(!c) return;
+    const t=c.currentTime;
+    // 裂ける音（バリッ）
+    const crackDur=0.25;
+    const cb=c.createBuffer(1, c.sampleRate*crackDur, c.sampleRate);
+    const cd=cb.getChannelData(0);
+    for(let i=0;i<cd.length;i++){ cd[i]=(Math.random()*2-1)*Math.pow(1-i/cd.length,1.5); }
+    const cs=c.createBufferSource(); cs.buffer=cb;
+    const hp=c.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=900;
+    const cg=c.createGain();
+    cg.gain.setValueAtTime(0.55, t);
+    cg.gain.exponentialRampToValueAtTime(0.001, t+crackDur);
+    cs.connect(hp); hp.connect(cg); cg.connect(c.destination);
+    cs.start(t);
+    // 轟き（ゴロゴロ…）
+    const rDur=2.2;
+    const rb=c.createBuffer(1, c.sampleRate*rDur, c.sampleRate);
+    const rd=rb.getChannelData(0);
+    for(let i=0;i<rd.length;i++){ rd[i]=(Math.random()*2-1); }
+    const rs=c.createBufferSource(); rs.buffer=rb;
+    const lp=c.createBiquadFilter(); lp.type='lowpass'; lp.frequency.setValueAtTime(220,t); lp.frequency.exponentialRampToValueAtTime(70,t+rDur);
+    const rg=c.createGain();
+    rg.gain.setValueAtTime(0.0001, t);
+    rg.gain.exponentialRampToValueAtTime(0.4, t+0.1);
+    rg.gain.exponentialRampToValueAtTime(0.001, t+rDur);
+    rs.connect(lp); lp.connect(rg); rg.connect(c.destination);
+    rs.start(t+0.05);
+    // 低い響き
+    const o=c.createOscillator(), og=c.createGain();
+    o.type='sine'; o.frequency.setValueAtTime(52,t); o.frequency.exponentialRampToValueAtTime(34,t+1.6);
+    og.gain.setValueAtTime(0.0001,t);
+    og.gain.exponentialRampToValueAtTime(0.25,t+0.08);
+    og.gain.exponentialRampToValueAtTime(0.001,t+1.8);
+    o.connect(og); og.connect(c.destination);
+    o.start(t); o.stop(t+2);
+  }
+
+  // ── 参拝開始（雷が落ちる）──
+  let sanpaiBusy=false;
+  function sanpaiStart(){
+    if(sanpaiBusy) return;
+    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      go(2); return;
+    }
+    sanpaiBusy=true;
+    playKaminari();
+    const k=document.getElementById('kaminari');
+    k.classList.remove('on');
+    void k.offsetWidth;
+    k.classList.add('on');
+    document.body.classList.add('quake');
+    setTimeout(function(){ document.body.classList.remove('quake'); }, 600);
+    setTimeout(function(){
+      k.classList.remove('on');
+      sanpaiBusy=false;
+      go(2);
+    }, 950);
   }
 
   // ── 結果を画像で保存 ──
