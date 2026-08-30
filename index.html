@@ -1053,7 +1053,7 @@
   <p class="sub">心静かに、身を清めるひととき</p>
   <button class="hairei" onclick="sanpaiStart()">月夜の祓いへ</button>
   <div class="entry-row">
-    <button class="goshuin-entry" onclick="go(15)">
+    <button class="goshuin-entry" onclick="mbOpen()">
       <span class="ge-seal ge-seal-mb">性</span>
       <span class="ge-text">魂の見立て</span>
     </button>
@@ -1073,7 +1073,7 @@
 <!-- 二、手水 -->
 <section class="scene" id="s2">
   <h2>手水</h2>
-  <button class="breath-circle" onclick="go(3)" aria-label="深呼吸を終えて進む">深呼吸</button>
+  <button class="breath-circle" onclick="mbFlowGo()" aria-label="深呼吸を終えて進む">深呼吸</button>
   <p class="kotoba">円のうごきに合わせて<br>ゆっくり息を吸い、ゆっくり吐きます<br>三度くり返したら、円をそっと押しましょう</p>
 </section>
 
@@ -1404,6 +1404,7 @@
       <button class="mb-answer" id="mbA" onclick="mbAnswer(0)">A</button>
       <button class="mb-answer" id="mbB" onclick="mbAnswer(1)">B</button>
     </div>
+    <button class="next" id="mbSkipBtn" style="display:none" onclick="mbProceed()">見立てを飛ばして祓いへ</button>
   </div>
   <div id="mbResult" style="display:none">
     <div class="mikuji-frame">
@@ -1416,9 +1417,10 @@
         <div class="mikuji-in" aria-hidden="true">性</div>
       </div>
     </div>
+    <button class="next next-big" id="mbNextBtn" style="display:none" onclick="mbProceed()">祓いへ進む</button>
     <button class="next" onclick="mbRestart()">もう一度診断する</button>
   </div>
-  <button class="next" onclick="go(1)">はじめに戻る</button>
+  <button class="next" id="mbHomeBtn" onclick="go(1)">はじめに戻る</button>
 </section>
 
 
@@ -2093,6 +2095,19 @@
     try{ localStorage.setItem('mbti', JSON.stringify({type:type, day:todayKey()})); }catch(e){}
     mbShowResult(type);
   }
+  // 参拝の流れの中で見立てを通るときの制御
+  let mbFlow=false;
+  function mbFlowGo(){ mbFlow=true; go(15); }
+  function mbOpen(){ mbFlow=false; go(15); }
+  function mbProceed(){ mbFlow=false; go(3); }
+  function mbFlowButtons(state){
+    const nextB=document.getElementById('mbNextBtn');
+    const skipB=document.getElementById('mbSkipBtn');
+    const homeB=document.getElementById('mbHomeBtn');
+    if(nextB){ nextB.style.display=(mbFlow && state==='result')?'':'none'; }
+    if(skipB){ skipB.style.display=(mbFlow && state==='quiz')?'':'none'; }
+    if(homeB){ homeB.style.display=mbFlow?'none':''; }
+  }
   function mbShowResult(type){
     const d=MB_DATA[type];
     document.getElementById('mbQuiz').style.display='none';
@@ -2104,12 +2119,14 @@
     tEl.classList.add('stamp-in');
     document.getElementById('mbName').textContent=d.n;
     document.getElementById('mbDesc').textContent=d.d;
+    mbFlowButtons('result');
     playSuzu(0.7);
   }
   function mbRestart(){
     mbStep=0; mbScore={};
     document.getElementById('mbResult').style.display='none';
     document.getElementById('mbQuiz').style.display='';
+    mbFlowButtons('quiz');
     mbRender();
   }
   function mbInit(){
