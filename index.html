@@ -213,10 +213,34 @@
     cursor:pointer;
     box-shadow:0 0 20px rgba(201,169,97,.12), inset 0 0 12px rgba(201,169,97,.06);
     transition:background .4s,color .4s,box-shadow .4s;
+    animation:haireipulse 4s ease-in-out infinite;
+  }
+  @keyframes haireipulse{
+    0%,100%{box-shadow:0 0 20px rgba(201,169,97,.14), inset 0 0 12px rgba(201,169,97,.06)}
+    50%{box-shadow:0 0 42px rgba(201,169,97,.42), inset 0 0 16px rgba(201,169,97,.12)}
   }
   button.hairei:hover,button.hairei:focus-visible{
     background:var(--kin);color:var(--sumi);outline:none;
     box-shadow:0 0 34px rgba(201,169,97,.4);
+    animation:none;
+  }
+  .entry-row{
+    display:flex;gap:12px;margin-top:20px;
+    flex-wrap:wrap;justify-content:center;
+  }
+  .entry-row .goshuin-entry{margin-top:0;padding:11px 18px 11px 12px;gap:11px}
+  .entry-row .ge-text{font-size:.98rem;letter-spacing:.16em}
+  .ge-seal-mb{
+    background:
+      radial-gradient(circle at 30% 30%, rgba(255,255,255,.28), transparent 55%),
+      linear-gradient(150deg,#e6c04a 0%,#c49a2e 60%,#8f6d1c 100%);
+    border:1px solid rgba(250,235,180,.9);
+    animation:sealglowgold 3.5s ease-in-out infinite;
+    animation-delay:1.7s;
+  }
+  @keyframes sealglowgold{
+    0%,100%{box-shadow:0 2px 5px rgba(0,0,0,.35), inset 0 0 5px rgba(80,58,10,.55), 0 0 6px rgba(230,192,74,.25)}
+    50%{box-shadow:0 2px 5px rgba(0,0,0,.35), inset 0 0 5px rgba(80,58,10,.55), 0 0 20px rgba(230,192,74,.65)}
   }
   .top-menu{display:flex;flex-direction:column;align-items:center;margin-top:20px;gap:1px}
   .top-menu .next{padding:8px 20px;font-size:.84rem;opacity:.85}
@@ -262,7 +286,7 @@
     filter:drop-shadow(0 0 10px rgba(201,169,97,.35));
   }
   @media (prefers-reduced-motion: reduce){
-    .ge-seal{animation:none}
+    .ge-seal,.ge-seal-mb,button.hairei{animation:none}
   }
 
   /* ── 雷 ── */
@@ -846,7 +870,7 @@
   }
   .gday .gd-mark{font-family:'Shippori Mincho',serif;font-size:.95rem;line-height:1.2}
 
-  /* ── 十六タイプ診断 ── */
+  /* ── 魂の見立て（十六タイプ） ── */
   .mb-question{
     font-family:'Shippori Mincho',serif;
     font-size:1.05rem;letter-spacing:.08em;line-height:2;
@@ -1027,17 +1051,22 @@
     </g>
   </svg>
   <p class="sub">心静かに、身を清めるひととき</p>
-  <button class="hairei" onclick="sanpaiStart()">参拝する</button>
-  <button class="goshuin-entry" onclick="go(14)">
-    <span class="ge-seal">祓</span>
-    <span class="ge-text">御朱印帳</span>
-  </button>
+  <button class="hairei" onclick="sanpaiStart()">月夜の祓いへ</button>
+  <div class="entry-row">
+    <button class="goshuin-entry" onclick="go(15)">
+      <span class="ge-seal ge-seal-mb">性</span>
+      <span class="ge-text">魂の見立て</span>
+    </button>
+    <button class="goshuin-entry" onclick="go(14)">
+      <span class="ge-seal">祓</span>
+      <span class="ge-text">御朱印帳</span>
+    </button>
+  </div>
   <div class="top-menu">
     <button class="next" onclick="go(7)">お守りの作り方</button>
     <button class="next" onclick="go(8)">セージ浄化のやり方</button>
     <button class="next" onclick="go(9)">方位を知る</button>
     <button class="next" onclick="go(10)">日本全国 人気神社</button>
-    <button class="next" onclick="go(15)">十六タイプ診断</button>
   </div>
 </section>
 
@@ -1365,9 +1394,9 @@
   <button class="next" onclick="go(1)">はじめに戻る</button>
 </section>
 
-<!-- 十五、十六タイプ診断 -->
+<!-- 十五、魂の見立て（十六タイプ） -->
 <section class="scene scene-compact" id="s15">
-  <h2>十六タイプ診断</h2>
+  <h2>魂の見立て</h2>
   <div id="mbQuiz">
     <p class="kuji-note" id="mbProg">一問目 ／ 十二問</p>
     <p class="mb-question" id="mbQ">質問</p>
@@ -2007,7 +2036,7 @@
     else{ msg.textContent='はじめてのお参りをすると、ここに御朱印が押されます。'; }
   }
 
-  // ── 十六タイプ診断 ──
+  // ── 魂の見立て（十六タイプ） ──
   const MB_Q=[
     {q:'初めての集まりでは？', a:['自分から話しかけて輪を広げる','まず様子を見て、合う人と深く話す'], t:['E','I']},
     {q:'休みの日、力が湧くのは？', a:['人と会って出かけたとき','ひとりで静かに過ごしたとき'], t:['E','I']},
