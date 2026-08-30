@@ -18,7 +18,7 @@
     --usuzumi:#8b8fa3;
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{height:100%}
+  html,body{height:100%;overscroll-behavior:none}
   body{
     background:
       radial-gradient(ellipse 120% 70% at 50% -10%, #1b2340 0%, transparent 60%),
@@ -58,7 +58,7 @@
   /* ── 月の題字 ── */
   .moon-title{
     position:relative;
-    width:min(58vw,225px);
+    width:min(46vw,178px);
     aspect-ratio:1;
     border-radius:50%;
     background:
@@ -72,7 +72,7 @@
       inset -8px -10px 30px rgba(160,130,70,.35),
       inset 6px 8px 18px rgba(255,252,240,.8);
     display:flex;align-items:center;justify-content:center;
-    margin:4px auto 6px;
+    margin:0 auto 2px;
     animation:moonfloat 9s ease-in-out infinite;
   }
   @keyframes moonfloat{
@@ -145,12 +145,12 @@
   /* ── 鳥居と灯籠 ── */
   .torii-row{
     display:flex;align-items:flex-end;justify-content:center;
-    gap:min(5vw,26px);
-    margin:14px auto 20px;
+    gap:min(4vw,20px);
+    margin:8px auto 12px;
   }
   .torii{margin:0}
   .tourou{
-    width:min(13vw,52px);
+    width:min(10vw,40px);
     filter:drop-shadow(0 6px 12px rgba(0,0,0,.6)) drop-shadow(0 0 16px rgba(255,196,110,.28));
   }
   .tourou .flame{
@@ -172,7 +172,7 @@
   /* ── 呼応する光の球体 ── */
   .orb-row{
     display:flex;align-items:flex-end;justify-content:center;
-    gap:14px;margin-top:26px;
+    gap:11px;margin-top:14px;
   }
   .orb{
     border:none;cursor:pointer;border-radius:50%;
@@ -183,12 +183,12 @@
     transition:transform .25s;
   }
   .orb:focus-visible{outline:1px solid var(--shiro)}
-  .o1{--orbc:#58d6ff;--orbt:6.5s;width:44px;height:44px}
-  .o2{--orbc:#ff7ad9;--orbt:7.8s;width:62px;height:62px;animation-delay:.9s}
-  .o3{--orbc:#9dff8a;--orbt:6.1s;width:78px;height:78px;animation-delay:1.7s}
-  .o4{--orbc:#ffb45e;--orbt:8.4s;width:70px;height:70px;animation-delay:.4s}
-  .o5{--orbc:#8f8aff;--orbt:7.1s;width:56px;height:56px;animation-delay:2.3s}
-  .o6{--orbc:#ff6f8e;--orbt:6.8s;width:42px;height:42px;animation-delay:1.2s}
+  .o1{--orbc:#58d6ff;--orbt:6.5s;width:34px;height:34px}
+  .o2{--orbc:#ff7ad9;--orbt:7.8s;width:48px;height:48px;animation-delay:.9s}
+  .o3{--orbc:#9dff8a;--orbt:6.1s;width:58px;height:58px;animation-delay:1.7s}
+  .o4{--orbc:#ffb45e;--orbt:8.4s;width:54px;height:54px;animation-delay:.4s}
+  .o5{--orbc:#8f8aff;--orbt:7.1s;width:44px;height:44px;animation-delay:2.3s}
+  .o6{--orbc:#ff6f8e;--orbt:6.8s;width:32px;height:32px;animation-delay:1.2s}
   @keyframes orbbreathe{
     0%,100%{opacity:.5;transform:scale(.92)}
     50%{opacity:.95;transform:scale(1.06)}
@@ -206,7 +206,7 @@
   }
   .orb-note{
     color:var(--usuzumi);font-size:.7rem;letter-spacing:.15em;
-    margin-top:12px;opacity:.55;
+    margin-top:8px;opacity:.55;
   }
   @media (prefers-reduced-motion: reduce){
     .orb,.orb.hit{animation:none}
@@ -304,19 +304,19 @@
     margin-bottom:4px;
     text-shadow:0 0 30px rgba(201,169,97,.3);
   }
-  .torii{width:min(56vw,215px);margin:14px auto 20px;display:block;
+  .torii{width:min(42vw,165px);margin:0 auto;display:block;
     filter:drop-shadow(0 10px 24px rgba(0,0,0,.55)) drop-shadow(0 0 18px rgba(194,64,47,.2));}
   .sub{
-    color:var(--usuzumi);font-size:.84rem;letter-spacing:.3em;
-    margin-bottom:30px;
+    color:var(--usuzumi);font-size:.84rem;letter-spacing:.2em;
+    margin-bottom:18px;font-size:.78rem;
   }
   button.hairei{
     font-family:'Shippori Mincho',serif;
     background:linear-gradient(180deg,rgba(201,169,97,.12),rgba(201,169,97,.03));
     color:var(--kin-hi);
     border:1px solid var(--kin);
-    padding:16px 54px;
-    font-size:1.05rem;
+    padding:13px 46px;
+    font-size:1rem;
     letter-spacing:.4em;text-indent:.4em;
     cursor:pointer;
     box-shadow:0 0 20px rgba(201,169,97,.12), inset 0 0 12px rgba(201,169,97,.06);
@@ -333,7 +333,7 @@
     animation:none;
   }
   .entry-row{
-    display:flex;gap:12px;margin-top:20px;
+    display:flex;gap:10px;margin-top:14px;
     flex-wrap:wrap;justify-content:center;
   }
   .entry-row .goshuin-entry{margin-top:0;padding:11px 18px 11px 12px;gap:11px}
@@ -350,8 +350,8 @@
     0%,100%{box-shadow:0 2px 5px rgba(0,0,0,.35), inset 0 0 5px rgba(80,58,10,.55), 0 0 6px rgba(230,192,74,.25)}
     50%{box-shadow:0 2px 5px rgba(0,0,0,.35), inset 0 0 5px rgba(80,58,10,.55), 0 0 20px rgba(230,192,74,.65)}
   }
-  .top-menu{display:flex;flex-direction:column;align-items:center;margin-top:20px;gap:1px}
-  .top-menu .next{padding:8px 20px;font-size:.84rem;opacity:.85}
+  .top-menu{display:flex;flex-direction:column;align-items:center;margin-top:12px;gap:0}
+  .top-menu .next{padding:6px 18px;font-size:.8rem;opacity:.85}
 
   /* ── 御朱印帳の入口 ── */
   .goshuin-entry{
@@ -579,7 +579,7 @@
   .scene-compact{
     overflow-y:auto;
     justify-content:flex-start;
-    padding-top:118px;
+    padding-top:108px;
     padding-bottom:36px;
   }
   /* 画面に余裕があるときは中央に寄せる */
