@@ -1167,7 +1167,7 @@
 <!-- 二、手水 -->
 <section class="scene" id="s2">
   <h2>手水</h2>
-  <button class="breath-circle" onclick="mbFlowGo()" aria-label="深呼吸を終えて進む">深呼吸</button>
+  <button class="breath-circle" onclick="afterTemizu()" aria-label="深呼吸を終えて進む">深呼吸</button>
   <p class="kotoba">円のうごきに合わせて<br>ゆっくり息を吸い、ゆっくり吐きます<br>三度くり返したら、円をそっと押しましょう</p>
 </section>
 
@@ -1516,6 +1516,32 @@
   </div>
   <button class="next" id="mbHomeBtn" onclick="go(1)">はじめに戻る</button>
 </section>
+
+<!-- 十六、祓いを選ぶ -->
+<section class="scene scene-compact" id="s16">
+  <h2>祓いを選ぶ</h2>
+  <p class="kuji-note">本日の祓いを、お選びください</p>
+  <div class="kuji-menu">
+    <button class="kuji-card" onclick="chooseCourse('plain')">
+      <span class="ckz c1"></span><span class="ckz c2"></span><span class="ckz c3"></span><span class="ckz c4"></span>
+      <span class="kuji-seal">祓</span>
+      <span class="kuji-card-text">
+        <span class="kuji-card-title">お祓い</span>
+        <span class="kuji-card-sub">清めの祓いのみ ・ 静かに</span>
+      </span>
+    </button>
+    <button class="kuji-card kin-card" onclick="chooseCourse('mb')">
+      <span class="ckz c1"></span><span class="ckz c2"></span><span class="ckz c3"></span><span class="ckz c4"></span>
+      <span class="kuji-seal kin-seal">性</span>
+      <span class="kuji-card-text">
+        <span class="kuji-card-title">十六お祓い</span>
+        <span class="kuji-card-sub">16タイプ性格診断つき</span>
+      </span>
+    </button>
+  </div>
+  <button class="next" onclick="go(1)">はじめに戻る</button>
+</section>
+
 
 
 
@@ -1973,7 +1999,7 @@
   function sanpaiStart(){
     if(sanpaiBusy) return;
     if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-      go(2); return;
+      go(16); return;
     }
     sanpaiBusy=true;
     playKaminari();
@@ -1986,7 +2012,7 @@
     setTimeout(function(){
       k.classList.remove('on');
       sanpaiBusy=false;
-      go(2);
+      go(16);
     }, 950);
   }
 
@@ -2191,6 +2217,13 @@
   }
   // 参拝の流れの中で見立てを通るときの制御
   let mbFlow=false;
+  // 祓いのコース（plain: お祓いのみ / mb: 十六お祓い）
+  let course='plain';
+  function chooseCourse(c){ course=c; go(2); }
+  function afterTemizu(){
+    if(course==='mb'){ mbFlowGo(); }
+    else{ go(3); }
+  }
   function mbFlowGo(){ mbFlow=true; go(15); }
   function mbOpen(){ mbFlow=false; go(15); }
   function mbProceed(){ mbFlow=false; go(3); }
