@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>お祓い ─ 身を清める</title>
+<title>性格診断お祓い ─ MBTIと同じ16タイプ × 月夜の祓い清め</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@300;400&display=swap" rel="stylesheet">
 <style>
@@ -83,9 +83,9 @@
     writing-mode:vertical-rl;
     font-family:'Shippori Mincho',serif;
     font-weight:600;
-    font-size:clamp(2rem,8vw,2.7rem);
-    letter-spacing:.32em;
-    line-height:1;
+    font-size:clamp(1.5rem,6vw,2rem);
+    letter-spacing:.18em;
+    line-height:1.8;
     color:#33291a;
     text-shadow:
       0 1px 0 rgba(255,252,240,.7),
@@ -1037,7 +1037,7 @@
 <!-- 一、入口 -->
 <section class="scene scene-compact active" id="s1">
   <div class="moon-title">
-    <span class="moon-moji">お祓い</span>
+    <span class="moon-moji">性格診断<br>お祓い</span>
   </div>
   <svg class="torii" viewBox="0 0 200 165" aria-hidden="true">
     <g>
@@ -1050,12 +1050,12 @@
       <rect x="140" y="152" width="23" height="7" fill="#8e2f22"/>
     </g>
   </svg>
-  <p class="sub">心静かに、身を清めるひととき</p>
+  <p class="sub">MBTIと同じ 16タイプ診断 × 祓い清め</p>
   <button class="hairei" onclick="sanpaiStart()">月夜の祓いへ</button>
   <div class="entry-row">
     <button class="goshuin-entry" onclick="mbOpen()">
       <span class="ge-seal ge-seal-mb">性</span>
-      <span class="ge-text">魂の見立て</span>
+      <span class="ge-text">16タイプ性格診断</span>
     </button>
     <button class="goshuin-entry" onclick="go(14)">
       <span class="ge-seal">祓</span>
@@ -1396,7 +1396,7 @@
 
 <!-- 十五、魂の見立て（十六タイプ） -->
 <section class="scene scene-compact" id="s15">
-  <h2>魂の見立て</h2>
+  <h2>16タイプ性格診断</h2>
   <div id="mbQuiz">
     <p class="kuji-note" id="mbProg">一問目 ／ 十二問</p>
     <p class="mb-question" id="mbQ">質問</p>
