@@ -65,7 +65,7 @@
   /* ── 月の題字 ── */
   .moon-title{
     position:relative;
-    width:min(46vw,178px);
+    width:min(41vw,158px);
     aspect-ratio:1;
     border-radius:50%;
     background:
@@ -253,7 +253,7 @@
   /* ── 呼応する光の球体 ── */
   .orb-row{
     display:flex;align-items:flex-end;justify-content:center;
-    gap:11px;margin-top:14px;
+    gap:11px;margin-top:10px;
   }
   .orb{
     border:none;cursor:pointer;border-radius:50%;
@@ -390,11 +390,11 @@
     margin-bottom:4px;
     text-shadow:0 0 30px rgba(201,169,97,.3);
   }
-  .torii{width:min(42vw,165px);margin:0 auto;display:block;
+  .torii{width:min(38vw,150px);margin:0 auto;display:block;
     filter:drop-shadow(0 10px 24px rgba(0,0,0,.55)) drop-shadow(0 0 18px rgba(194,64,47,.2));}
   .sub{
     color:var(--usuzumi);font-size:.84rem;letter-spacing:.2em;
-    margin-bottom:18px;font-size:.78rem;
+    margin-bottom:12px;font-size:.78rem;
   }
   button.hairei{
     font-family:'Shippori Mincho',serif;
@@ -419,12 +419,12 @@
     animation:none;
   }
   .entry-row{
-    display:flex;gap:10px;margin-top:14px;
+    display:flex;gap:10px;margin-top:11px;
     flex-wrap:wrap;justify-content:center;
   }
   .entry-row .goshuin-entry{margin-top:0;padding:11px 18px 11px 12px;gap:11px}
   .entry-row .ge-text{font-size:.98rem;letter-spacing:.16em}
-  .ge-seal-mb{
+  .ge-seal.ge-seal-mb{
     background:
       radial-gradient(circle at 30% 30%, rgba(255,255,255,.28), transparent 55%),
       linear-gradient(150deg,#e6c04a 0%,#c49a2e 60%,#8f6d1c 100%);
@@ -436,14 +436,45 @@
     0%,100%{box-shadow:0 2px 5px rgba(0,0,0,.35), inset 0 0 5px rgba(80,58,10,.55), 0 0 6px rgba(230,192,74,.25)}
     50%{box-shadow:0 2px 5px rgba(0,0,0,.35), inset 0 0 5px rgba(80,58,10,.55), 0 0 20px rgba(230,192,74,.65)}
   }
-  .top-menu{display:flex;flex-direction:column;align-items:center;margin-top:12px;gap:0}
-  .top-menu .next{padding:6px 18px;font-size:.8rem;opacity:.85}
+  /* おみくじの入口（入口画面の主役の一つ） */
+  .kuji-entry{
+    margin-top:11px;
+    padding:11px 26px 11px 13px;
+    border-color:var(--kin-hi);
+    animation:kujientry 4.5s ease-in-out infinite;
+  }
+  @keyframes kujientry{
+    0%,100%{box-shadow:0 6px 20px rgba(0,0,0,.45), 0 0 24px rgba(201,169,97,.22), inset 0 0 0 2px rgba(10,8,18,.8), inset 0 0 0 3px rgba(201,169,97,.45)}
+    50%{box-shadow:0 6px 20px rgba(0,0,0,.45), 0 0 48px rgba(201,169,97,.52), inset 0 0 0 2px rgba(10,8,18,.8), inset 0 0 0 3px rgba(201,169,97,.8)}
+  }
+  .ge-seal.ge-seal-kuji{
+    background:
+      radial-gradient(circle at 30% 30%, rgba(255,255,255,.22), transparent 55%),
+      linear-gradient(150deg,#6a54a8 0%,#46357a 60%,#2b2050 100%);
+    border:1px solid rgba(196,178,245,.65);
+    animation:sealglowmurasaki 3.5s ease-in-out infinite;
+    animation-delay:.8s;
+  }
+  @keyframes sealglowmurasaki{
+    0%,100%{box-shadow:0 2px 5px rgba(0,0,0,.35), inset 0 0 5px rgba(20,12,45,.6), 0 0 6px rgba(106,84,168,.25)}
+    50%{box-shadow:0 2px 5px rgba(0,0,0,.35), inset 0 0 5px rgba(20,12,45,.6), 0 0 24px rgba(106,84,168,.75)}
+  }
+  .top-menu{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+    align-items:center;justify-items:stretch;
+    width:100%;max-width:340px;
+    margin-top:11px;gap:0 2px;
+  }
+  .top-menu .next{
+    padding:6px 2px;font-size:.72rem;opacity:.85;
+    letter-spacing:.04em;text-indent:0;white-space:nowrap;
+  }
 
   /* ── 御朱印帳の入口 ── */
   .goshuin-entry{
     display:flex;align-items:center;gap:14px;
-    margin-top:18px;
-    padding:12px 30px 12px 14px;
+    margin-top:13px;
+    padding:11px 30px 11px 14px;
     background:linear-gradient(160deg,rgba(201,169,97,.14),rgba(201,169,97,.03));
     border:1px solid var(--kin);
     cursor:pointer;
@@ -671,6 +702,7 @@
   /* 画面に余裕があるときは中央に寄せる */
   .scene-compact::before,
   .scene-compact::after{content:'';margin:auto;flex-shrink:0}
+  .scene-compact > *{flex-shrink:0}
   .fuda-paper{
     width:min(66vw,250px);
     min-height:330px;
@@ -800,6 +832,96 @@
     transition:background .4s,color .4s,box-shadow .4s;
   }
   .omikuji-draw:hover,.omikuji-draw:focus-visible{background:var(--kin);color:var(--sumi);outline:none;box-shadow:0 0 30px rgba(201,169,97,.4)}
+
+  /* ── 籤筒（振って一本出す）── */
+  .kujitsutsu{
+    position:fixed;left:50%;top:43%;
+    translate:-50% -50%;
+    width:76px;height:206px;
+    z-index:50;pointer-events:none;display:none;
+    transform-origin:50% 90%;
+  }
+  .kujitsutsu.on{display:block}
+  .kt-body{
+    position:absolute;inset:0;
+    border-radius:7px 7px 4px 4px;
+    background:
+      linear-gradient(90deg, rgba(0,0,0,.5) 0%, transparent 15%, rgba(255,240,205,.26) 33%, transparent 52%, rgba(0,0,0,.34) 86%, rgba(0,0,0,.55) 100%),
+      repeating-linear-gradient(90deg, rgba(201,169,97,.15) 0 1px, transparent 1px 9px),
+      linear-gradient(180deg, #7d2b20 0%, #5e1d16 55%, #3b120d 100%);
+    border:1px solid rgba(201,169,97,.7);
+    box-shadow:0 18px 44px rgba(0,0,0,.62), 0 0 34px rgba(201,169,97,.26), inset 0 0 20px rgba(0,0,0,.5);
+  }
+  .kt-body::before{
+    content:'';position:absolute;left:13%;right:13%;top:-5px;height:12px;
+    border-radius:50%;
+    background:radial-gradient(ellipse at 50% 38%, #120806 0%, #2a100c 68%, #6b241b 100%);
+    box-shadow:0 1px 0 rgba(201,169,97,.6);
+  }
+  .kt-body::after{
+    content:'';position:absolute;left:-1px;right:-1px;top:35%;height:13px;
+    background:linear-gradient(180deg,#f0dca2 0%,#c9a961 45%,#8f7434 100%);
+    box-shadow:0 1px 3px rgba(0,0,0,.5), inset 0 1px 2px rgba(255,250,230,.75);
+  }
+  .kt-stick{
+    position:absolute;left:50%;top:-4px;
+    width:9px;height:118px;
+    translate:-50% 0;
+    border-radius:3px;
+    background:linear-gradient(180deg,#f8f0d8 0%,#e2d0a6 42%,#c3ae7c 100%);
+    box-shadow:0 0 18px rgba(230,205,143,.85), 0 2px 6px rgba(0,0,0,.5);
+    opacity:0;z-index:-1;
+  }
+  .kujitsutsu.shake{animation:ktshake 1.15s ease-in-out}
+  @keyframes ktshake{
+    0%{transform:rotate(-3deg)}
+    12%{transform:rotate(13deg)}
+    26%{transform:rotate(-14deg)}
+    40%{transform:rotate(12deg)}
+    54%{transform:rotate(-11deg)}
+    68%{transform:rotate(9deg)}
+    82%{transform:rotate(-6deg)}
+    100%{transform:rotate(0deg)}
+  }
+  .kt-stick.out{animation:ktstick .75s cubic-bezier(.3,1.4,.5,1) forwards}
+  @keyframes ktstick{
+    0%{opacity:0;transform:translateY(46px)}
+    25%{opacity:1}
+    100%{opacity:1;transform:translateY(-96px)}
+  }
+  .kujitsutsu.fade{animation:ktfade .42s ease forwards}
+  @keyframes ktfade{to{opacity:0}}
+
+  /* ── 和紙に浮かぶ神紋 ── */
+  .mikuji-paper::before{
+    content:'';position:absolute;z-index:0;
+    left:50%;top:47%;width:196px;height:196px;
+    translate:-50% -50%;
+    border-radius:50%;
+    background:
+      repeating-conic-gradient(from 0deg, rgba(150,120,55,.045) 0deg 1.1deg, transparent 1.1deg 22.5deg),
+      radial-gradient(circle, transparent 36.5%, rgba(150,120,55,.05) 37.5%, transparent 39%),
+      radial-gradient(circle, transparent 55%, rgba(150,120,55,.04) 56%, transparent 57.5%);
+    animation:monspin 90s linear infinite;
+    pointer-events:none;
+  }
+  @keyframes monspin{to{rotate:360deg}}
+  .mikuji-title,.omikuji-fortune,.omikuji-advice,
+  .mb-type,.mb-name,.mb-desc,.fuda-kotoba,.hi{position:relative;z-index:1}
+
+  /* ── 運勢の文字が一字ずつ ── */
+  .kchar{display:inline-block;opacity:0;animation:kcharin .7s ease-out both}
+  .omikuji-fortune .kchar{
+    background:linear-gradient(160deg,#9a7b2e 0%, #d4ab45 30%, #8a6b24 55%, #c49d3f 80%, #7d6222 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+  }
+  .koi-fortune .kchar{
+    background:linear-gradient(160deg,#b03a55 0%, #e0607e 30%, #96233d 55%, #d4536f 80%, #872036 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+  }
+  @keyframes kcharin{from{opacity:0}to{opacity:1}}
 
   /* ── 恋みくじ（紅仕立て）── */
   .mikuji-frame.koi{
@@ -1117,6 +1239,10 @@
   }
   @media (prefers-reduced-motion: reduce){
     .shaking,.koi-flash.on,.petal,.stamp-in,.fade-in{animation:none}
+    .kujitsutsu{display:none}
+    .kchar{animation:none;opacity:1}
+    .mikuji-paper::before{animation:none}
+    .kuji-entry,.ge-seal-kuji{animation:none}
   }
 
   /* ── 読み物ページ共通 ── */
@@ -1242,6 +1368,10 @@
 <div class="fog fog3" aria-hidden="true"></div>
 <div class="vignette" aria-hidden="true"></div>
 <div class="veil" id="veil" aria-hidden="true"></div>
+<div class="kujitsutsu" id="kujitsutsu" aria-hidden="true">
+  <div class="kt-stick" id="ktStick"></div>
+  <div class="kt-body"></div>
+</div>
 
 <!-- 一、入口 -->
 <section class="scene scene-compact active" id="s1">
@@ -1287,6 +1417,10 @@
   </div>
   <p class="sub">MBTIと同じ 16タイプ診断 × 祓い清め</p>
   <button class="hairei" onclick="sanpaiStart()">月夜の祓いへ</button>
+  <button class="goshuin-entry kuji-entry" onclick="go(12)">
+    <span class="ge-seal ge-seal-kuji">籤</span>
+    <span class="ge-text">おみくじを引く</span>
+  </button>
   <div class="entry-row">
     <button class="goshuin-entry" onclick="mbOpen()">
       <span class="ge-seal ge-seal-mb">性</span>
@@ -1877,7 +2011,7 @@
     const sh=document.getElementById(SHARE_IDS[type]);
     if(sh){ sh.style.display=(rec && rec.type===type)?'':'none'; }
     if(rec && rec.type===type){
-      fEl.textContent=rec.f;
+      revealChars(fEl, rec.f);
       aEl.textContent=rec.a;
       ob.textContent='本日はお引きになりました ─ また明日';
       ob.disabled=true;
@@ -1906,6 +2040,62 @@
     try{
       localStorage.setItem('mikuji-day', JSON.stringify({day:todayKey(), type:type, f:r.f, a:r.a}));
     }catch(e){}
+  }
+
+  // ── 籤筒：木の棒が触れ合う音 ──
+  function woodHit(c, t0, vol){
+    const dur=0.055;
+    const buf=c.createBuffer(1, Math.floor(c.sampleRate*dur), c.sampleRate);
+    const d=buf.getChannelData(0);
+    for(let i=0;i<d.length;i++){ d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,6); }
+    const src=c.createBufferSource(); src.buffer=buf;
+    const bp=c.createBiquadFilter(); bp.type='bandpass';
+    bp.frequency.value=850+Math.random()*1000; bp.Q.value=4.5;
+    const g=c.createGain();
+    g.gain.setValueAtTime(vol, t0);
+    g.gain.exponentialRampToValueAtTime(0.0005, t0+dur);
+    src.connect(bp); bp.connect(g); g.connect(dest(c));
+    src.start(t0);
+  }
+  function playKujiRattle(){
+    const c=ac(); if(!c) return;
+    const t=c.currentTime;
+    for(let i=0;i<16;i++){
+      woodHit(c, t+0.05+Math.random()*1.05, 0.09+Math.random()*0.13);
+    }
+  }
+
+  // ── 籤筒を振って、一本すっと差し出す ──
+  function kujiTsutsu(done){
+    const kt=document.getElementById('kujitsutsu');
+    const st=document.getElementById('ktStick');
+    if(!kt || !st || prefersCalm()){ done(); return; }
+    kt.className='kujitsutsu on';
+    st.className='kt-stick';
+    void kt.offsetWidth;
+    kt.classList.add('shake');
+    playKujiRattle();
+    setTimeout(function(){
+      st.classList.add('out');
+      setTimeout(function(){
+        kt.classList.add('fade');
+        setTimeout(function(){ kt.className='kujitsutsu'; done(); }, 420);
+      }, 620);
+    }, 1150);
+  }
+
+  // ── 運勢の文字を一字ずつ浮かべる ──
+  function revealChars(el, text){
+    el.textContent='';
+    const frag=document.createDocumentFragment();
+    text.split('').forEach(function(ch,i){
+      const sp=document.createElement('span');
+      sp.className='kchar';
+      sp.textContent=ch;
+      sp.style.animationDelay=(i*0.14)+'s';
+      frag.appendChild(sp);
+    });
+    el.appendChild(frag);
   }
 
   function goldFlashOn(){
@@ -1964,14 +2154,15 @@
     aEl.classList.remove('fade-in');
     aEl.textContent=waitMsg;
     frame.classList.add('shaking');
-    setTimeout(function(){
+    setTimeout(function(){ frame.classList.remove('shaking'); }, 1150);
+    kujiTsutsu(function(){
       frame.classList.remove('shaking');
       goldFlashOn();
       if(fx.burst==='sparks'){ burstSparks(frame); }
       else{ rainCoins(); }
       setTimeout(function(){
         const r=list[Math.floor(Math.random()*list.length)];
-        fEl.textContent=r.f;
+        revealChars(fEl, r.f);
         fEl.classList.add('stamp-in');
         aEl.textContent=r.a;
         aEl.classList.add('fade-in');
@@ -1979,7 +2170,7 @@
         const sb=document.getElementById(shId); if(sb){sb.style.display='';}
         btn.textContent='本日はお引きになりました ─ また明日';
       }, 350);
-    }, 1100);
+    });
   }
   function drawOmikuji(){
     drawKujiWithFx(omikuji,'omikuji','omikujiFortune','omikujiAdvice','omikujiBtn','omikujiShareBtn','ご神託を伺っています…',{section:'s6',burst:'sparks'});
@@ -2014,7 +2205,8 @@
     // 一、震え
     playSuzu(1);
     frame.classList.add('shaking');
-    setTimeout(function(){
+    setTimeout(function(){ frame.classList.remove('shaking'); }, 1150);
+    kujiTsutsu(function(){
       frame.classList.remove('shaking');
       // 二、閃光
       const flash=document.getElementById('koiFlash');
@@ -2042,7 +2234,7 @@
       // 四、運勢が判子のように現れる
       setTimeout(function(){
         const r=koi[Math.floor(Math.random()*koi.length)];
-        fEl.textContent=r.f;
+        revealChars(fEl, r.f);
         fEl.classList.add('stamp-in');
         // 五、助言がふわり
         aEl.textContent=r.a;
@@ -2051,7 +2243,7 @@
         var s2b=document.getElementById('koiShareBtn'); if(s2b){s2b.style.display='';}
         btn.textContent='本日はお引きになりました ─ また明日';
       }, 350);
-    }, 1300);
+    });
   }
 
   // ── 金運みくじ ──
