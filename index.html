@@ -16,12 +16,17 @@
     --kin:#c9a961;
     --kin-hi:#e6cd8f;
     --usuzumi:#8b8fa3;
+    --murasaki:#2b2050;
+    --murasaki-hi:#6a54a8;
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{height:100%;overscroll-behavior:none}
   body{
     background:
+      radial-gradient(ellipse 70% 45% at 50% 6%, rgba(106,84,168,.17) 0%, transparent 70%),
       radial-gradient(ellipse 120% 70% at 50% -10%, #1b2340 0%, transparent 60%),
+      radial-gradient(ellipse 85% 52% at 16% 88%, rgba(43,32,80,.52) 0%, transparent 66%),
+      radial-gradient(ellipse 80% 46% at 86% 78%, rgba(62,34,74,.40) 0%, transparent 66%),
       radial-gradient(ellipse 100% 60% at 50% 115%, #10131f 0%, transparent 55%),
       var(--sumi);
     color:var(--shiro);
@@ -38,6 +43,8 @@
     animation:twinkle 4s ease-in-out infinite;
   }
   @keyframes twinkle{0%,100%{opacity:.15}50%{opacity:.55}}
+  .stars span:nth-child(3n){background:var(--kin-hi);box-shadow:0 0 6px rgba(230,205,143,.7)}
+  .stars span:nth-child(5n){width:3px;height:3px;animation-duration:6s}
 
   /* ── 舞う光 ── */
   .lights{position:fixed;inset:0;pointer-events:none;z-index:1}
@@ -76,8 +83,22 @@
     animation:moonfloat 9s ease-in-out infinite;
   }
   @keyframes moonfloat{
-    0%,100%{transform:translateY(0)}
-    50%{transform:translateY(-7px)}
+    0%,100%{
+      transform:translateY(0);
+      box-shadow:
+        0 0 55px 16px rgba(236,216,160,.22),
+        0 0 130px 55px rgba(236,216,160,.08),
+        inset -8px -10px 30px rgba(160,130,70,.35),
+        inset 6px 8px 18px rgba(255,252,240,.8);
+    }
+    50%{
+      transform:translateY(-7px);
+      box-shadow:
+        0 0 80px 24px rgba(236,216,160,.36),
+        0 0 200px 80px rgba(236,216,160,.15),
+        inset -8px -10px 30px rgba(160,130,70,.35),
+        inset 6px 8px 18px rgba(255,252,240,.8);
+    }
   }
   .moon-moji{
     writing-mode:vertical-rl;
@@ -104,6 +125,65 @@
     pointer-events:none;z-index:2;
   }
 
+  /* ── 月光の帯 ── */
+  .rays{
+    position:fixed;left:50%;top:-12vh;
+    width:124vmin;height:124vh;
+    translate:-50% 0;
+    pointer-events:none;z-index:0;
+    transform-origin:50% 0;
+    background:
+      linear-gradient(178deg, rgba(236,216,160,.055) 0%, transparent 52%),
+      conic-gradient(from 171deg at 50% 0%,
+        transparent 0deg, rgba(236,216,160,.055) 3.5deg, transparent 7deg,
+        transparent 11deg, rgba(236,216,160,.035) 14deg, transparent 18deg);
+    filter:blur(7px);
+    animation:raysway 26s ease-in-out infinite alternate;
+  }
+  @keyframes raysway{ from{transform:rotate(-2.2deg)} to{transform:rotate(2.2deg)} }
+
+  /* ── 神鏡の光輪 ── */
+  .halo{
+    position:fixed;left:50%;top:38%;
+    translate:-50% -50%;
+    border-radius:50%;
+    pointer-events:none;z-index:0;
+  }
+  .halo1{
+    width:88vmin;height:88vmin;
+    border:1px solid rgba(201,169,97,.14);
+    box-shadow:inset 0 0 60px rgba(201,169,97,.05), 0 0 40px rgba(201,169,97,.04);
+    animation:halospin 130s linear infinite;
+  }
+  .halo1::before{
+    content:'';position:absolute;inset:6%;
+    border-radius:50%;
+    border:1px dashed rgba(201,169,97,.10);
+  }
+  .halo2{
+    width:134vmin;height:134vmin;
+    border:1px solid rgba(106,84,168,.16);
+    animation:halospin 210s linear infinite reverse;
+  }
+  .halo2::before{
+    content:'';position:absolute;inset:-14px;
+    border-radius:50%;
+    background:conic-gradient(from 0deg,
+      transparent 0deg, rgba(201,169,97,.13) 45deg, transparent 100deg,
+      transparent 230deg, rgba(106,84,168,.14) 290deg, transparent 345deg);
+    -webkit-mask:radial-gradient(circle, transparent 95%, #000 96.5%);
+    mask:radial-gradient(circle, transparent 95%, #000 96.5%);
+  }
+  @keyframes halospin{ from{rotate:0deg} to{rotate:360deg} }
+
+  /* ── 場面の変わり目（暗幕）── */
+  .veil{
+    position:fixed;inset:0;z-index:60;pointer-events:none;opacity:0;
+    background:radial-gradient(ellipse 90% 70% at 50% 45%, rgba(12,14,26,.62), rgba(4,5,11,.94));
+  }
+  .veil.on{animation:veilpass 1.05s ease-in-out}
+  @keyframes veilpass{0%{opacity:0}26%{opacity:1}100%{opacity:0}}
+
   /* ── 霧 ── */
   .fog{
     position:fixed;left:-30%;width:160%;height:34vh;
@@ -116,6 +196,7 @@
   }
   .fog1{bottom:-6vh;animation:fogdrift 46s ease-in-out infinite alternate}
   .fog2{bottom:16vh;opacity:.6;animation:fogdrift 64s ease-in-out infinite alternate-reverse}
+  .fog3{bottom:36vh;height:26vh;opacity:.32;animation:fogdrift 92s ease-in-out infinite alternate}
   @keyframes fogdrift{
     from{transform:translateX(-4%)}
     to{transform:translateX(4%)}
@@ -286,6 +367,11 @@
     font-family:'Shippori Mincho',serif;font-weight:500;letter-spacing:.4em;text-indent:.4em;
     color:var(--shiro);
     text-shadow:0 0 24px rgba(201,169,97,.25);
+    animation:kotodama 8s ease-in-out infinite;
+  }
+  @keyframes kotodama{
+    0%,100%{text-shadow:0 0 24px rgba(201,169,97,.25)}
+    50%{text-shadow:0 0 36px rgba(201,169,97,.5), 0 0 74px rgba(106,84,168,.30)}
   }
   h2{position:relative;padding-bottom:16px;margin-bottom:4px}
   h2::after{
@@ -1109,6 +1195,13 @@
     .norito-play.playing::before,.norito-play.playing::after{animation:none}
     .scene{transition:none}
   }
+  /* ── 動きを控える設定への配慮 ── */
+  @media (prefers-reduced-motion: reduce){
+    .halo{animation:none}
+    .rays{animation:none}
+    .veil{animation:none;opacity:0}
+    h1,h2{animation:none}
+  }
 </style>
 </head>
 <body>
@@ -1128,6 +1221,9 @@
   <div class="kaminari-flash"></div>
   <div class="kaminari-bolt"></div>
 </div>
+<div class="halo halo2" aria-hidden="true"></div>
+<div class="halo halo1" aria-hidden="true"></div>
+<div class="rays" aria-hidden="true"></div>
 <div class="glow" aria-hidden="true"></div>
 <div class="lights" aria-hidden="true">
   <span style="left:12%;animation-duration:16s;animation-delay:0s"></span>
@@ -1143,7 +1239,9 @@
 </div>
 <div class="fog fog1" aria-hidden="true"></div>
 <div class="fog fog2" aria-hidden="true"></div>
+<div class="fog fog3" aria-hidden="true"></div>
 <div class="vignette" aria-hidden="true"></div>
+<div class="veil" id="veil" aria-hidden="true"></div>
 
 <!-- 一、入口 -->
 <section class="scene scene-compact active" id="s1">
@@ -1601,7 +1699,17 @@
 
 
 <script>
+  function prefersCalm(){
+    return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
   function go(n){
+    // 場面の変わり目に、暗幕をひと呼吸
+    const veilEl=document.getElementById('veil');
+    if(veilEl && !prefersCalm()){
+      veilEl.classList.remove('on');
+      void veilEl.offsetWidth;
+      veilEl.classList.add('on');
+    }
     // 画面を離れるとき：音を止め、自動進行タイマーを解除
     if(window.noritoTimer){ clearTimeout(window.noritoTimer); window.noritoTimer=null; }
     if(window.sahouTimer){ clearTimeout(window.sahouTimer); window.sahouTimer=null; }
@@ -1962,13 +2070,49 @@
   }
 
   // ── 音（鈴・柏手）──
-  let audioCtx=null;
+  let audioCtx=null, reverbIn=null;
+  // 社殿の残響（インパルス応答をその場で合成）
+  function buildReverb(c){
+    const sec=3.6, len=Math.floor(c.sampleRate*sec);
+    const buf=c.createBuffer(2, len, c.sampleRate);
+    for(let ch=0;ch<2;ch++){
+      const d=buf.getChannelData(ch);
+      for(let i=0;i<len;i++){
+        const t=i/len;
+        d[i]=(Math.random()*2-1)*Math.pow(1-t,2.6);
+      }
+      // 柱や壁からの初期反射
+      [0.019,0.031,0.047,0.068,0.093].forEach(function(sec2,k){
+        const p=Math.floor(sec2*c.sampleRate*(1+ch*0.06));
+        if(p<len){ d[p]+=(k%2?-1:1)*0.55/(k+1); }
+      });
+    }
+    const conv=c.createConvolver(); conv.buffer=buf;
+    const damp=c.createBiquadFilter(); damp.type='lowpass'; damp.frequency.value=4200;
+    const wet=c.createGain(); wet.gain.value=0.55;
+    const pre=c.createGain();
+    pre.connect(conv); conv.connect(damp); damp.connect(wet); wet.connect(c.destination);
+    return pre;
+  }
   function ac(){
     try{
-      if(!audioCtx){ audioCtx=new (window.AudioContext||window.webkitAudioContext)(); }
+      if(!audioCtx){
+        audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+        try{ reverbIn=buildReverb(audioCtx); }catch(e){ reverbIn=null; }
+      }
       if(audioCtx.state==='suspended'){ audioCtx.resume(); }
       return audioCtx;
     }catch(e){ return null; }
+  }
+  // 直の音と残響の両方へ送る出口
+  function dest(c){
+    if(!c.__bus){
+      const b=c.createGain(); b.gain.value=0.85;
+      b.connect(c.destination);
+      if(reverbIn){ b.connect(reverbIn); }
+      c.__bus=b;
+    }
+    return c.__bus;
   }
   document.addEventListener('click', function(){ ac(); }, {once:true});
   function suzuHit(c, t0, vol){
@@ -1979,7 +2123,7 @@
       g.gain.setValueAtTime(0.0001, t0);
       g.gain.exponentialRampToValueAtTime(vol*0.10/(i+1), t0+0.012);
       g.gain.exponentialRampToValueAtTime(0.0001, t0+0.8+i*0.08);
-      o.connect(g); g.connect(c.destination);
+      o.connect(g); g.connect(dest(c));
       o.start(t0); o.stop(t0+1.1);
     });
   }
@@ -1999,7 +2143,7 @@
     const g=c.createGain();
     g.gain.setValueAtTime(0.5, t0);
     g.gain.exponentialRampToValueAtTime(0.001, t0+dur);
-    src.connect(bp); bp.connect(g); g.connect(c.destination);
+    src.connect(bp); bp.connect(g); g.connect(dest(c));
     src.start(t0);
   }
   function playKashiwade(){
@@ -2021,7 +2165,7 @@
     const cg=c.createGain();
     cg.gain.setValueAtTime(0.55, t);
     cg.gain.exponentialRampToValueAtTime(0.001, t+crackDur);
-    cs.connect(hp); hp.connect(cg); cg.connect(c.destination);
+    cs.connect(hp); hp.connect(cg); cg.connect(dest(c));
     cs.start(t);
     // 轟き（ゴロゴロ…）
     const rDur=2.2;
@@ -2034,7 +2178,7 @@
     rg.gain.setValueAtTime(0.0001, t);
     rg.gain.exponentialRampToValueAtTime(0.4, t+0.1);
     rg.gain.exponentialRampToValueAtTime(0.001, t+rDur);
-    rs.connect(lp); lp.connect(rg); rg.connect(c.destination);
+    rs.connect(lp); lp.connect(rg); rg.connect(dest(c));
     rs.start(t+0.05);
     // 低い響き
     const o=c.createOscillator(), og=c.createGain();
@@ -2042,7 +2186,7 @@
     og.gain.setValueAtTime(0.0001,t);
     og.gain.exponentialRampToValueAtTime(0.25,t+0.08);
     og.gain.exponentialRampToValueAtTime(0.001,t+1.8);
-    o.connect(og); og.connect(c.destination);
+    o.connect(og); og.connect(dest(c));
     o.start(t); o.stop(t+2);
   }
 
@@ -2331,7 +2475,7 @@
     g.gain.setValueAtTime(0.0001, t);
     g.gain.exponentialRampToValueAtTime(vol, t+0.02);
     g.gain.exponentialRampToValueAtTime(0.0001, t+1.1);
-    o.connect(g); g.connect(c.destination);
+    o.connect(g); g.connect(dest(c));
     o.start(t); o.stop(t+1.3);
   }
   function orbTap(i){
@@ -2375,8 +2519,37 @@
         gold:Math.random()<0.6
       });
     }
+    // ── 流れ星（ときおり一筋）──
+    let shoot=[];
+    let nextShoot=performance.now()+5000+Math.random()*8000;
     function tick(){
       ctx.clearRect(0,0,W,H);
+      const now=performance.now();
+      if(now>nextShoot){
+        const fromLeft=Math.random()<0.5;
+        shoot.push({
+          x: fromLeft? -60 : W+60,
+          y: Math.random()*H*0.42,
+          vx:(fromLeft?1:-1)*(6.5+Math.random()*4),
+          vy: 2.0+Math.random()*1.5,
+          life:1
+        });
+        nextShoot=now+9000+Math.random()*17000;
+      }
+      for(let i=shoot.length-1;i>=0;i--){
+        const sh=shoot[i];
+        sh.x+=sh.vx; sh.y+=sh.vy; sh.life-=0.009;
+        if(sh.life<=0 || sh.y>H+80 || sh.x<-160 || sh.x>W+160){ shoot.splice(i,1); continue; }
+        const tx=sh.x-sh.vx*15, ty=sh.y-sh.vy*15;
+        const lg=ctx.createLinearGradient(sh.x,sh.y,tx,ty);
+        lg.addColorStop(0,'rgba(243,239,230,'+(0.8*sh.life)+')');
+        lg.addColorStop(0.35,'rgba(230,205,143,'+(0.35*sh.life)+')');
+        lg.addColorStop(1,'rgba(201,169,97,0)');
+        ctx.strokeStyle=lg; ctx.lineWidth=1.7; ctx.lineCap='round';
+        ctx.shadowColor='rgba(230,205,143,.9)'; ctx.shadowBlur=12;
+        ctx.beginPath(); ctx.moveTo(sh.x,sh.y); ctx.lineTo(tx,ty); ctx.stroke();
+      }
+      ctx.shadowBlur=0;
       for(let i=0;i<ps.length;i++){
         const p=ps[i];
         p.x+=p.vx; p.y+=p.vy; p.ph+=p.sp;
