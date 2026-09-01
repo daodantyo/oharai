@@ -272,7 +272,7 @@
   /* ── 呼応する光の球体 ── */
   .orb-row{
     display:flex;align-items:flex-end;justify-content:center;
-    gap:11px;margin-top:10px;
+    gap:9px;margin-top:22px;
   }
   .orb{
     border:none;cursor:pointer;border-radius:50%;
@@ -291,12 +291,12 @@
     transition:transform .25s;
   }
   .orb:focus-visible{outline:1px solid var(--kin-hi)}
-  .o1{--orbc:#f4e5ba;--orbt:6.5s;width:34px;height:34px}
-  .o2{--orbc:#e6bf70;--orbt:7.8s;width:48px;height:48px;animation-delay:.9s}
-  .o3{--orbc:#f0d79a;--orbt:6.1s;width:58px;height:58px;animation-delay:1.7s}
-  .o4{--orbc:#dcab60;--orbt:8.4s;width:54px;height:54px;animation-delay:.4s}
-  .o5{--orbc:#ead0a2;--orbt:7.1s;width:44px;height:44px;animation-delay:2.3s}
-  .o6{--orbc:#f7edd6;--orbt:6.8s;width:32px;height:32px;animation-delay:1.2s}
+  .o1{--orbc:#f4e5ba;--orbt:6.5s;width:21px;height:21px}
+  .o2{--orbc:#e6bf70;--orbt:7.8s;width:29px;height:29px;animation-delay:.9s}
+  .o3{--orbc:#f0d79a;--orbt:6.1s;width:35px;height:35px;animation-delay:1.7s}
+  .o4{--orbc:#dcab60;--orbt:8.4s;width:33px;height:33px;animation-delay:.4s}
+  .o5{--orbc:#ead0a2;--orbt:7.1s;width:27px;height:27px;animation-delay:2.3s}
+  .o6{--orbc:#f7edd6;--orbt:6.8s;width:20px;height:20px;animation-delay:1.2s}
   @keyframes orbbreathe{
     0%,100%{opacity:.5;transform:scale(.92)}
     50%{opacity:.95;transform:scale(1.06)}
@@ -313,10 +313,6 @@
         brightness(1.45);
     }
     100%{opacity:.7;transform:scale(1)}
-  }
-  .orb-note{
-    color:var(--usuzumi);font-size:.7rem;letter-spacing:.15em;
-    margin-top:8px;opacity:.55;
   }
   @media (prefers-reduced-motion: reduce){
     .orb,.orb.hit{animation:none}
@@ -462,47 +458,49 @@
     box-shadow:0 0 34px rgba(201,169,97,.4);
     animation:none;
   }
-  .entry-row{
-    display:flex;gap:10px;margin-top:11px;
-    flex-wrap:wrap;justify-content:center;
+  /* ── 入口の四つの紋 ── */
+  .mon-row{
+    display:flex;justify-content:center;align-items:flex-start;
+    gap:min(6vw,26px);
+    margin-top:26px;
   }
-  .entry-row .goshuin-entry{margin-top:0;padding:11px 18px 11px 12px;gap:11px}
-  .entry-row .ge-text{font-size:.98rem;letter-spacing:.16em}
-  .ge-seal.ge-seal-mb{
-    background:
-      radial-gradient(circle at 30% 30%, rgba(255,255,255,.28), transparent 55%),
-      linear-gradient(150deg,#e6c04a 0%,#c49a2e 60%,#8f6d1c 100%);
-    border:1px solid rgba(250,235,180,.9);
-    animation:sealglowgold 3.5s ease-in-out infinite;
-    animation-delay:1.7s;
+  .mon{
+    background:none;border:none;padding:0;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:9px;
+    transition:transform .22s;
   }
-  @keyframes sealglowgold{
-    0%,100%{box-shadow:0 2px 5px rgba(0,0,0,.35), inset 0 0 5px rgba(80,58,10,.55), 0 0 6px rgba(230,192,74,.25)}
-    50%{box-shadow:0 2px 5px rgba(0,0,0,.35), inset 0 0 5px rgba(80,58,10,.55), 0 0 20px rgba(230,192,74,.65)}
+  .mon:hover,.mon:focus-visible{transform:translateY(-3px);outline:none}
+  .mon-seal{
+    width:54px;height:54px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Shippori Mincho',serif;
+    font-size:1.5rem;color:#fdf6ea;
+    text-shadow:0 1px 2px rgba(35,18,4,.7);
+    border:1px solid rgba(240,220,162,.7);
+    box-shadow:0 4px 10px rgba(0,0,0,.5), inset 0 0 9px rgba(0,0,0,.38);
+    transition:box-shadow .3s;
   }
-  /* おみくじの入口（入口画面の主役の一つ） */
-  .kuji-entry{
-    margin-top:11px;
-    padding:11px 26px 11px 13px;
-    border-color:var(--kin-hi);
-    animation:kujientry 4.5s ease-in-out infinite;
+  .mon:hover .mon-seal,.mon:focus-visible .mon-seal{
+    box-shadow:0 6px 16px rgba(0,0,0,.55), 0 0 24px rgba(201,169,97,.6), inset 0 0 9px rgba(0,0,0,.38);
   }
-  @keyframes kujientry{
-    0%,100%{box-shadow:0 6px 20px rgba(0,0,0,.45), 0 0 24px rgba(201,169,97,.22), inset 0 0 0 2px rgba(10,8,18,.8), inset 0 0 0 3px rgba(201,169,97,.45)}
-    50%{box-shadow:0 6px 20px rgba(0,0,0,.45), 0 0 48px rgba(201,169,97,.52), inset 0 0 0 2px rgba(10,8,18,.8), inset 0 0 0 3px rgba(201,169,97,.8)}
+  .mon-label{
+    font-family:'Shippori Mincho',serif;
+    font-size:.66rem;letter-spacing:.08em;white-space:nowrap;
+    color:var(--kin);opacity:.88;
   }
-  .ge-seal.ge-seal-kuji{
-    background:
-      radial-gradient(circle at 30% 30%, rgba(255,255,255,.22), transparent 55%),
-      linear-gradient(150deg,#6a54a8 0%,#46357a 60%,#2b2050 100%);
-    border:1px solid rgba(196,178,245,.65);
-    animation:sealglowmurasaki 3.5s ease-in-out infinite;
-    animation-delay:.8s;
-  }
-  @keyframes sealglowmurasaki{
-    0%,100%{box-shadow:0 2px 5px rgba(0,0,0,.35), inset 0 0 5px rgba(20,12,45,.6), 0 0 6px rgba(106,84,168,.25)}
-    50%{box-shadow:0 2px 5px rgba(0,0,0,.35), inset 0 0 5px rgba(20,12,45,.6), 0 0 24px rgba(106,84,168,.75)}
-  }
+  .mon-kuji{background:
+    radial-gradient(circle at 32% 27%, rgba(255,255,255,.24), transparent 55%),
+    linear-gradient(150deg,#6a54a8 0%,#46357a 60%,#2b2050 100%)}
+  .mon-sei{background:
+    radial-gradient(circle at 32% 27%, rgba(255,255,255,.34), transparent 55%),
+    linear-gradient(150deg,#e6c04a 0%,#c49a2e 60%,#8f6d1c 100%);
+    color:#3a2a08;text-shadow:0 1px 1px rgba(255,250,220,.65)}
+  .mon-harai{background:
+    radial-gradient(circle at 32% 27%, rgba(255,255,255,.2), transparent 55%),
+    linear-gradient(150deg,#c0392b 0%,#a02818 60%,#8a1f12 100%)}
+  .mon-sha{background:
+    radial-gradient(circle at 32% 27%, rgba(255,255,255,.24), transparent 55%),
+    linear-gradient(150deg,#3f5b96 0%,#27406e 60%,#141f3c 100%)}
 
   /* ── 社務所（四枚の札）── */
   .sho-menu{gap:14px}
@@ -539,62 +537,8 @@
     border-color:rgba(248,190,175,.8);
     box-shadow:0 3px 8px rgba(0,0,0,.45), inset 0 0 8px rgba(70,14,6,.6), 0 0 20px rgba(194,64,47,.45);
   }
-  /* 社務所の入口（藍） */
-  .ge-seal.ge-seal-sha{
-    background:
-      radial-gradient(circle at 30% 30%, rgba(255,255,255,.22), transparent 55%),
-      linear-gradient(150deg,#3f5b96 0%,#27406e 60%,#141f3c 100%);
-    border:1px solid rgba(178,200,244,.65);
-    animation:sealglowai 3.5s ease-in-out infinite;
-    animation-delay:2.4s;
-  }
-  @keyframes sealglowai{
-    0%,100%{box-shadow:0 2px 5px rgba(0,0,0,.35), inset 0 0 5px rgba(10,18,40,.6), 0 0 6px rgba(63,91,150,.25)}
-    50%{box-shadow:0 2px 5px rgba(0,0,0,.35), inset 0 0 5px rgba(10,18,40,.6), 0 0 22px rgba(90,125,200,.7)}
-  }
-
-  /* ── 御朱印帳の入口 ── */
-  .goshuin-entry{
-    display:flex;align-items:center;gap:14px;
-    margin-top:13px;
-    padding:11px 30px 11px 14px;
-    background:linear-gradient(160deg,rgba(201,169,97,.14),rgba(201,169,97,.03));
-    border:1px solid var(--kin);
-    cursor:pointer;
-    box-shadow:0 6px 18px rgba(0,0,0,.4), 0 0 20px rgba(201,169,97,.16), inset 0 0 0 2px rgba(10,8,18,.8), inset 0 0 0 3px rgba(201,169,97,.4);
-    transition:box-shadow .3s, transform .2s;
-  }
-  .goshuin-entry:hover,.goshuin-entry:focus-visible{
-    transform:translateY(-2px);
-    box-shadow:0 10px 24px rgba(0,0,0,.5), 0 0 30px rgba(201,169,97,.3), inset 0 0 0 2px rgba(10,8,18,.8), inset 0 0 0 3px rgba(201,169,97,.6);
-    outline:none;
-  }
-  .ge-seal{
-    width:44px;height:44px;border-radius:6px;
-    display:flex;align-items:center;justify-content:center;
-    font-family:'Shippori Mincho',serif;
-    font-size:1.3rem;color:#fdf6ea;
-    background:
-      radial-gradient(circle at 30% 30%, rgba(255,255,255,.16), transparent 55%),
-      linear-gradient(150deg,#c0392b 0%,#a02818 60%,#8a1f12 100%);
-    transform:rotate(-5deg);
-    box-shadow:0 2px 5px rgba(0,0,0,.35), inset 0 0 5px rgba(60,10,5,.6);
-    animation:sealglow 3.5s ease-in-out infinite;
-  }
-  @keyframes sealglow{
-    0%,100%{box-shadow:0 2px 5px rgba(0,0,0,.35), inset 0 0 5px rgba(60,10,5,.6), 0 0 6px rgba(192,57,43,.2)}
-    50%{box-shadow:0 2px 5px rgba(0,0,0,.35), inset 0 0 5px rgba(60,10,5,.6), 0 0 18px rgba(192,57,43,.55)}
-  }
-  .ge-text{
-    font-family:'Shippori Mincho',serif;
-    font-size:1.1rem;letter-spacing:.3em;text-indent:.1em;
-    background:linear-gradient(180deg,#f5e5ae 0%,#d4ab45 55%,#a98a35 100%);
-    -webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;color:transparent;
-    filter:drop-shadow(0 0 10px rgba(201,169,97,.35));
-  }
   @media (prefers-reduced-motion: reduce){
-    .ge-seal,.ge-seal-mb,button.hairei{animation:none}
+    button.hairei{animation:none}
   }
 
   /* ── 雷 ── */
@@ -1388,7 +1332,6 @@
     .kujitsutsu{display:none}
     .kchar{animation:none;opacity:1}
     .mikuji-paper::before{animation:none}
-    .kuji-entry,.ge-seal-kuji{animation:none}
   }
 
   /* ── 読み物ページ共通 ── */
@@ -1681,24 +1624,24 @@
   </div>
   <p class="sub">MBTIと同じ 16タイプ診断 × 祓い清め</p>
   <button class="hairei" onclick="sanpaiStart()">月夜の祓いへ</button>
-  <button class="goshuin-entry kuji-entry" onclick="go(12)">
-    <span class="ge-seal ge-seal-kuji">籤</span>
-    <span class="ge-text">おみくじを引く</span>
-  </button>
-  <div class="entry-row">
-    <button class="goshuin-entry" onclick="mbOpen()">
-      <span class="ge-seal ge-seal-mb">性</span>
-      <span class="ge-text">16タイプ性格診断</span>
+  <div class="mon-row">
+    <button class="mon" onclick="go(12)">
+      <span class="mon-seal mon-kuji">籤</span>
+      <span class="mon-label">おみくじ</span>
     </button>
-    <button class="goshuin-entry" onclick="go(14)">
-      <span class="ge-seal">祓</span>
-      <span class="ge-text">御朱印帳</span>
+    <button class="mon" onclick="mbOpen()">
+      <span class="mon-seal mon-sei">性</span>
+      <span class="mon-label">性格診断</span>
+    </button>
+    <button class="mon" onclick="go(14)">
+      <span class="mon-seal mon-harai">祓</span>
+      <span class="mon-label">御朱印帳</span>
+    </button>
+    <button class="mon" onclick="go(17)">
+      <span class="mon-seal mon-sha">社</span>
+      <span class="mon-label">社務所</span>
     </button>
   </div>
-  <button class="goshuin-entry" onclick="go(17)">
-    <span class="ge-seal ge-seal-sha">社</span>
-    <span class="ge-text">社務所</span>
-  </button>
   <div class="orb-row">
     <button class="orb o1" onclick="orbTap(0)" aria-label="光の球体"></button>
     <button class="orb o2" onclick="orbTap(1)" aria-label="光の球体"></button>
@@ -1707,7 +1650,6 @@
     <button class="orb o5" onclick="orbTap(4)" aria-label="光の球体"></button>
     <button class="orb o6" onclick="orbTap(5)" aria-label="光の球体"></button>
   </div>
-  <p class="orb-note">灯りに触れると、光が呼応します</p>
 </section>
 
 <!-- 二、手水 -->
