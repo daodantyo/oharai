@@ -288,24 +288,44 @@
     margin:8px auto 12px;
   }
   .torii{margin:0}
-  .tourou{
-    width:min(10vw,40px);
-    filter:drop-shadow(0 6px 12px rgba(0,0,0,.6)) drop-shadow(0 0 16px rgba(255,196,110,.28));
+  /* 鳥居の左右に浮かぶ火の玉 */
+  .tbi{
+    position:relative;flex:none;
+    border-radius:50%;
+    background:radial-gradient(circle at 50% 58%,
+      rgba(255,255,255,.98) 0%,
+      rgba(228,250,255,.94) 15%,
+      var(--orbc) 38%,
+      rgba(70,160,205,.42) 64%,
+      rgba(30,80,120,.14) 74%,
+      rgba(0,0,0,0) 80%);
+    filter:
+      drop-shadow(0 0 10px var(--orbc))
+      drop-shadow(0 0 28px var(--orbc))
+      drop-shadow(0 0 62px rgba(120,205,240,.42));
+    animation:
+      hidama var(--orbt) ease-in-out infinite,
+      hiyure calc(var(--orbt) * .23) ease-in-out infinite;
   }
-  .tourou .flame{
-    animation:flicker 2.8s ease-in-out infinite;
-    filter:drop-shadow(0 0 6px rgba(255,210,130,.95)) drop-shadow(0 0 14px rgba(255,170,80,.6));
+  .tbi::before{
+    content:'';position:absolute;left:50%;bottom:56%;
+    width:42%;height:132%;
+    transform:translateX(-50%);
+    background:linear-gradient(0deg,
+      var(--orbc) 0%,
+      rgba(214,246,255,.55) 30%,
+      rgba(180,230,255,.22) 58%,
+      rgba(255,255,255,0) 100%);
+    border-radius:50% 50% 46% 46% / 68% 68% 32% 32%;
+    filter:blur(2.6px);
+    opacity:.85;
+    animation:honoo calc(var(--orbt) * .31) ease-in-out infinite;
+    pointer-events:none;
   }
-  .tourou.t2 .flame{animation-delay:1.3s}
-  @keyframes flicker{
-    0%,100%{opacity:.55}
-    22%{opacity:.95}
-    45%{opacity:.5}
-    64%{opacity:.9}
-    82%{opacity:.65}
-  }
+  .tbi-l{--orbc:#cfeeff;--orbt:7.4s;width:min(10vw,38px);aspect-ratio:1;margin-bottom:28px}
+  .tbi-r{--orbc:#b4e2f7;--orbt:8.6s;width:min(9vw,33px);aspect-ratio:1;margin-bottom:46px;animation-delay:1.6s}
   @media (prefers-reduced-motion: reduce){
-    .fog1,.fog2,.moon-title::after,.tourou .flame{animation:none}
+    .fog1,.fog2,.moon-title::after,.tbi,.tbi::before{animation:none}
   }
 
   /* ── 呼応する光の球体 ── */
@@ -1599,12 +1619,6 @@
       <stop offset="42%" stop-color="#c9a961"/>
       <stop offset="100%" stop-color="#8a6f31"/>
     </linearGradient>
-    <linearGradient id="ishi" x1="0" y1="0" x2="1" y2="0.35">
-      <stop offset="0%" stop-color="#252938"/>
-      <stop offset="30%" stop-color="#4c5370"/>
-      <stop offset="55%" stop-color="#3a3f52"/>
-      <stop offset="100%" stop-color="#1e2130"/>
-    </linearGradient>
   </defs>
 </svg>
 
@@ -1659,18 +1673,7 @@
     <span class="moon-moji">性格診断<br>お祓い</span>
   </div>
   <div class="torii-row">
-    <svg class="tourou" viewBox="0 0 60 112" aria-hidden="true">
-      <g fill="url(#ishi)">
-        <path d="M8 14 L30 2 L52 14 L48 20 L12 20 Z"/>
-        <rect x="27" y="0" width="6" height="6" rx="2"/>
-        <rect x="16" y="20" width="28" height="26" rx="2"/>
-        <rect x="24" y="46" width="12" height="34"/>
-        <path d="M10 80 L50 80 L54 92 L6 92 Z"/>
-        <rect x="4" y="92" width="52" height="8" rx="2"/>
-      </g>
-      <rect x="22" y="25" width="16" height="16" rx="2" fill="#14100a"/>
-      <circle class="flame" cx="30" cy="33" r="6" fill="#ffd98a"/>
-    </svg>
+    <span class="tbi tbi-l" aria-hidden="true"></span>
     <svg class="torii" viewBox="0 0 200 165" aria-hidden="true">
       <g>
         <path d="M6 26 Q100 12 194 26 L191 40 Q100 27 9 40 Z" fill="url(#urushiH)"/>
@@ -1687,18 +1690,7 @@
         <rect x="140" y="152" width="23" height="7" fill="#57190f"/>
       </g>
     </svg>
-    <svg class="tourou t2" viewBox="0 0 60 112" aria-hidden="true">
-      <g fill="url(#ishi)">
-        <path d="M8 14 L30 2 L52 14 L48 20 L12 20 Z"/>
-        <rect x="27" y="0" width="6" height="6" rx="2"/>
-        <rect x="16" y="20" width="28" height="26" rx="2"/>
-        <rect x="24" y="46" width="12" height="34"/>
-        <path d="M10 80 L50 80 L54 92 L6 92 Z"/>
-        <rect x="4" y="92" width="52" height="8" rx="2"/>
-      </g>
-      <rect x="22" y="25" width="16" height="16" rx="2" fill="#14100a"/>
-      <circle class="flame" cx="30" cy="33" r="6" fill="#ffd98a"/>
-    </svg>
+    <span class="tbi tbi-r" aria-hidden="true"></span>
   </div>
   <p class="sub">MBTIと同じ 16タイプ診断 × 祓い清め</p>
   <button class="hairei" onclick="sanpaiStart()">月夜の祓いへ</button>
