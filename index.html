@@ -313,48 +313,84 @@
     display:flex;align-items:flex-end;justify-content:center;
     gap:9px;margin-top:22px;
   }
+  /* 火の玉（人魂）── 青白い芯と、立ちのぼる炎の尾 */
   .orb{
+    position:relative;
     border:none;cursor:pointer;border-radius:50%;
     padding:0;
-    background:radial-gradient(circle at 34% 27%,
-      rgba(255,253,246,.96) 0%,
-      rgba(255,247,226,.72) 13%,
-      var(--orbc) 44%,
-      rgba(150,110,45,.28) 71%,
-      rgba(0,0,0,0) 78%);
+    background:radial-gradient(circle at 50% 58%,
+      rgba(255,255,255,.98) 0%,
+      rgba(228,250,255,.94) 15%,
+      var(--orbc) 38%,
+      rgba(70,160,205,.42) 64%,
+      rgba(30,80,120,.14) 74%,
+      rgba(0,0,0,0) 80%);
     filter:
-      drop-shadow(0 0 12px var(--orbc))
-      drop-shadow(0 0 28px rgba(201,169,97,.34))
-      drop-shadow(0 6px 18px rgba(0,0,0,.55));
-    animation:orbbreathe var(--orbt) ease-in-out infinite;
+      drop-shadow(0 0 9px var(--orbc))
+      drop-shadow(0 0 24px var(--orbc))
+      drop-shadow(0 0 52px rgba(120,205,240,.4));
+    animation:
+      hidama var(--orbt) ease-in-out infinite,
+      hiyure calc(var(--orbt) * .23) ease-in-out infinite;
     transition:transform .25s;
   }
+  /* 炎の尾 */
+  .orb::before{
+    content:'';position:absolute;left:50%;bottom:56%;
+    width:42%;height:132%;
+    transform:translateX(-50%);
+    background:linear-gradient(0deg,
+      var(--orbc) 0%,
+      rgba(214,246,255,.55) 30%,
+      rgba(180,230,255,.22) 58%,
+      rgba(255,255,255,0) 100%);
+    border-radius:50% 50% 46% 46% / 68% 68% 32% 32%;
+    filter:blur(2.6px);
+    opacity:.85;
+    animation:honoo calc(var(--orbt) * .31) ease-in-out infinite;
+    pointer-events:none;
+  }
   .orb:focus-visible{outline:1px solid var(--kin-hi)}
-  .o1{--orbc:#f4e5ba;--orbt:6.5s;width:21px;height:21px}
-  .o2{--orbc:#e6bf70;--orbt:7.8s;width:29px;height:29px;animation-delay:.9s}
-  .o3{--orbc:#f0d79a;--orbt:6.1s;width:35px;height:35px;animation-delay:1.7s}
-  .o4{--orbc:#dcab60;--orbt:8.4s;width:33px;height:33px;animation-delay:.4s}
-  .o5{--orbc:#ead0a2;--orbt:7.1s;width:27px;height:27px;animation-delay:2.3s}
-  .o6{--orbc:#f7edd6;--orbt:6.8s;width:20px;height:20px;animation-delay:1.2s}
-  @keyframes orbbreathe{
-    0%,100%{opacity:.5;transform:scale(.92)}
-    50%{opacity:.95;transform:scale(1.06)}
+  .o1{--orbc:#bfe9ff;--orbt:6.5s;width:27px;height:27px}
+  .o2{--orbc:#9fd8f5;--orbt:7.8s;width:36px;height:36px;animation-delay:.9s}
+  .o3{--orbc:#daf4ff;--orbt:6.1s;width:44px;height:44px;animation-delay:1.7s}
+  .o4{--orbc:#a6dfec;--orbt:8.4s;width:41px;height:41px;animation-delay:.4s}
+  .o5{--orbc:#c6e8ff;--orbt:7.1s;width:34px;height:34px;animation-delay:2.3s}
+  .o6{--orbc:#e6f8ff;--orbt:6.8s;width:26px;height:26px;animation-delay:1.2s}
+  /* ふわりと漂う */
+  @keyframes hidama{
+    0%,100%{transform:translate(0,0) scale(.95)}
+    28%{transform:translate(2px,-9px) scale(1.05)}
+    55%{transform:translate(-2px,3px) scale(.98)}
+    78%{transform:translate(1px,-4px) scale(1.02)}
+  }
+  /* 明滅 */
+  @keyframes hiyure{
+    0%,100%{opacity:.72}
+    45%{opacity:1}
+    72%{opacity:.85}
+  }
+  /* 尾のゆらぎ */
+  @keyframes honoo{
+    0%,100%{transform:translateX(-50%) scaleY(1) skewX(0deg);opacity:.8}
+    33%{transform:translateX(-53%) scaleY(1.28) skewX(6deg);opacity:.95}
+    66%{transform:translateX(-47%) scaleY(.84) skewX(-5deg);opacity:.62}
   }
   .orb.hit{
     animation:orbhit .7s ease-out;
   }
   @keyframes orbhit{
     0%{
-      opacity:1;transform:scale(1.32);
+      opacity:1;transform:scale(1.34);
       filter:
-        drop-shadow(0 0 32px var(--orbc))
-        drop-shadow(0 0 64px rgba(236,214,158,.85))
-        brightness(1.45);
+        drop-shadow(0 0 34px var(--orbc))
+        drop-shadow(0 0 70px rgba(190,238,255,.9))
+        brightness(1.5);
     }
-    100%{opacity:.7;transform:scale(1)}
+    100%{opacity:.72;transform:scale(1)}
   }
   @media (prefers-reduced-motion: reduce){
-    .orb,.orb.hit{animation:none}
+    .orb,.orb.hit,.orb::before{animation:none}
   }
 
   /* ── しめ縄と紙垂 ── */
@@ -1685,12 +1721,12 @@
     </button>
   </div>
   <div class="orb-row">
-    <button class="orb o1" onclick="orbTap(0)" aria-label="光の球体"></button>
-    <button class="orb o2" onclick="orbTap(1)" aria-label="光の球体"></button>
-    <button class="orb o3" onclick="orbTap(2)" aria-label="光の球体"></button>
-    <button class="orb o4" onclick="orbTap(3)" aria-label="光の球体"></button>
-    <button class="orb o5" onclick="orbTap(4)" aria-label="光の球体"></button>
-    <button class="orb o6" onclick="orbTap(5)" aria-label="光の球体"></button>
+    <button class="orb o1" onclick="orbTap(0)" aria-label="火の玉"></button>
+    <button class="orb o2" onclick="orbTap(1)" aria-label="火の玉"></button>
+    <button class="orb o3" onclick="orbTap(2)" aria-label="火の玉"></button>
+    <button class="orb o4" onclick="orbTap(3)" aria-label="火の玉"></button>
+    <button class="orb o5" onclick="orbTap(4)" aria-label="火の玉"></button>
+    <button class="orb o6" onclick="orbTap(5)" aria-label="火の玉"></button>
   </div>
 </section>
 
@@ -3114,6 +3150,8 @@
           el.classList.remove('hit');
           void el.offsetWidth;
           el.classList.add('hit');
+          // 閃きが終わったら漂いへ戻す（hit が残ると animation が上書きされたままになる）
+          setTimeout(function(){ el.classList.remove('hit'); }, 720);
         }, d*130);
         orbTone(ORB_TONES[idx], d*0.13, Math.max(0.02, 0.08-d*0.013));
       })(orbs[j], dist, j);
