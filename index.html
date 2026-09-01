@@ -611,11 +611,20 @@
   }
 
   /* ── 二、手水 ── */
+  /* 水盤にたたえた水面 */
   .breath-circle{
     position:relative;
-    width:158px;height:158px;border-radius:50%;
+    width:162px;height:162px;border-radius:50%;
     border:1px solid var(--kin);
-    background:radial-gradient(circle,rgba(201,169,97,.07),transparent 70%);
+    background:
+      radial-gradient(ellipse 58% 34% at 37% 25%, rgba(248,240,216,.22) 0%, transparent 58%),
+      radial-gradient(circle at 50% 44%, #1e2842 0%, #151c31 56%, #0b0f1e 100%);
+    box-shadow:
+      0 14px 36px rgba(0,0,0,.58),
+      0 0 32px rgba(201,169,97,.2),
+      inset 0 0 0 3px rgba(8,10,20,.85),
+      inset 0 0 0 4px rgba(201,169,97,.45),
+      inset 0 7px 24px rgba(0,0,0,.62);
     color:var(--shiro);
     display:flex;align-items:center;justify-content:center;
     font-family:'Shippori Mincho',serif;
@@ -631,6 +640,26 @@
     border:1px solid rgba(201,169,97,.25);
     animation:breathe 8s ease-in-out infinite reverse;
   }
+  .breath-moji{
+    position:relative;z-index:2;
+    text-shadow:0 0 18px rgba(10,14,28,.95), 0 1px 2px rgba(0,0,0,.8);
+  }
+  /* 息にあわせて広がる波紋 */
+  .hamon{
+    position:absolute;left:50%;top:50%;
+    width:30px;height:30px;border-radius:50%;
+    translate:-50% -50%;
+    border:1px solid rgba(201,169,97,.5);
+    animation:hamon 8s ease-out infinite;
+    pointer-events:none;z-index:1;
+  }
+  .hamon.h2{animation-delay:2.66s}
+  .hamon.h3{animation-delay:5.33s}
+  @keyframes hamon{
+    0%{transform:scale(.2);opacity:0}
+    14%{opacity:.7}
+    100%{transform:scale(4.3);opacity:0}
+  }
   .breath-circle:hover,.breath-circle:focus-visible{color:var(--kin-hi);outline:none}
   @keyframes breathe{
     0%,100%{transform:scale(1);border-color:var(--kin)}
@@ -640,23 +669,35 @@
 
   /* ── 三、御祈祷 ── */
   .norito-area{display:flex;flex-direction:column;align-items:center;margin:30px 0 14px}
+  /* 磨き上げた神鏡 */
   .norito-play{
     position:relative;
-    width:126px;height:126px;border-radius:50%;
-    border:1px solid var(--kin);
-    background:radial-gradient(circle,rgba(201,169,97,.1),transparent 72%);
-    color:var(--kin-hi);
+    width:132px;height:132px;border-radius:50%;
+    border:none;
+    background:
+      radial-gradient(circle at 35% 28%, rgba(255,251,235,.34) 0%, transparent 44%),
+      conic-gradient(from 208deg,
+        #6a5322 0%, #b0913c 11%, #e9d295 24%, #a3832f 37%,
+        #634d1f 50%, #a3832f 63%, #edd9a4 76%, #b0913c 89%, #6a5322 100%);
+    color:#2b2108;
     font-family:'Shippori Mincho',serif;
     font-size:2.7rem;
     display:flex;align-items:center;justify-content:center;
     cursor:pointer;
-    text-shadow:0 0 22px rgba(201,169,97,.45);
-    transition:background .4s,color .4s;
+    text-shadow:0 1px 0 rgba(255,250,225,.75), 0 -1px 1px rgba(60,44,10,.5);
+    box-shadow:
+      0 16px 38px rgba(0,0,0,.6),
+      0 0 36px rgba(201,169,97,.34),
+      inset 0 0 0 3px rgba(30,22,6,.55),
+      inset 0 0 0 5px rgba(240,220,160,.55),
+      inset 0 -8px 22px rgba(60,44,10,.45),
+      inset 0 8px 18px rgba(255,250,225,.28);
+    transition:filter .4s, box-shadow .4s;
   }
-  .norito-play:hover,.norito-play:focus-visible{background:rgba(201,169,97,.2);outline:none}
+  .norito-play:hover,.norito-play:focus-visible{filter:brightness(1.12);outline:none}
   .norito-play.playing::before,.norito-play.playing::after{
     content:'';position:absolute;inset:0;border-radius:50%;
-    border:1px solid rgba(201,169,97,.5);
+    border:1px solid rgba(230,205,143,.75);
     animation:ring 3s ease-out infinite;
   }
   .norito-play.playing::after{animation-delay:1.5s}
@@ -696,9 +737,30 @@
     border-radius:50%;
     display:flex;align-items:center;justify-content:center;
     margin:28px 0 6px;
-    background:radial-gradient(circle,rgba(201,169,97,.09),transparent 68%);
+    background:
+      radial-gradient(circle at 38% 30%, rgba(255,247,225,.07) 0%, transparent 50%),
+      radial-gradient(circle, #1d1a2e 0%, #16121f 60%, #0d0a14 100%);
     border:1px solid var(--kin);
-    box-shadow:0 0 34px rgba(201,169,97,.18), inset 0 0 26px rgba(201,169,97,.08);
+    box-shadow:
+      0 18px 42px rgba(0,0,0,.6),
+      0 0 38px rgba(201,169,97,.22),
+      inset 0 0 0 3px rgba(10,8,18,.85),
+      inset 0 0 0 4px rgba(201,169,97,.4),
+      inset 0 0 40px rgba(0,0,0,.5);
+  }
+  /* 逆にまわる細環 */
+  .sahou-ring .ensou{
+    position:absolute;inset:-26px;border-radius:50%;
+    border:1px solid rgba(106,84,168,.4);
+    animation:ringspin 44s linear infinite reverse;
+    pointer-events:none;
+  }
+  .sahou-ring .ensou::before{
+    content:'';position:absolute;left:50%;top:-4px;
+    width:7px;height:7px;border-radius:50%;
+    transform:translateX(-50%);
+    background:radial-gradient(circle at 34% 30%, #fdf3d2, #c9a961 70%);
+    box-shadow:0 0 12px rgba(201,169,97,.8);
   }
   /* まわる外環 */
   .sahou-ring::before{
@@ -731,8 +793,9 @@
     transition:background .5s, box-shadow .5s;
   }
   .sdot.on{
-    background:radial-gradient(circle at 35% 30%, #f5e5ae, #c9a961 70%);
-    box-shadow:0 0 12px rgba(201,169,97,.7);
+    background:radial-gradient(circle at 33% 28%, #fdf5db 0%, #e2c983 42%, #a8862f 100%);
+    box-shadow:0 0 16px rgba(201,169,97,.85), 0 1px 3px rgba(0,0,0,.5), inset 0 1px 1px rgba(255,252,235,.9);
+    border-color:var(--kin-hi);
   }
   .sahou-tap{color:var(--usuzumi);font-size:.74rem;letter-spacing:.15em;margin-top:26px;opacity:.55}
 
@@ -1449,6 +1512,8 @@
   @media (prefers-reduced-motion: reduce){
     .halo{animation:none}
     .kinsunago{animation:none}
+    .hamon{animation:none;opacity:0}
+    .sahou-ring .ensou{animation:none}
     .rays{animation:none}
     .veil{animation:none;opacity:0}
     h1,h2{animation:none}
@@ -1611,7 +1676,12 @@
 <!-- 二、手水 -->
 <section class="scene" id="s2">
   <h2>手水</h2>
-  <button class="breath-circle" onclick="afterTemizu()" aria-label="深呼吸を終えて進む">深呼吸</button>
+  <button class="breath-circle" onclick="afterTemizu()" aria-label="深呼吸を終えて進む">
+    <span class="hamon h1" aria-hidden="true"></span>
+    <span class="hamon h2" aria-hidden="true"></span>
+    <span class="hamon h3" aria-hidden="true"></span>
+    <span class="breath-moji">深呼吸</span>
+  </button>
   <p class="kotoba">円のうごきに合わせて<br>ゆっくり息を吸い、ゆっくり吐きます<br>三度くり返したら、円をそっと押しましょう</p>
 </section>
 
@@ -1633,6 +1703,7 @@
 <section class="scene" id="s4" onclick="sahouNext()">
   <h2>拝礼</h2>
   <div class="sahou-ring">
+    <span class="ensou" aria-hidden="true"></span>
     <div class="sahou" id="sahouText">二礼</div>
   </div>
   <p class="sahou-guide" id="sahouGuide">深いおじぎを二回</p>
