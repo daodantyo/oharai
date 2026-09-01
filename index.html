@@ -195,6 +195,45 @@
   }
   @keyframes halospin{ from{rotate:0deg} to{rotate:360deg} }
 
+  /* ── 戻る導線（どの画面からでも一手で戻れる）── */
+  .modoru{
+    position:fixed;left:12px;top:110px;z-index:47;
+    display:none;align-items:center;gap:7px;
+    padding:8px 15px 8px 12px;
+    background:linear-gradient(160deg,rgba(22,18,34,.94),rgba(12,9,20,.94));
+    border:1px solid rgba(201,169,97,.55);
+    color:var(--kin);
+    font-family:'Shippori Mincho',serif;
+    font-size:.8rem;letter-spacing:.14em;
+    cursor:pointer;
+    box-shadow:0 4px 14px rgba(0,0,0,.5), inset 0 0 0 1px rgba(10,8,18,.8);
+    transition:color .3s, border-color .3s, box-shadow .3s;
+  }
+  .modoru.on{display:flex}
+  .modoru:hover,.modoru:focus-visible{
+    color:var(--kin-hi);border-color:var(--kin-hi);outline:none;
+    box-shadow:0 6px 18px rgba(0,0,0,.55), 0 0 18px rgba(201,169,97,.32), inset 0 0 0 1px rgba(10,8,18,.8);
+  }
+  .modoru-ya{
+    width:0;height:0;
+    border-top:4.5px solid transparent;
+    border-bottom:4.5px solid transparent;
+    border-right:7px solid currentColor;
+  }
+
+  /* ── 手水：三度の呼吸を数える ── */
+  .breath-steps{display:flex;gap:18px;margin:18px 0 10px}
+  .breath-circle.ready{
+    border-color:var(--kin-hi);
+    box-shadow:
+      0 14px 36px rgba(0,0,0,.58),
+      0 0 48px rgba(201,169,97,.5),
+      inset 0 0 0 3px rgba(8,10,20,.85),
+      inset 0 0 0 4px rgba(230,205,143,.85),
+      inset 0 7px 24px rgba(0,0,0,.62);
+  }
+  .breath-circle.ready .breath-moji{color:var(--kin-hi)}
+
   /* ── 場面の変わり目（暗幕）── */
   .veil{
     position:fixed;inset:0;z-index:60;pointer-events:none;opacity:0;
@@ -1335,7 +1374,7 @@
   }
 
   /* ── 読み物ページ共通 ── */
-  .scene-scroll{justify-content:flex-start;overflow-y:auto;padding-top:120px;padding-bottom:40px}
+  .scene-scroll{justify-content:flex-start;overflow-y:auto;padding-top:164px;padding-bottom:40px}
   .omamori-page{max-width:min(90vw,540px);text-align:left;margin-bottom:22px}
   .omamori-page h2{text-align:center;margin-bottom:24px}
   .omamori-intro{color:var(--usuzumi);font-size:.9rem;line-height:2;letter-spacing:.05em;margin-bottom:26px}
@@ -1570,6 +1609,9 @@
 <div class="fog fog3" aria-hidden="true"></div>
 <div class="vignette" aria-hidden="true"></div>
 <div class="veil" id="veil" aria-hidden="true"></div>
+<button class="modoru" id="modoru" onclick="goBack()" aria-label="前の画面へ戻る">
+  <span class="modoru-ya" aria-hidden="true"></span>もどる
+</button>
 <div class="kujitsutsu" id="kujitsutsu" aria-hidden="true">
   <div class="kt-stick" id="ktStick"></div>
   <div class="kt-body"></div>
@@ -1661,7 +1703,12 @@
     <span class="hamon h3" aria-hidden="true"></span>
     <span class="breath-moji">深呼吸</span>
   </button>
-  <p class="kotoba">円のうごきに合わせて<br>ゆっくり息を吸い、ゆっくり吐きます<br>三度くり返したら、円をそっと押しましょう</p>
+  <div class="breath-steps" aria-hidden="true">
+    <span class="sdot" id="bdot0"></span>
+    <span class="sdot" id="bdot1"></span>
+    <span class="sdot" id="bdot2"></span>
+  </div>
+  <p class="kotoba" id="breathGuide">円のふくらみに合わせて、ゆっくり息を吸います</p>
 </section>
 
 <!-- 三、御祈祷 -->
@@ -2094,7 +2141,15 @@
   function prefersCalm(){
     return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   }
-  function go(n){
+  // ── 来た道を覚えて、一手で戻れるようにする ──
+  let navStack=[1];
+  function goBack(){
+    navStack.pop();
+    const prev=navStack.length ? navStack[navStack.length-1] : 1;
+    go(prev, true);
+  }
+
+  function go(n, isBack){
     // 場面の変わり目に、暗幕をひと呼吸
     const veilEl=document.getElementById('veil');
     if(veilEl && !prefersCalm()){
@@ -2104,10 +2159,11 @@
     }
     // 画面を離れるとき：音を止め、自動進行タイマーを解除
     if(window.noritoTimer){ clearTimeout(window.noritoTimer); window.noritoTimer=null; }
+    if(window.noritoTick){ clearInterval(window.noritoTick); window.noritoTick=null; }
     if(window.sahouTimer){ clearTimeout(window.sahouTimer); window.sahouTimer=null; }
     const audio=document.getElementById('noritoAudio');
-    if(audio && !audio.paused){
-      audio.pause();
+    if(audio){
+      if(!audio.paused){ audio.pause(); }
       audio.currentTime=0;
       const ic=document.getElementById('noritoIcon');
       const lb=document.getElementById('noritoLabel');
@@ -2143,26 +2199,97 @@
     if(n===13){ initKujiScreen('kin','kinFortune','kinAdvice','kinBtn'); }
     if(n===9){ initHoui(); }
     if(n===14){ renderGoshuin(); }
+    if(n===2){ initTemizu(); }
     if(n===15){ mbInit(); }
+    // 来た道に積む（戻るときは積まない）
+    if(!isBack && navStack[navStack.length-1]!==n){
+      navStack.push(n);
+      if(navStack.length>50){ navStack.shift(); }
+    }
+    const mb=document.getElementById('modoru');
+    if(mb){ mb.classList.toggle('on', n!==1); }
+  }
+
+  // ── 手水：三度の呼吸を数える ──
+  let breathCount=0;
+  function renderBreath(){
+    for(let i=0;i<3;i++){
+      const d=document.getElementById('bdot'+i);
+      if(d){ d.classList.toggle('on', i<breathCount); }
+    }
+    const g=document.getElementById('breathGuide');
+    if(g){
+      g.textContent = breathCount>=3
+        ? '三度おわりました。円をそっと押してお進みください'
+        : ['ひと息目','ふた息目','み息目'][breathCount]+'　円のふくらみに合わせて、ゆっくり息を吸います';
+    }
+    const c=document.querySelector('.breath-circle');
+    if(c){ c.classList.toggle('ready', breathCount>=3); }
+  }
+  function initTemizu(){
+    const c=document.querySelector('.breath-circle');
+    // 動きを控える設定では円が息をしないので、はじめから進める
+    breathCount = prefersCalm() ? 3 : 0;
+    renderBreath();
+    if(c && !c.dataset.wired){
+      c.addEventListener('animationiteration', function(e){
+        // ::before も同じ breathe を回しているので、本体の分だけ数える
+        if(e.animationName!=='breathe' || e.target!==c || e.pseudoElement) return;
+        if(breathCount<3){ breathCount++; renderBreath(); }
+      });
+      c.dataset.wired='1';
+    }
   }
 
   // ── 御祈祷：祝詞の再生と自動進行 ──
   const NORITO_AUTO_SEC = 30;
+  function noritoStop(){
+    if(window.noritoTimer){ clearTimeout(window.noritoTimer); window.noritoTimer=null; }
+    if(window.noritoTick){ clearInterval(window.noritoTick); window.noritoTick=null; }
+  }
+  // 音が実際に鳴りはじめてから数えはじめる
+  function noritoStart(){
+    const label=document.getElementById('noritoLabel');
+    noritoStop();
+    let left=NORITO_AUTO_SEC;
+    const tick=function(){ label.textContent='祝詞が流れています　あと'+left+'秒で拝礼へ進みます'; };
+    tick();
+    window.noritoTick=setInterval(function(){
+      left--;
+      if(left<=0){ clearInterval(window.noritoTick); window.noritoTick=null; return; }
+      tick();
+    }, 1000);
+    window.noritoTimer=setTimeout(function(){ go(4); }, NORITO_AUTO_SEC*1000);
+  }
   function toggleNorito(){
     const audio=document.getElementById('noritoAudio');
     const label=document.getElementById('noritoLabel');
     const btn=document.getElementById('noritoPlay');
-    if(audio.paused){
-      audio.play();
-      label.textContent='祝詞が流れています…（しばらくすると自動で進みます）';
-      btn.classList.add('playing');
-      if(window.noritoTimer){ clearTimeout(window.noritoTimer); }
-      window.noritoTimer=setTimeout(function(){ go(4); }, NORITO_AUTO_SEC*1000);
-    }else{
-      audio.pause();
-      label.textContent='「神」を押すと、祝詞が流れます';
+    // 状態はボタンで持つ（audio.paused は読み込み中や失敗のときあてにならない）
+    if(btn.classList.contains('playing')){
       btn.classList.remove('playing');
-      if(window.noritoTimer){ clearTimeout(window.noritoTimer); window.noritoTimer=null; }
+      audio.pause();
+      audio.currentTime=0;
+      label.textContent='「神」を押すと、祝詞が流れます';
+      noritoStop();
+      return;
+    }
+    btn.classList.add('playing');
+    label.textContent='祝詞を読み込んでいます…';
+    if(!audio.dataset.wired){
+      audio.addEventListener('playing', function(){
+        const b=document.getElementById('noritoPlay');
+        if(b && b.classList.contains('playing')){ noritoStart(); }
+      });
+      audio.dataset.wired='1';
+    }
+    const p=audio.play();
+    if(p && p.catch){
+      p.catch(function(){
+        btn.classList.remove('playing');
+        label.textContent='祝詞を再生できませんでした。「進む」からお進みください';
+        noritoStop();
+      });
     }
   }
 
