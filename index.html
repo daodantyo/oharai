@@ -1331,32 +1331,112 @@
   }
   .eho-note{color:var(--usuzumi);font-size:.82rem !important;margin-top:12px;text-align:center}
   .compass-wrap{text-align:center}
+  /* 方位盤の外筐（漆地） */
   .compass{
     position:relative;
-    width:200px;height:200px;border-radius:50%;
+    width:210px;height:210px;border-radius:50%;
+    margin:14px auto 18px;
     border:1px solid var(--kin);
-    background:radial-gradient(circle,rgba(201,169,97,.05),transparent 70%);
-    margin:10px auto 16px;
+    background:
+      radial-gradient(circle at 36% 30%, rgba(255,247,225,.10) 0%, transparent 48%),
+      radial-gradient(circle, #1c1a2e 0%, #15121f 62%, #0c0a13 100%);
+    box-shadow:
+      0 18px 44px rgba(0,0,0,.62),
+      0 0 34px rgba(201,169,97,.22),
+      inset 0 0 0 3px rgba(10,8,18,.85),
+      inset 0 0 0 4px rgba(201,169,97,.45),
+      inset 0 0 44px rgba(0,0,0,.6);
+  }
+  /* 回る盤面 */
+  .compass-card{
+    position:absolute;inset:0;border-radius:50%;
     transition:transform .2s linear;
   }
-  .compass::before{
-    content:'';position:absolute;inset:14px;border-radius:50%;
-    border:1px solid rgba(201,169,97,.25);
+  .compass-card::before{
+    content:'';position:absolute;inset:38px;border-radius:50%;
+    border:1px solid rgba(201,169,97,.22);
+  }
+  /* 二十四の目盛と、八方位の長い目盛 */
+  .compass-ring{position:absolute;inset:4px;border-radius:50%;pointer-events:none}
+  .compass-ring::before,.compass-ring::after{
+    content:'';position:absolute;inset:0;border-radius:50%;
+  }
+  .compass-ring::before{
+    background:repeating-conic-gradient(from -0.55deg,
+      rgba(201,169,97,.5) 0deg 1.1deg, transparent 1.1deg 15deg);
+    -webkit-mask:radial-gradient(circle, transparent 89%, #000 90%, #000 97%, transparent 98%);
+    mask:radial-gradient(circle, transparent 89%, #000 90%, #000 97%, transparent 98%);
+  }
+  .compass-ring::after{
+    background:repeating-conic-gradient(from -1deg,
+      rgba(236,214,158,.9) 0deg 2deg, transparent 2deg 45deg);
+    -webkit-mask:radial-gradient(circle, transparent 85%, #000 86%, #000 97%, transparent 98%);
+    mask:radial-gradient(circle, transparent 85%, #000 86%, #000 97%, transparent 98%);
+  }
+  /* 十二支 */
+  .compass-eto{position:absolute;inset:0;pointer-events:none}
+  .compass-eto .ceto{
+    position:absolute;left:50%;top:50%;
+    font-family:'Shippori Mincho',serif;
+    font-size:.62rem;color:rgba(201,169,97,.72);
+    transform-origin:50% 50%;
+    margin:-.4em 0 0 -.35em;
+  }
+  /* 恵方の印 */
+  .compass-eho{position:absolute;inset:0;pointer-events:none;transform-origin:50% 50%}
+  .ceho-mark{
+    position:absolute;left:50%;top:3px;
+    transform:translateX(-50%);
+    width:21px;height:21px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Shippori Mincho',serif;font-size:.68rem;color:#3a2a08;
+    background:radial-gradient(circle at 32% 28%, #fdf3d2 0%, #e6c04a 46%, #a8801f 100%);
+    box-shadow:0 0 15px rgba(230,192,74,.85), 0 1px 3px rgba(0,0,0,.55), 0 0 0 3px rgba(12,10,19,.85);
   }
   .compass-n,.compass-e,.compass-s,.compass-w{
     position:absolute;font-family:'Shippori Mincho',serif;
-    color:var(--shiro);font-size:1rem;
+    color:var(--shiro);font-size:.95rem;
+    text-shadow:0 0 12px rgba(0,0,0,.9);
   }
-  .compass-n{top:10px;left:50%;transform:translateX(-50%);color:var(--shu);font-size:1.2rem}
-  .compass-s{bottom:10px;left:50%;transform:translateX(-50%)}
-  .compass-e{right:12px;top:50%;transform:translateY(-50%)}
-  .compass-w{left:12px;top:50%;transform:translateY(-50%)}
+  .compass-n{top:19px;left:50%;transform:translateX(-50%);color:#e8705c;font-size:1.12rem;text-shadow:0 0 14px rgba(194,64,47,.7)}
+  .compass-s{bottom:19px;left:50%;transform:translateX(-50%)}
+  .compass-e{right:19px;top:50%;transform:translateY(-50%)}
+  .compass-w{left:19px;top:50%;transform:translateY(-50%)}
+  /* 磁針（外筐に固定、画面の上＝いま向いている方角）*/
   .compass-needle{
     position:absolute;left:50%;top:50%;
-    width:2px;height:70px;
-    background:linear-gradient(180deg,var(--shu) 50%,var(--shiro) 50%);
-    transform:translate(-50%,-100%);
-    transform-origin:bottom center;
+    width:9px;height:112px;
+    transform:translate(-50%,-50%);
+    pointer-events:none;z-index:2;
+  }
+  .compass-needle::before{
+    content:'';position:absolute;left:0;top:0;width:9px;height:56px;
+    background:linear-gradient(180deg,#f09079 0%,#c2402f 58%,#8e2f22 100%);
+    clip-path:polygon(50% 0,100% 100%,0 100%);
+    filter:drop-shadow(0 0 9px rgba(194,64,47,.65));
+  }
+  .compass-needle::after{
+    content:'';position:absolute;left:0;bottom:0;width:9px;height:56px;
+    background:linear-gradient(0deg,#f6f2e9 0%,#cfccc3 58%,#8b8fa3 100%);
+    clip-path:polygon(50% 100%,100% 0,0 0);
+  }
+  /* 中心の鏡 */
+  .compass-boss{
+    position:absolute;left:50%;top:50%;width:19px;height:19px;
+    transform:translate(-50%,-50%);
+    border-radius:50%;z-index:3;pointer-events:none;
+    background:radial-gradient(circle at 33% 29%, #fdf5d8 0%, #d8ba74 44%, #8a6f31 100%);
+    box-shadow:0 1px 3px rgba(0,0,0,.6), 0 0 16px rgba(201,169,97,.6);
+  }
+  /* 真上の印（いま向いている方角）*/
+  .compass-index{
+    position:absolute;left:50%;top:-7px;
+    transform:translateX(-50%);
+    width:0;height:0;z-index:3;pointer-events:none;
+    border-left:6px solid transparent;
+    border-right:6px solid transparent;
+    border-top:11px solid var(--kin-hi);
+    filter:drop-shadow(0 0 7px rgba(230,205,143,.75));
   }
   .compass-label{color:var(--usuzumi);font-size:.82rem !important;margin-bottom:14px;text-align:center}
 
@@ -1687,20 +1767,27 @@
     <div class="omamori-sec">
       <div class="omamori-head">今年の恵方</div>
       <div class="eho-box">
-        <div class="eho-dir">南南東</div>
-        <p class="eho-note">2026年（丙午）の恵方。この方角に向かって祈ると縁起がよいとされます。</p>
+        <div class="eho-dir" id="ehoDir">南南東</div>
+        <p class="eho-note" id="ehoNote">2026年（丙午）の恵方。この方角に向かって祈ると縁起がよいとされます。</p>
       </div>
     </div>
 
     <div class="omamori-sec">
       <div class="omamori-head">方位磁針</div>
       <div class="compass-wrap">
-        <div class="compass" id="compassDial">
-          <div class="compass-n">北</div>
-          <div class="compass-e">東</div>
-          <div class="compass-s">南</div>
-          <div class="compass-w">西</div>
-          <div class="compass-needle"></div>
+        <div class="compass">
+          <div class="compass-card" id="compassDial">
+            <div class="compass-ring" aria-hidden="true"></div>
+            <div class="compass-eto" id="compassEto" aria-hidden="true"></div>
+            <div class="compass-eho" id="compassEho" aria-hidden="true"><span class="ceho-mark">恵</span></div>
+            <div class="compass-n">北</div>
+            <div class="compass-e">東</div>
+            <div class="compass-s">南</div>
+            <div class="compass-w">西</div>
+          </div>
+          <div class="compass-needle" aria-hidden="true"></div>
+          <div class="compass-boss" aria-hidden="true"></div>
+          <div class="compass-index" aria-hidden="true"></div>
         </div>
         <p class="compass-label" id="compassLabel">下のボタンを押すと、方位磁針が動きます</p>
         <button class="omikuji-draw" id="compassBtn" onclick="startCompass()">方位磁針を使う</button>
@@ -1963,6 +2050,7 @@
     if(n===6){ initKujiScreen('omikuji','omikujiFortune','omikujiAdvice','omikujiBtn'); }
     if(n===11){ initKujiScreen('koi','koiFortune','koiAdvice','koiBtn'); }
     if(n===13){ initKujiScreen('kin','kinFortune','kinAdvice','kinBtn'); }
+    if(n===9){ initHoui(); }
     if(n===14){ renderGoshuin(); }
     if(n===15){ mbInit(); }
   }
@@ -2022,6 +2110,55 @@
       startSahouAuto();
     }else{
       go(5);
+    }
+  }
+
+  // ── 恵方（十干から割り出す）──
+  const JIKKAN=['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+  const JUNISHI=['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+  // 十干 → [方角の名, 北から時計回りの角度]
+  const EHO={
+    '甲':['東北東',75], '己':['東北東',75],
+    '乙':['西南西',255],'庚':['西南西',255],
+    '丙':['南南東',165],'辛':['南南東',165],
+    '戊':['南南東',165],'癸':['南南東',165],
+    '丁':['北北西',345],'壬':['北北西',345]
+  };
+  function ehoOfYear(y){
+    const kan=JIKKAN[((y-4)%10+10)%10];
+    const shi=JUNISHI[((y-4)%12+12)%12];
+    const e=EHO[kan];
+    return {eto:kan+shi, name:e[0], deg:e[1]};
+  }
+
+  // ── 方位盤を組む（十二支と恵方の印）──
+  function buildCompass(){
+    const eto=document.getElementById('compassEto');
+    if(eto && !eto.dataset.built){
+      JUNISHI.forEach(function(ch,i){
+        const sp=document.createElement('span');
+        sp.className='ceto';
+        sp.textContent=ch;
+        // 子を北に置き、時計回りに三十度ずつ
+        sp.style.transform='rotate('+(i*30)+'deg) translateY(-61px) rotate('+(-i*30)+'deg)';
+        eto.appendChild(sp);
+      });
+      eto.dataset.built='1';
+    }
+  }
+  function initHoui(){
+    buildCompass();
+    const y=new Date().getFullYear();
+    const e=ehoOfYear(y);
+    const d=document.getElementById('ehoDir');
+    const nt=document.getElementById('ehoNote');
+    if(d) d.textContent=e.name;
+    if(nt) nt.textContent=y+'年（'+e.eto+'）の恵方。この方角に向かって祈ると縁起がよいとされます。';
+    const m=document.getElementById('compassEho');
+    if(m){
+      m.style.transform='rotate('+e.deg+'deg)';
+      const mk=m.querySelector('.ceho-mark');
+      if(mk){ mk.style.transform='translateX(-50%) rotate('+(-e.deg)+'deg)'; }
     }
   }
 
