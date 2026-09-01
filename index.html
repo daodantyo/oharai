@@ -503,15 +503,54 @@
     0%,100%{box-shadow:0 2px 5px rgba(0,0,0,.35), inset 0 0 5px rgba(20,12,45,.6), 0 0 6px rgba(106,84,168,.25)}
     50%{box-shadow:0 2px 5px rgba(0,0,0,.35), inset 0 0 5px rgba(20,12,45,.6), 0 0 24px rgba(106,84,168,.75)}
   }
-  .top-menu{
-    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
-    align-items:center;justify-items:stretch;
-    width:100%;max-width:340px;
-    margin-top:11px;gap:0 2px;
+
+  /* ── 社務所（四枚の札）── */
+  .sho-menu{gap:14px}
+  .sho-menu .kuji-card{padding:16px 18px;gap:16px}
+  .sho-menu .kuji-seal{width:52px;height:52px;font-size:1.45rem}
+  .sho-menu .kuji-card-title{font-size:1.12rem;letter-spacing:.2em}
+  .sho-menu .kuji-card-sub{font-size:.72rem}
+  .sho-menu .kuji-card:nth-child(2)::after{animation-delay:1.1s}
+  .sho-menu .kuji-card:nth-child(3)::after{animation-delay:2.2s}
+  .sho-menu .kuji-card:nth-child(4)::after{animation-delay:3.3s}
+  /* 浄（白銀） */
+  .kuji-seal.jo-seal{
+    background:
+      radial-gradient(circle at 32% 28%, rgba(255,255,255,.5), transparent 55%),
+      linear-gradient(150deg,#d9dbe4 0%,#a8adbe 55%,#6f7488 100%);
+    border-color:rgba(246,248,255,.9);
+    color:#2b2f3d;
+    text-shadow:0 1px 1px rgba(255,255,255,.6);
+    box-shadow:0 3px 8px rgba(0,0,0,.45), inset 0 0 8px rgba(50,55,70,.5), 0 0 20px rgba(200,210,235,.4);
   }
-  .top-menu .next{
-    padding:6px 2px;font-size:.72rem;opacity:.85;
-    letter-spacing:.04em;text-indent:0;white-space:nowrap;
+  /* 方（紫） */
+  .kuji-seal.hou-seal{
+    background:
+      radial-gradient(circle at 32% 28%, rgba(255,255,255,.24), transparent 55%),
+      linear-gradient(150deg,#7c64bd 0%,#4d3b86 55%,#2b2050 100%);
+    border-color:rgba(198,182,246,.75);
+    box-shadow:0 3px 8px rgba(0,0,0,.45), inset 0 0 8px rgba(20,12,45,.6), 0 0 20px rgba(106,84,168,.5);
+  }
+  /* 詣（朱） */
+  .kuji-seal.mode-seal{
+    background:
+      radial-gradient(circle at 32% 28%, rgba(255,255,255,.2), transparent 55%),
+      linear-gradient(150deg,#d0503c 0%,#a82f1e 55%,#7d2116 100%);
+    border-color:rgba(248,190,175,.8);
+    box-shadow:0 3px 8px rgba(0,0,0,.45), inset 0 0 8px rgba(70,14,6,.6), 0 0 20px rgba(194,64,47,.45);
+  }
+  /* 社務所の入口（藍） */
+  .ge-seal.ge-seal-sha{
+    background:
+      radial-gradient(circle at 30% 30%, rgba(255,255,255,.22), transparent 55%),
+      linear-gradient(150deg,#3f5b96 0%,#27406e 60%,#141f3c 100%);
+    border:1px solid rgba(178,200,244,.65);
+    animation:sealglowai 3.5s ease-in-out infinite;
+    animation-delay:2.4s;
+  }
+  @keyframes sealglowai{
+    0%,100%{box-shadow:0 2px 5px rgba(0,0,0,.35), inset 0 0 5px rgba(10,18,40,.6), 0 0 6px rgba(63,91,150,.25)}
+    50%{box-shadow:0 2px 5px rgba(0,0,0,.35), inset 0 0 5px rgba(10,18,40,.6), 0 0 22px rgba(90,125,200,.7)}
   }
 
   /* ── 御朱印帳の入口 ── */
@@ -1656,12 +1695,10 @@
       <span class="ge-text">御朱印帳</span>
     </button>
   </div>
-  <div class="top-menu">
-    <button class="next" onclick="go(7)">お守りの作り方</button>
-    <button class="next" onclick="go(8)">セージ浄化のやり方</button>
-    <button class="next" onclick="go(9)">方位を知る</button>
-    <button class="next" onclick="go(10)">日本全国 人気神社</button>
-  </div>
+  <button class="goshuin-entry" onclick="go(17)">
+    <span class="ge-seal ge-seal-sha">社</span>
+    <span class="ge-text">社務所</span>
+  </button>
   <div class="orb-row">
     <button class="orb o1" onclick="orbTap(0)" aria-label="光の球体"></button>
     <button class="orb o2" onclick="orbTap(1)" aria-label="光の球体"></button>
@@ -1786,7 +1823,7 @@
 
     <p class="omamori-foot">これは日本で受け継がれてきた縁起物・祈りの形です。心を込めて作ること、そのものに意味があります。</p>
   </div>
-  <button class="next" onclick="go(1)">はじめに戻る</button>
+  <button class="next" onclick="go(17)">社務所へ戻る</button>
 </section>
 
 <!-- 八、セージ浄化のやり方 -->
@@ -1825,7 +1862,7 @@
 
     <p class="omamori-foot">これは世界各地で受け継がれてきた浄化の習慣です。香りとともに心を整えるひととき、そのものに意味があります。</p>
   </div>
-  <button class="next" onclick="go(1)">はじめに戻る</button>
+  <button class="next" onclick="go(17)">社務所へ戻る</button>
 </section>
 
 <!-- 九、方位 -->
@@ -1875,7 +1912,7 @@
 
     <p class="omamori-foot">方位の吉凶は古くからの慣習・考え方であり、暮らしの中で心を整えるための知恵として受け継がれてきたものです。</p>
   </div>
-  <button class="next" onclick="go(1)">はじめに戻る</button>
+  <button class="next" onclick="go(17)">社務所へ戻る</button>
 </section>
 
 <!-- 十、日本全国 人気神社 -->
@@ -1921,7 +1958,7 @@
 
     <p class="omamori-foot">神社の由緒やご利益は各社に伝わるものです。参拝の際は、それぞれの作法と静けさを大切に。</p>
   </div>
-  <button class="next" onclick="go(1)">はじめに戻る</button>
+  <button class="next" onclick="go(17)">社務所へ戻る</button>
 </section>
 
 <!-- 十一、恋みくじ -->
@@ -2069,6 +2106,47 @@
 
 
 
+
+<!-- 十七、社務所 -->
+<section class="scene scene-compact" id="s17">
+  <h2>社務所</h2>
+  <p class="kuji-note">お参りの前後に、どうぞ</p>
+  <div class="kuji-menu sho-menu">
+    <button class="kuji-card" onclick="go(7)">
+      <span class="ckz c1"></span><span class="ckz c2"></span><span class="ckz c3"></span><span class="ckz c4"></span>
+      <span class="kuji-seal kin-seal">守</span>
+      <span class="kuji-card-text">
+        <span class="kuji-card-title">お守りの作り方</span>
+        <span class="kuji-card-sub">塩 ・ 小豆 ・ お米で結ぶ</span>
+      </span>
+    </button>
+    <button class="kuji-card" onclick="go(8)">
+      <span class="ckz c1"></span><span class="ckz c2"></span><span class="ckz c3"></span><span class="ckz c4"></span>
+      <span class="kuji-seal jo-seal">浄</span>
+      <span class="kuji-card-text">
+        <span class="kuji-card-title">セージ浄化のやり方</span>
+        <span class="kuji-card-sub">煙で場と石を清める</span>
+      </span>
+    </button>
+    <button class="kuji-card" onclick="go(9)">
+      <span class="ckz c1"></span><span class="ckz c2"></span><span class="ckz c3"></span><span class="ckz c4"></span>
+      <span class="kuji-seal hou-seal">方</span>
+      <span class="kuji-card-text">
+        <span class="kuji-card-title">方位を知る</span>
+        <span class="kuji-card-sub">今年の恵方と鬼門</span>
+      </span>
+    </button>
+    <button class="kuji-card" onclick="go(10)">
+      <span class="ckz c1"></span><span class="ckz c2"></span><span class="ckz c3"></span><span class="ckz c4"></span>
+      <span class="kuji-seal mode-seal">詣</span>
+      <span class="kuji-card-text">
+        <span class="kuji-card-title">日本全国 人気神社</span>
+        <span class="kuji-card-sub">一度は参りたい社</span>
+      </span>
+    </button>
+  </div>
+  <button class="next" onclick="go(1)">はじめに戻る</button>
+</section>
 
 <script>
   function prefersCalm(){
