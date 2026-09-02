@@ -321,17 +321,52 @@
   /* 鳥居そのものが祓いへの入口 */
   .gate{
     position:relative;
+    display:flex;flex-direction:column;align-items:center;gap:7px;
     background:none;border:none;padding:0;margin:0;
     cursor:pointer;line-height:0;
-    animation:gatehalo 5s ease-in-out infinite;
+  }
+  .gate-torii{
+    position:relative;display:block;line-height:0;
+    animation:gatehalo 4s ease-in-out infinite;
+  }
+  /* くぐれることを示す波紋 */
+  .nami{
+    position:absolute;left:50%;bottom:2%;
+    width:46%;height:13%;
+    transform:translateX(-50%);
+    border:1px solid rgba(240,222,170,.75);
+    border-radius:50%;
+    opacity:0;
+    animation:namihiro 3.2s ease-out infinite;
+    pointer-events:none;
+  }
+  .nami.n2{animation-delay:1.6s}
+  @keyframes namihiro{
+    0%{transform:translateX(-50%) scale(.3);opacity:0}
+    16%{opacity:.9}
+    100%{transform:translateX(-50%) scale(1.55);opacity:0}
+  }
+  /* 門の下の一言 */
+  .kuguru{
+    display:block;line-height:1;
+    font-family:'Shippori Mincho',serif;
+    font-size:1.02rem;letter-spacing:.44em;text-indent:.44em;
+    background:linear-gradient(180deg,#fffbe8 0%,#f2dfa8 50%,#d4b264 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+    animation:kuguru 3.2s ease-in-out infinite;
+  }
+  @keyframes kuguru{
+    0%,100%{filter:drop-shadow(0 0 7px rgba(236,216,160,.45))}
+    50%{filter:drop-shadow(0 0 22px rgba(255,244,206,1))}
   }
   @keyframes gatehalo{
-    0%,100%{filter:drop-shadow(0 0 6px rgba(236,216,160,.12))}
-    50%{filter:drop-shadow(0 0 30px rgba(236,216,160,.46))}
+    0%,100%{filter:drop-shadow(0 0 8px rgba(236,216,160,.16))}
+    50%{filter:drop-shadow(0 0 38px rgba(255,238,190,.62))}
   }
   .gate:focus-visible{outline:1px solid var(--kin-hi);outline-offset:6px}
   /* 門の奥からこぼれる光 ── 上ほど明るく、奥行きを出す */
-  .gate::before{
+  .gate-torii::before{
     content:'';position:absolute;
     left:27%;right:27%;top:33%;bottom:1%;
     background:
@@ -353,7 +388,7 @@
     animation:gateiki 5s ease-in-out infinite;
   }
   /* 奥へ続く参道 ── 手前が広く、奥へ狭まる */
-  .gate::after{
+  .gate-torii::after{
     content:'';position:absolute;
     left:50%;bottom:1%;
     width:52%;height:40%;
@@ -602,33 +637,6 @@
   }
   .torii{width:min(56vw,216px);margin:0 auto;display:block;
     filter:drop-shadow(0 10px 24px rgba(0,0,0,.55)) drop-shadow(0 0 18px rgba(194,64,47,.2));}
-  /* 祓いへの入口（鳥居と同じ行き先）*/
-  .hajime{
-    position:relative;
-    font-family:'Shippori Mincho',serif;
-    background:linear-gradient(180deg,rgba(201,169,97,.18),rgba(201,169,97,.04));
-    color:var(--kin-hi);
-    border:1px solid var(--kin);
-    padding:12px 38px;
-    margin-top:12px;
-    font-size:1.02rem;
-    letter-spacing:.3em;text-indent:.3em;
-    cursor:pointer;
-    animation:hajimepulse 3.6s ease-in-out infinite;
-    transition:background .4s,color .4s;
-  }
-  .hajime::before{
-    content:'';position:absolute;inset:4px;
-    border:1px solid rgba(201,169,97,.42);
-    pointer-events:none;
-  }
-  @keyframes hajimepulse{
-    0%,100%{box-shadow:0 0 22px rgba(201,169,97,.18), inset 0 0 12px rgba(201,169,97,.07)}
-    50%{box-shadow:0 0 48px rgba(201,169,97,.55), inset 0 0 18px rgba(201,169,97,.15)}
-  }
-  .hajime:hover,.hajime:focus-visible{
-    background:var(--kin);color:var(--sumi);outline:none;animation:none;
-  }
   .sub{
     position:relative;
     color:var(--usuzumi);font-size:.74rem;letter-spacing:.2em;
@@ -726,7 +734,8 @@
     box-shadow:0 3px 8px rgba(0,0,0,.45), inset 0 0 8px rgba(70,14,6,.6), 0 0 20px rgba(194,64,47,.45);
   }
   @media (prefers-reduced-motion: reduce){
-    .gate,.gate::before,.gate::after,.hajime{animation:none}
+    .gate-torii,.gate-torii::before,.gate-torii::after,.nami,.kuguru{animation:none}
+    .nami{opacity:.5}
   }
 
   /* ── 雷 ── */
@@ -1785,7 +1794,8 @@
   </div>
   <div class="torii-row">
     <span class="tbi tbi-l" aria-hidden="true"></span>
-    <button class="gate" onclick="sanpaiStart()" aria-label="月夜の祓いへ進む">
+    <button class="gate" onclick="sanpaiStart()" aria-label="鳥居をくぐってお祓いへ進む">
+    <span class="gate-torii">
     <svg class="torii" viewBox="0 0 200 165" aria-hidden="true">
       <g>
         <path d="M6 26 Q100 12 194 26 L191 40 Q100 27 9 40 Z" fill="url(#urushiH)"/>
@@ -1802,10 +1812,13 @@
         <rect x="140" y="152" width="23" height="7" fill="#57190f"/>
       </g>
     </svg>
+      <span class="nami n1" aria-hidden="true"></span>
+      <span class="nami n2" aria-hidden="true"></span>
+    </span>
+    <span class="kuguru">くぐる</span>
     </button>
     <span class="tbi tbi-r" aria-hidden="true"></span>
   </div>
-  <button class="hajime" onclick="sanpaiStart()">お祓いをはじめる</button>
   <p class="sub">祓い清め × 16タイプ性格診断</p>
   <div class="mon-row">
     <button class="mon" onclick="go(12)">
