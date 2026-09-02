@@ -105,6 +105,10 @@
     0%,100%{
       transform:translateY(0);
       box-shadow:
+        0 0 0 19px rgba(244,232,196,.05),
+        0 0 2px 20px rgba(196,212,255,.06),
+        0 0 0 40px rgba(236,216,160,.022),
+        0 0 1px 41px rgba(186,206,255,.028),
         0 0 55px 16px rgba(236,216,160,.22),
         0 0 130px 55px rgba(236,216,160,.08),
         inset -8px -10px 30px rgba(160,130,70,.35),
@@ -113,6 +117,10 @@
     50%{
       transform:translateY(-7px);
       box-shadow:
+        0 0 0 25px rgba(244,232,196,.07),
+        0 0 2px 26px rgba(196,212,255,.085),
+        0 0 0 52px rgba(236,216,160,.032),
+        0 0 1px 53px rgba(186,206,255,.04),
         0 0 80px 24px rgba(236,216,160,.36),
         0 0 200px 80px rgba(236,216,160,.15),
         inset -8px -10px 30px rgba(160,130,70,.35),
@@ -266,8 +274,31 @@
     background:radial-gradient(ellipse 105% 90% at 50% 46%, transparent 58%, rgba(4,5,11,.55) 100%);
   }
 
+  /* ── 月の兎（餅つき）── */
+  .tsuki-usagi{
+    position:absolute;inset:0;width:100%;height:100%;
+    fill:#7d6a42;opacity:.11;
+    transform:translate(-13%,7%) scale(.76);
+    filter:blur(.4px);
+    pointer-events:none;z-index:1;
+  }
+  .moon-moji{position:relative;z-index:2}
+
   /* ── 月にかかる薄雲 ── */
   .moon-title{overflow:hidden}
+  /* 二枚目の叢雲（逆へ、もっと遅く） */
+  .moon-title::before{
+    content:'';position:absolute;left:-70%;top:56%;
+    width:240%;height:26%;
+    background:linear-gradient(180deg, transparent 0%, rgba(206,218,246,.2) 50%, transparent 100%);
+    filter:blur(9px);
+    animation:moonmist2 61s linear infinite;
+    pointer-events:none;z-index:3;
+  }
+  @keyframes moonmist2{
+    0%{transform:translateX(14%)}
+    100%{transform:translateX(-14%)}
+  }
   .moon-title::after{
     content:'';position:absolute;left:-60%;top:30%;
     width:220%;height:34%;
@@ -287,14 +318,63 @@
     gap:min(4vw,20px);
     margin:8px auto 12px;
   }
-  .torii{margin:0}
+  /* 鳥居そのものが祓いへの入口 */
+  .gate{
+    position:relative;
+    background:none;border:none;padding:0;margin:0;
+    cursor:pointer;line-height:0;
+    animation:gateiki 5s ease-in-out infinite;
+  }
+  .gate:focus-visible{outline:1px solid var(--kin-hi);outline-offset:6px}
+  /* 門の奥にともる灯 */
+  .gate::before{
+    content:'';position:absolute;
+    left:26%;right:26%;top:34%;bottom:2%;
+    background:radial-gradient(ellipse 66% 62% at 50% 62%,
+      rgba(255,247,222,.34) 0%,
+      rgba(236,216,160,.16) 40%,
+      rgba(236,216,160,0) 72%);
+    filter:blur(4px);
+    pointer-events:none;
+    animation:gateiki 5s ease-in-out infinite;
+  }
+  @keyframes gateiki{
+    0%,100%{filter:drop-shadow(0 0 0 rgba(201,169,97,0))}
+    50%{filter:drop-shadow(0 0 26px rgba(236,216,160,.42))}
+  }
+  .gate-moji{
+    position:absolute;left:50%;top:58%;
+    transform:translate(-50%,-50%);
+    writing-mode:vertical-rl;
+    font-family:'Shippori Mincho',serif;
+    font-size:clamp(1.05rem,4.3vw,1.36rem);
+    letter-spacing:.2em;line-height:1.75;
+    background:linear-gradient(180deg,#fffbe8 0%,#f4e2ac 48%,#dfc077 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+    filter:drop-shadow(0 0 16px rgba(255,240,196,.85)) drop-shadow(0 1px 3px rgba(0,0,0,.95));
+    animation:gatemoji 3.4s ease-in-out infinite;
+    pointer-events:none;white-space:nowrap;
+    transition:filter .35s;
+  }
+  @keyframes gatemoji{
+    0%,100%{filter:drop-shadow(0 0 14px rgba(255,240,196,.6)) drop-shadow(0 1px 3px rgba(0,0,0,.95))}
+    50%{filter:drop-shadow(0 0 26px rgba(255,246,214,1)) drop-shadow(0 1px 3px rgba(0,0,0,.95))}
+  }
+  .gate:hover .gate-moji,.gate:focus-visible .gate-moji{
+    filter:drop-shadow(0 0 22px rgba(255,240,190,.95)) drop-shadow(0 1px 2px rgba(0,0,0,.8));
+  }
+  .torii{margin:0;transition:filter .35s}
+  .gate:hover .torii,.gate:focus-visible .torii{
+    filter:drop-shadow(0 8px 24px rgba(0,0,0,.6)) drop-shadow(0 0 26px rgba(194,64,47,.5));
+  }
   /* 鳥居の左右に浮かぶ火の玉（炎の姿は .orb と共通、下の「火の玉」を参照）*/
   .tbi{flex:none}
   /* 門を守る一対は朱と青 */
   .tbi-l{--orbc:#ffc6b4;--orbd:rgba(196,84,62,.42);--orbt:7.4s;width:min(10vw,38px);aspect-ratio:1;margin-bottom:28px}
   .tbi-r{--orbc:#bfe9ff;--orbd:rgba(58,148,205,.42);--orbt:8.6s;width:min(9vw,33px);aspect-ratio:1;margin-bottom:46px;animation-delay:1.6s}
   @media (prefers-reduced-motion: reduce){
-    .fog1,.fog2,.moon-title::after,.tbi,.tbi::before{animation:none}
+    .fog1,.fog2,.moon-title::after,.moon-title::before,.tbi,.tbi::before{animation:none}
   }
 
   /* ── 呼応する光の球体 ── */
@@ -479,48 +559,37 @@
     margin-bottom:4px;
     text-shadow:0 0 30px rgba(201,169,97,.3);
   }
-  .torii{width:min(38vw,150px);margin:0 auto;display:block;
+  .torii{width:min(56vw,216px);margin:0 auto;display:block;
     filter:drop-shadow(0 10px 24px rgba(0,0,0,.55)) drop-shadow(0 0 18px rgba(194,64,47,.2));}
+  .kuguru{
+    font-family:'Shippori Mincho',serif;
+    font-size:.88rem;letter-spacing:.18em;text-indent:.18em;
+    margin-top:12px;
+    background:linear-gradient(180deg,#fffbe8 0%,#eed79c 52%,#c9a961 100%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+    animation:kuguru 3.4s ease-in-out infinite;
+  }
+  @keyframes kuguru{
+    0%,100%{filter:drop-shadow(0 0 8px rgba(236,216,160,.4))}
+    50%{filter:drop-shadow(0 0 20px rgba(255,242,200,.9))}
+  }
   .sub{
     position:relative;
-    color:var(--usuzumi);font-size:.78rem;letter-spacing:.2em;
-    padding-bottom:11px;margin-bottom:12px;
-    white-space:nowrap;
+    color:var(--usuzumi);font-size:.74rem;letter-spacing:.2em;
+    margin-top:5px;padding-bottom:10px;margin-bottom:10px;
+    white-space:nowrap;opacity:.85;
   }
   .sub::after{
     content:'';position:absolute;left:50%;bottom:0;
     width:min(30vw,124px);height:1px;transform:translateX(-50%);
     background:linear-gradient(90deg,transparent,rgba(201,169,97,.55) 22%,rgba(230,205,143,.75) 50%,rgba(201,169,97,.55) 78%,transparent);
   }
-  button.hairei{
-    font-family:'Shippori Mincho',serif;
-    background:linear-gradient(180deg,rgba(201,169,97,.12),rgba(201,169,97,.03));
-    color:var(--kin-hi);
-    border:1px solid var(--kin);
-    padding:13px 46px;
-    font-size:1rem;
-    letter-spacing:.4em;text-indent:.4em;
-    cursor:pointer;
-    box-shadow:0 0 20px rgba(201,169,97,.12), inset 0 0 12px rgba(201,169,97,.06);
-    transition:background .4s,color .4s,box-shadow .4s;
-    animation:haireipulse 4s ease-in-out infinite;
-  }
-  @keyframes haireipulse{
-    0%,100%{box-shadow:0 0 20px rgba(201,169,97,.14), inset 0 0 12px rgba(201,169,97,.06)}
-    50%{box-shadow:0 0 42px rgba(201,169,97,.42), inset 0 0 16px rgba(201,169,97,.12)}
-  }
-  button.hairei{position:relative}
   .omikuji-draw{position:relative}
-  button.hairei::before,
   .omikuji-draw::before{
     content:'';position:absolute;inset:4px;
     border:1px solid rgba(201,169,97,.38);
     pointer-events:none;
-  }
-  button.hairei:hover,button.hairei:focus-visible{
-    background:var(--kin);color:var(--sumi);outline:none;
-    box-shadow:0 0 34px rgba(201,169,97,.4);
-    animation:none;
   }
   /* ── 入口の四つの紋 ── */
   .mon-row{
@@ -602,7 +671,7 @@
     box-shadow:0 3px 8px rgba(0,0,0,.45), inset 0 0 8px rgba(70,14,6,.6), 0 0 20px rgba(194,64,47,.45);
   }
   @media (prefers-reduced-motion: reduce){
-    button.hairei{animation:none}
+    .gate,.gate::before,.gate-moji,.kuguru{animation:none}
   }
 
   /* ── 雷 ── */
@@ -1639,10 +1708,29 @@
 <!-- 一、入口 -->
 <section class="scene scene-compact active" id="s1">
   <div class="moon-title">
+    <svg class="tsuki-usagi" viewBox="0 0 100 100" aria-hidden="true">
+      <!-- 臼 -->
+      <path d="M59 85 L61 69 L86 69 L84 85 Z"/>
+      <ellipse cx="73.5" cy="69" rx="12.5" ry="3.3"/>
+      <!-- 体 -->
+      <ellipse cx="34" cy="62" rx="13.5" ry="16.5"/>
+      <!-- 後脚 -->
+      <ellipse cx="31" cy="79" rx="9.5" ry="4.6"/>
+      <!-- 頭 -->
+      <ellipse cx="43" cy="40" rx="8.6" ry="9.2"/>
+      <!-- 耳 -->
+      <ellipse cx="39" cy="24" rx="3.1" ry="11" transform="rotate(-10 39 24)"/>
+      <ellipse cx="47.5" cy="23" rx="3.1" ry="11" transform="rotate(7 47.5 23)"/>
+      <!-- 杵 -->
+      <rect x="50" y="30" width="6.2" height="30" rx="3.1" transform="rotate(38 53.1 45)"/>
+      <!-- 前脚 -->
+      <ellipse cx="50" cy="52" rx="7" ry="4.2" transform="rotate(-28 50 52)"/>
+    </svg>
     <span class="moon-moji">月夜祓</span>
   </div>
   <div class="torii-row">
     <span class="tbi tbi-l" aria-hidden="true"></span>
+    <button class="gate" onclick="sanpaiStart()" aria-label="月夜の祓いへ進む">
     <svg class="torii" viewBox="0 0 200 165" aria-hidden="true">
       <g>
         <path d="M6 26 Q100 12 194 26 L191 40 Q100 27 9 40 Z" fill="url(#urushiH)"/>
@@ -1659,10 +1747,12 @@
         <rect x="140" y="152" width="23" height="7" fill="#57190f"/>
       </g>
     </svg>
+      <span class="gate-moji">月夜の<br>祓いへ</span>
+    </button>
     <span class="tbi tbi-r" aria-hidden="true"></span>
   </div>
+  <p class="kuguru">鳥居をくぐって、祓いへ</p>
   <p class="sub">祓い清め × 16タイプ性格診断</p>
-  <button class="hairei" onclick="sanpaiStart()">月夜の祓いへ</button>
   <div class="mon-row">
     <button class="mon" onclick="go(12)">
       <span class="mon-seal mon-kuji">籤</span>
