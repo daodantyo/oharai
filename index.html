@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>性格診断お祓い ─ MBTIと同じ16タイプ × 月夜の祓い清め</title>
+<title>月夜祓 ─ 祓い清めと16タイプ性格診断</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@300;400&display=swap" rel="stylesheet">
 <style>
@@ -123,9 +123,9 @@
     writing-mode:vertical-rl;
     font-family:'Shippori Mincho',serif;
     font-weight:600;
-    font-size:clamp(1.5rem,6vw,2rem);
-    letter-spacing:.18em;
-    line-height:1.8;
+    font-size:clamp(1.9rem,7.6vw,2.5rem);
+    letter-spacing:.2em;
+    line-height:1.6;
     color:#33291a;
     text-shadow:
       0 1px 0 rgba(255,252,240,.7),
@@ -1639,7 +1639,7 @@
 <!-- 一、入口 -->
 <section class="scene scene-compact active" id="s1">
   <div class="moon-title">
-    <span class="moon-moji">性格診断<br>お祓い</span>
+    <span class="moon-moji">月夜祓</span>
   </div>
   <div class="torii-row">
     <span class="tbi tbi-l" aria-hidden="true"></span>
@@ -1661,7 +1661,7 @@
     </svg>
     <span class="tbi tbi-r" aria-hidden="true"></span>
   </div>
-  <p class="sub">MBTIと同じ 16タイプ診断 × 祓い清め</p>
+  <p class="sub">祓い清め × 16タイプ性格診断</p>
   <button class="hairei" onclick="sanpaiStart()">月夜の祓いへ</button>
   <div class="mon-row">
     <button class="mon" onclick="go(12)">
@@ -2888,7 +2888,7 @@
     // 日付と銘
     x.fillStyle='#8b8fa3'; x.font='300 34px '+serif;
     x.fillText(dateText, W/2, H-150);
-    x.fillText('お祓い ─ 身を清める', W/2, H-100);
+    x.fillText('月夜祓 ─ 身を清める', W/2, H-100);
     return cv;
   }
   function saveCanvas(cv, name, title){
