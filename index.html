@@ -288,42 +288,11 @@
     margin:8px auto 12px;
   }
   .torii{margin:0}
-  /* 鳥居の左右に浮かぶ火の玉 */
-  .tbi{
-    position:relative;flex:none;
-    border-radius:50%;
-    background:radial-gradient(circle at 50% 58%,
-      rgba(255,255,255,.98) 0%,
-      rgba(228,250,255,.94) 15%,
-      var(--orbc) 38%,
-      rgba(70,160,205,.42) 64%,
-      rgba(30,80,120,.14) 74%,
-      rgba(0,0,0,0) 80%);
-    filter:
-      drop-shadow(0 0 10px var(--orbc))
-      drop-shadow(0 0 28px var(--orbc))
-      drop-shadow(0 0 62px rgba(120,205,240,.42));
-    animation:
-      hidama var(--orbt) ease-in-out infinite,
-      hiyure calc(var(--orbt) * .23) ease-in-out infinite;
-  }
-  .tbi::before{
-    content:'';position:absolute;left:50%;bottom:56%;
-    width:42%;height:132%;
-    transform:translateX(-50%);
-    background:linear-gradient(0deg,
-      var(--orbc) 0%,
-      rgba(214,246,255,.55) 30%,
-      rgba(180,230,255,.22) 58%,
-      rgba(255,255,255,0) 100%);
-    border-radius:50% 50% 46% 46% / 68% 68% 32% 32%;
-    filter:blur(2.6px);
-    opacity:.85;
-    animation:honoo calc(var(--orbt) * .31) ease-in-out infinite;
-    pointer-events:none;
-  }
-  .tbi-l{--orbc:#cfeeff;--orbt:7.4s;width:min(10vw,38px);aspect-ratio:1;margin-bottom:28px}
-  .tbi-r{--orbc:#b4e2f7;--orbt:8.6s;width:min(9vw,33px);aspect-ratio:1;margin-bottom:46px;animation-delay:1.6s}
+  /* 鳥居の左右に浮かぶ火の玉（炎の姿は .orb と共通、下の「火の玉」を参照）*/
+  .tbi{flex:none}
+  /* 門を守る一対は朱と青 */
+  .tbi-l{--orbc:#ffc6b4;--orbd:rgba(196,84,62,.42);--orbt:7.4s;width:min(10vw,38px);aspect-ratio:1;margin-bottom:28px}
+  .tbi-r{--orbc:#bfe9ff;--orbd:rgba(58,148,205,.42);--orbt:8.6s;width:min(9vw,33px);aspect-ratio:1;margin-bottom:46px;animation-delay:1.6s}
   @media (prefers-reduced-motion: reduce){
     .fog1,.fog2,.moon-title::after,.tbi,.tbi::before{animation:none}
   }
@@ -334,35 +303,33 @@
     gap:9px;margin-top:22px;
   }
   /* 火の玉（人魂）── 青白い芯と、立ちのぼる炎の尾 */
-  .orb{
+  /* 火の玉の姿（鳥居横と共通）── 白熱した芯を、色のついた炎がつつむ */
+  .orb,.tbi{
     position:relative;
-    border:none;cursor:pointer;border-radius:50%;
-    padding:0;
+    border-radius:50%;
     background:radial-gradient(circle at 50% 58%,
       rgba(255,255,255,.98) 0%,
-      rgba(228,250,255,.94) 15%,
+      rgba(255,255,255,.9) 14%,
       var(--orbc) 38%,
-      rgba(70,160,205,.42) 64%,
-      rgba(30,80,120,.14) 74%,
+      var(--orbd) 64%,
       rgba(0,0,0,0) 80%);
     filter:
       drop-shadow(0 0 9px var(--orbc))
-      drop-shadow(0 0 24px var(--orbc))
-      drop-shadow(0 0 52px rgba(120,205,240,.4));
+      drop-shadow(0 0 26px var(--orbc))
+      drop-shadow(0 0 56px var(--orbd));
     animation:
       hidama var(--orbt) ease-in-out infinite,
       hiyure calc(var(--orbt) * .23) ease-in-out infinite;
-    transition:transform .25s;
   }
   /* 炎の尾 */
-  .orb::before{
+  .orb::before,.tbi::before{
     content:'';position:absolute;left:50%;bottom:56%;
     width:42%;height:132%;
     transform:translateX(-50%);
     background:linear-gradient(0deg,
       var(--orbc) 0%,
-      rgba(214,246,255,.55) 30%,
-      rgba(180,230,255,.22) 58%,
+      rgba(255,255,255,.5) 32%,
+      rgba(255,255,255,.16) 60%,
       rgba(255,255,255,0) 100%);
     border-radius:50% 50% 46% 46% / 68% 68% 32% 32%;
     filter:blur(2.6px);
@@ -370,13 +337,15 @@
     animation:honoo calc(var(--orbt) * .31) ease-in-out infinite;
     pointer-events:none;
   }
+  .orb{border:none;cursor:pointer;padding:0;transition:transform .25s}
   .orb:focus-visible{outline:1px solid var(--kin-hi)}
-  .o1{--orbc:#bfe9ff;--orbt:6.5s;width:27px;height:27px}
-  .o2{--orbc:#9fd8f5;--orbt:7.8s;width:36px;height:36px;animation-delay:.9s}
-  .o3{--orbc:#daf4ff;--orbt:6.1s;width:44px;height:44px;animation-delay:1.7s}
-  .o4{--orbc:#a6dfec;--orbt:8.4s;width:41px;height:41px;animation-delay:.4s}
-  .o5{--orbc:#c6e8ff;--orbt:7.1s;width:34px;height:34px;animation-delay:2.3s}
-  .o6{--orbc:#e6f8ff;--orbt:6.8s;width:26px;height:26px;animation-delay:1.2s}
+  /* 五色（青・緑・黄・赤・白・紫）を配る */
+  .o1{--orbc:#bfe9ff;--orbd:rgba(58,148,205,.40);--orbt:6.5s;width:27px;height:27px}
+  .o2{--orbc:#b8f0d6;--orbd:rgba(54,176,136,.38);--orbt:7.8s;width:36px;height:36px;animation-delay:.9s}
+  .o3{--orbc:#f8e7ad;--orbd:rgba(198,158,56,.40);--orbt:6.1s;width:44px;height:44px;animation-delay:1.7s}
+  .o4{--orbc:#ffc6b4;--orbd:rgba(196,84,62,.40);--orbt:8.4s;width:41px;height:41px;animation-delay:.4s}
+  .o5{--orbc:#eef5ff;--orbd:rgba(146,172,204,.36);--orbt:7.1s;width:34px;height:34px;animation-delay:2.3s}
+  .o6{--orbc:#d8c6ff;--orbd:rgba(118,88,198,.40);--orbt:6.8s;width:26px;height:26px;animation-delay:1.2s}
   /* ふわりと漂う */
   @keyframes hidama{
     0%,100%{transform:translate(0,0) scale(.95)}
@@ -404,7 +373,7 @@
       opacity:1;transform:scale(1.34);
       filter:
         drop-shadow(0 0 34px var(--orbc))
-        drop-shadow(0 0 70px rgba(190,238,255,.9))
+        drop-shadow(0 0 70px var(--orbc))
         brightness(1.5);
     }
     100%{opacity:.72;transform:scale(1)}
