@@ -1,0 +1,20 @@
+# Secrets: never commit passwords, API keys, or credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets.*
+credentials.*
+*.secret
+config.local.*
+.npmrc
+.netrc
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
