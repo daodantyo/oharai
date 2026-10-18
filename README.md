@@ -2,6 +2,27 @@
 
 祓い清めと16タイプ性格診断の一枚物ウェブアプリです。ビルドも依存もなく、`index.html` と `norito.mp3` だけで動きます。
 
+## どのPCでも始める
+
+### A. ブラウザだけで（インストール不要）
+
+[claude.ai/code](https://claude.ai/code) を開き、リポジトリ `daodantyo/oharai` を選んで作業を始めます。作業はクラウド上で行われ、結果は GitHub に残ります。
+
+### B. 手元のPCで
+
+初回だけ clone します（Macでの詳しい手順は次の節）。
+
+```sh
+git clone https://github.com/daodantyo/oharai.git
+```
+
+2回目以降は、次のどちらか1つで「最新を取り込む → アプリを開く」まで済みます。
+
+- Mac / Linux: `./start.sh`
+- Windows: `start.bat` をダブルクリック
+
+`start.bat` は Windows 実機での動作確認をしていません。
+
 ## Macで動かす
 
 ```sh

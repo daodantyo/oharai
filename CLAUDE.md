@@ -26,7 +26,7 @@
 
 作業の正本は GitHub（`daodantyo/oharai`）に置く。どのPCからでも続けられるようにするための決まり。
 
-- 作業を始めるときは、まず最新を取り込む（`git pull`）。
+- 作業を始めるときは、まず最新を取り込む（`git pull`）。手元のPCでは `start.sh`（Mac / Linux）か `start.bat`（Windows）が、取り込みとアプリの起動をまとめてやる。
 - 作業を終えるときは、コミットして GitHub へ push する。push していない作業は、他のPCから見えない。
 - APIキー・トークンなどの秘密情報はコミットしない。
 - PCごとの個人設定（`~/.claude/`）はリポジトリに入らない。共有したいものだけを `.claude/settings.json` や `.mcp.json` に移す。
