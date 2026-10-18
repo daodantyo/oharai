@@ -2539,6 +2539,7 @@
   function startCompass(){
     const label=document.getElementById('compassLabel');
     const btn=document.getElementById('compassBtn');
+    let gotHeading=false;
     if(compassActive) return;
     if(typeof DeviceOrientationEvent!=='undefined' && typeof DeviceOrientationEvent.requestPermission==='function'){
       DeviceOrientationEvent.requestPermission().then(function(state){
@@ -2558,6 +2559,15 @@
       label.textContent='スマホを水平に持って、ゆっくり回してみてください';
       window.addEventListener('deviceorientationabsolute', onHeading, true);
       window.addEventListener('deviceorientation', onHeading, true);
+      // センサーのないPC（Macなど）では、イベントが来ないか alpha が null のまま。方位が一度も取れなければ知らせる
+      setTimeout(function(){
+        if(gotHeading) return;
+        window.removeEventListener('deviceorientationabsolute', onHeading, true);
+        window.removeEventListener('deviceorientation', onHeading, true);
+        compassActive=false;
+        btn.style.display='';
+        label.textContent='この端末では方位センサーが働いていないようです。スマホでお試しください';
+      }, 3000);
     }
     function onHeading(e){
       let heading=null;
@@ -2565,6 +2575,7 @@
       else if(e.absolute && typeof e.alpha==='number'){ heading=360-e.alpha; }
       else if(typeof e.alpha==='number'){ heading=360-e.alpha; }
       if(heading===null) return;
+      gotHeading=true;
       const dial=document.getElementById('compassDial');
       if(dial){ dial.style.transform='rotate('+(-heading)+'deg)'; }
       const names=['北','北北東','北東','東北東','東','東南東','南東','南南東','南','南南西','南西','西南西','西','西北西','北西','北北西'];
